@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Shiva.Services.Log4Net</name>
+    </assembly>
+    <members>
+        <member name="T:Shiva.Services.Log4NetLogger">
+            <summary>
+            Log4net logger implementation
+            </summary>
+            <seealso cref="T:Shiva.Core.Services.ILogger" />
+        </member>
+        <member name="M:Shiva.Services.Log4NetLogger.#ctor(log4net.ILog)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Shiva.Services.Log4NetLogger"/> class.
+            </summary>
+        </member>
+        <member name="P:Shiva.Services.Log4NetLogger.InfoIsEnabled">
+            <summary>
+            Gets a value indicating whether[information is enabled].
+            </summary>
+            <value>
+              <c>true</c> if [information is enabled]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Shiva.Services.Log4NetLogger.DebugIsEnabled">
+            <summary>
+            Gets a value indicating whether[debug is enabled].
+            </summary>
+            <value>
+              <c>true</c> if [debug is enabled]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Shiva.Services.Log4NetLogger.WarnIsEnabled">
+            <summary>
+            Gets a value indicating whether[warn is enabled].
+            </summary>
+            <value>
+             <c>true</c> if [warn is enabled]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Shiva.Services.Log4NetLogger.ErrorIsEnabled">
+             <summary>
+             Gets a value indicating whether [error is enabled].
+             </summary>
+             <value>
+            <c>true</c> if [error is enabled]; otherwise, <c>false</c>.
+             </value>
+        </member>
+        <member name="M:Shiva.Services.Log4NetLogger.Debug(System.String,System.IFormatProvider,System.Object[])">
+            <summary>
+            Debugs the specified message.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="format">The format.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:Shiva.Services.Log4NetLogger.Debug(System.String,System.Object[])">
+            <summary>
+            Debugs the specified message.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:Shiva.Services.Log4NetLogger.Debug(System.String)">
+            <summary>
+            Debugs the specified message.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Shiva.Services.Log4NetLogger.Error(System.String,System.IFormatProvider,System.Object[])">
+            <summary>
+            Errors the specified message.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="format">The format.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:Shiva.Services.Log4NetLogger.Error(System.String,System.Object[])">
+            <summary>
+            Errors the specified message.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:Shiva.Services.Log4NetLogger.Error(System.String)">
+            <summary>
+            Errors the specified message.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Shiva.Services.Log4NetLogger.Error(System.Exception)">
+            <summary>
+            Errors the specified exception.
+            </summary>
+            <param name="exception">The exception.</param>
+        </member>
+        <member name="M:Shiva.Services.Log4NetLogger.Info(System.String,System.IFormatProvider,System.Object[])">
+            <summary>
+            Informations the specified message.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="format">The format.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:Shiva.Services.Log4NetLogger.Info(System.String)">
+            <summary>
+            Informations the specified message.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Shiva.Services.Log4NetLogger.Info(System.String,System.Object[])">
+            <summary>
+            Informations the specified message.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:Shiva.Services.Log4NetLogger.Warn(System.String,System.IFormatProvider,System.Object[])">
+            <summary>
+            Warns the specified message.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="format">The format.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:Shiva.Services.Log4NetLogger.Warn(System.String,System.Object[])">
+            <summary>
+            Warns the specified message.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:Shiva.Services.Log4NetLogger.Warn(System.String)">
+            <summary>
+            Warns the specified message.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="T:Shiva.Services.Log4NetLogManager">
+            <summary>
+            Log 4 net log manager Implementation
+            </summary>
+        </member>
+        <member name="M:Shiva.Services.Log4NetLogManager.CreateLogger(System.String)">
+            <summary>
+            Creates the logger.
+            </summary>
+            <param name="name">The name of logger.</param>
+            <returns>
+            a logger
+            </returns>
+        </member>
+        <member name="M:Shiva.Services.Log4NetLogManager.CreateLogger``1">
+            <summary>
+            Creates the logger.
+            </summary>
+            <typeparam name="Type">The type name for logger.</typeparam>
+            <returns>
+            a logger
+            </returns>
+        </member>
+        <member name="M:Shiva.Services.Log4NetLogManager.CreateLogger(System.Type)">
+            <summary>
+            Creates the logger.
+            </summary>
+            <param name="type">The type.</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

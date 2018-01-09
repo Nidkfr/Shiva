@@ -27,6 +27,19 @@ namespace Shiva.Core.Services
         void Info(string message, IFormatProvider format = null, params object[] value);
 
         /// <summary>
+        /// Informations the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        void Info(string message);
+
+        /// <summary>
+        /// Informations the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="value">The value.</param>
+        void Info(string message, params object[] value);
+
+        /// <summary>
         /// Gets a value indicating whether [debug is enabled].
         /// </summary>
         /// <value>
@@ -41,6 +54,19 @@ namespace Shiva.Core.Services
         /// <param name="format">The format.</param>
         /// <param name="value">The value.</param>
         void Debug(string message, IFormatProvider format = null, params object[] value);
+
+        /// <summary>
+        /// Debugs the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="value">The value.</param>
+        void Debug(string message, params object[] value);
+
+        /// <summary>
+        /// Debugs the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        void Debug(string message);
 
         /// <summary>
         /// Gets a value indicating whether [warn is enabled].
@@ -59,6 +85,19 @@ namespace Shiva.Core.Services
         void Warn(string message, IFormatProvider format = null, params object[] value);
 
         /// <summary>
+        /// Warns the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="value">The value.</param>
+        void Warn(string message, params object[] value);
+
+        /// <summary>
+        /// Warns the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        void Warn(string message);
+
+        /// <summary>
         /// Gets a value indicating whether [error is enabled].
         /// </summary>
         /// <value>
@@ -73,6 +112,19 @@ namespace Shiva.Core.Services
         /// <param name="format">The format.</param>
         /// <param name="value">The value.</param>
         void Error(string message, IFormatProvider format = null, params object[] value);
+
+        /// <summary>
+        /// Errors the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="value">The value.</param>
+        void Error(string message, params object[] value);
+
+        /// <summary>
+        /// Errors the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        void Error(string message);
 
         /// <summary>
         /// Log errors  specified exception.

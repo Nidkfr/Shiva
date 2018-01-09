@@ -15,7 +15,7 @@ namespace Shiva.Core.Ioc
         /// <typeparam name="TService">The type of the service.</typeparam>
         /// <typeparam name="TImplementation">Type of instance of service</typeparam>
         /// <param name="scope">Scope for service</param>
-        void Register<TService,TImplementation>(ScopeServiceEnum scope = ScopeServiceEnum.Transient);
+        void Register<TService,TImplementation>(ScopeServiceEnum scope = ScopeServiceEnum.Transient)where TImplementation:class,TService;
 
         /// <summary>
         /// Registers the specified service in container.

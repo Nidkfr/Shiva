@@ -22,5 +22,12 @@ namespace Shiva.Core.Services
         /// <typeparam name="Type">The type name for logger.</typeparam>
         /// <returns>a logger</returns>
         ILogger CreateLogger<Type>();
+
+        /// <summary>
+        /// Creates the logger.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        ILogger CreateLogger(Type type);
     }
 }

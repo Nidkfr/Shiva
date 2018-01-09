@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Shiva.Services.SimpleInjector</name>
+    </assembly>
+    <members>
+        <member name="T:Shiva.Services.SimpleInjectorServiceContainer">
+            <summary>
+            Service Injector service container implementation
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,15 @@
+C:\Projects\GitHub\Shiva\Shiva\Shiva\Shiva.Services.SimpleInjector.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\Projects\GitHub\Shiva\Shiva\Shiva\Shiva.Services.SimpleInjector.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+C:\Projects\GitHub\Shiva\Shiva\Shiva\Shiva.Services.SimpleInjector.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+C:\Projects\GitHub\Shiva\Shiva\Shiva\Shiva.Services.SimpleInjector.Test\bin\Debug\fr\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.resources.dll
+C:\Projects\GitHub\Shiva\Shiva\Shiva\Shiva.Services.SimpleInjector.Test\bin\Debug\fr\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.resources.dll
+C:\Projects\GitHub\Shiva\Shiva\Shiva\Shiva.Services.SimpleInjector.Test\bin\Debug\fr\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
+C:\Projects\GitHub\Shiva\Shiva\Shiva\Shiva.Services.SimpleInjector.Test\bin\Debug\Shiva.Services.SimpleInjector.Test.dll
+C:\Projects\GitHub\Shiva\Shiva\Shiva\Shiva.Services.SimpleInjector.Test\bin\Debug\Shiva.Services.SimpleInjector.Test.pdb
+C:\Projects\GitHub\Shiva\Shiva\Shiva\Shiva.Services.SimpleInjector.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+C:\Projects\GitHub\Shiva\Shiva\Shiva\Shiva.Services.SimpleInjector.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
+C:\Projects\GitHub\Shiva\Shiva\Shiva\Shiva.Services.SimpleInjector.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+C:\Projects\GitHub\Shiva\Shiva\Shiva\Shiva.Services.SimpleInjector.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
+C:\Projects\GitHub\Shiva\Shiva\Shiva\Shiva.Services.SimpleInjector.Test\obj\Debug\Shiva.Services.SimpleInjector.Test.csproj.CoreCompileInputs.cache
+C:\Projects\GitHub\Shiva\Shiva\Shiva\Shiva.Services.SimpleInjector.Test\obj\Debug\Shiva.Services.SimpleInjector.Test.dll
+C:\Projects\GitHub\Shiva\Shiva\Shiva\Shiva.Services.SimpleInjector.Test\obj\Debug\Shiva.Services.SimpleInjector.Test.pdb
