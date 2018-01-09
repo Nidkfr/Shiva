@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{E1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shiva.Services.SimpleInjector", "Shiva.Services.SimpleInjector\Shiva.Services.SimpleInjector.csproj", "{5FF49945-707E-47CC-96D7-F0303CB55A16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shiva.Services.SimpleInjector.Test", "Shiva.Services.SimpleInjector.Test\Shiva.Services.SimpleInjector.Test.csproj", "{2C640F42-29AF-4EC4-922D-D73ADCC25DCF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{5FF49945-707E-47CC-96D7-F0303CB55A16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FF49945-707E-47CC-96D7-F0303CB55A16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FF49945-707E-47CC-96D7-F0303CB55A16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C640F42-29AF-4EC4-922D-D73ADCC25DCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C640F42-29AF-4EC4-922D-D73ADCC25DCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C640F42-29AF-4EC4-922D-D73ADCC25DCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C640F42-29AF-4EC4-922D-D73ADCC25DCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +62,7 @@ Global
 		{9A2C96F9-9381-4666-831C-9E4194D74E5D} = {0B615281-BDB5-4591-918A-17EB9BB97312}
 		{E168A264-7B2D-433B-A869-9C08B5C464E1} = {BB176A87-F7E6-421B-B7BF-B7710DCD4981}
 		{5FF49945-707E-47CC-96D7-F0303CB55A16} = {E168A264-7B2D-433B-A869-9C08B5C464E1}
+		{2C640F42-29AF-4EC4-922D-D73ADCC25DCF} = {0B615281-BDB5-4591-918A-17EB9BB97312}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1A622331-622B-4091-9DEF-A52DBE1D02A5}
