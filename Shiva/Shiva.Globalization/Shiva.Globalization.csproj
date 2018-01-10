@@ -5,8 +5,8 @@
     <RootNamespace>Shiva</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Globalization\" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\Shiva.Globalization.xml</DocumentationFile>
+  </PropertyGroup>
 
 </Project>
