@@ -60,6 +60,14 @@
             </summary>
             <seealso cref="T:Shiva.Core.Ioc.IServiceContainer" />
         </member>
+        <member name="P:Shiva.Core.Ioc.ServiceContainerBase.Logger">
+            <summary>
+            Gets the logger.
+            </summary>
+            <value>
+            The logger.
+            </value>
+        </member>
         <member name="M:Shiva.Core.Ioc.ServiceContainerBase.#ctor(Shiva.Core.Services.ILogManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Shiva.Core.Ioc.ServiceContainerBase"/> class.

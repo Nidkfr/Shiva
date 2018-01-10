@@ -14,12 +14,20 @@ namespace Shiva.Core.Ioc
         private ILogger _logger;
 
         /// <summary>
+        /// Gets the logger.
+        /// </summary>
+        /// <value>
+        /// The logger.
+        /// </value>
+        protected ILogger Logger => this._logger;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ServiceContainerBase"/> class.
         /// </summary>
         /// <param name="logmanager">The logger.</param>
         public ServiceContainerBase(ILogManager logmanager=null)
         {
-            this._logger = logmanager.CreateLogger(this.GetType()) ?? new NoLogger();
+            this._logger = logmanager?.CreateLogger(this.GetType()) ?? new NoLogger();
         }
 
         /// <summary>
@@ -28,7 +36,7 @@ namespace Shiva.Core.Ioc
         /// <typeparam name="TService">The type of the service.</typeparam>
         /// <typeparam name="TImplementation">Type of instance of service</typeparam>
         /// <param name="scope">Scope for service</param>
-        public void Register<TService, TImplementation>(ScopeServiceEnum scope = ScopeServiceEnum.Transient) where TImplementation:class,TService
+        public virtual void Register<TService, TImplementation>(ScopeServiceEnum scope = ScopeServiceEnum.Transient) where TImplementation:class,TService where TService:class
         {
             this.Register<TService>(this._createInstance<TService, TImplementation>, scope);
         }
@@ -40,10 +48,12 @@ namespace Shiva.Core.Ioc
         /// <param name="serviceFactory">The service factory.</param>
         /// <param name="scope">Scope for service</param>
 
-        public void Register<TService>(Func<TService> serviceFactory, ScopeServiceEnum scope = ScopeServiceEnum.Transient)
+        public virtual void Register<TService>(Func<TService> serviceFactory, ScopeServiceEnum scope = ScopeServiceEnum.Transient) where TService:class
         {
             if (this._logger.InfoIsEnabled)
                 this._logger.Info("Register Type {0} in mode {1}",typeof(TService),scope);
+
+            this.InternalRegister<TService>(serviceFactory, scope);
         }
 
         /// <summary>
@@ -51,7 +61,7 @@ namespace Shiva.Core.Ioc
         /// </summary>
         /// <typeparam name="TService">Service contract</typeparam>
         /// <param name="service">The service implementation.</param>
-        public void RegisterSingleton<TService>(TService service)
+        public virtual void RegisterSingleton<TService>(TService service)where TService:class
         {
             if (service == null)
                 throw new ArgumentNullException(nameof(service));
@@ -66,12 +76,17 @@ namespace Shiva.Core.Ioc
         /// <returns>
         /// Service implementation
         /// </returns>
-        public TService ResolveType<TService>()
+        public virtual TService ResolveType<TService>() where TService:class
         {
             if (this._logger.InfoIsEnabled)
                 this._logger.Info("Resolve Type {0}.", typeof(TService));
 
-            return this.InternalResolveType<TService>();
+            var val = this.InternalResolveType<TService>();
+
+            if (this._logger.DebugIsEnabled)
+                this._logger.Debug("Object type: {0}", val?.GetType());
+
+            return val;
         }
 
         private TService _createInstance<TService,TImplementation>() where TImplementation : class, TService
@@ -95,7 +110,7 @@ namespace Shiva.Core.Ioc
         /// </summary>
         /// <typeparam name="TService">The type of the service.</typeparam>
         /// <returns>service implementation</returns>
-        protected abstract TService InternalResolveType<TService>();
+        protected abstract TService InternalResolveType<TService>() where TService:class;
 
         /// <summary>
         /// Internals the register.
@@ -103,6 +118,6 @@ namespace Shiva.Core.Ioc
         /// <typeparam name="TService">The type of the service.</typeparam>
         /// <param name="serviceFactory">The service factory.</param>
         /// <param name="scope">The scope.</param>
-        protected abstract void InternalRegister<TService>(Func<TService> serviceFactory, ScopeServiceEnum scope);
+        protected abstract void InternalRegister<TService>(Func<TService> serviceFactory, ScopeServiceEnum scope) where TService:class;
     }
 }

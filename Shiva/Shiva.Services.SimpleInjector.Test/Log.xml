@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <log4net>
   <appender name="RollingFile" type="log4net.Appender.RollingFileAppender">
-    <file value="c:\temp\shiva\shiva.Core.log" />
+    <file value="c:\temp\shiva\shiva.Services.SimpleInjector.log" />
     <appendToFile value="false" />
     <maximumFileSize value="1MB" />
     <maxSizeRollBackups value="5" />

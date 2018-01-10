@@ -11,6 +11,12 @@ namespace Shiva.Core.Ioc
     [TestClass]
     public class UTServiceContainerBase:BaseTest
     {
+        [ClassInitialize]
+        public new static void ClassInit(TestContext context)
+        {
+            BaseTest.ClassInit(context);
+        }
+
         [TestMethod]
         public void TestInitialization()
         {
@@ -27,5 +33,6 @@ namespace Shiva.Core.Ioc
             instance.Register<ILogManager>(() => this.LogManager, ScopeServiceEnum.Singleton);
             instance.Register<ILogManager, Log4NetLogManager>();
         }
+        
     }
 }

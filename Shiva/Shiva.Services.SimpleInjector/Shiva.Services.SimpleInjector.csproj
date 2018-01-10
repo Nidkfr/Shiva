@@ -13,4 +13,8 @@
     <PackageReference Include="SimpleInjector" Version="4.0.12" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Shiva.Core\Shiva.Core.csproj" />
+  </ItemGroup>
+
 </Project>

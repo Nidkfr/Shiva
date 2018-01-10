@@ -69,6 +69,16 @@
         "compile": {
           "ref/netstandard1.5/System.Runtime.dll": {}
         }
+      },
+      "Shiva.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/Shiva.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Shiva.Core.dll": {}
+        }
       }
     }
   },
@@ -390,11 +400,17 @@
         "ref/xamarintvos10/_._",
         "ref/xamarinwatchos10/_._"
       ]
+    },
+    "Shiva.Core/1.0.0": {
+      "type": "project",
+      "path": "../Shiva.Core/Shiva.Core.csproj",
+      "msbuildProject": "../Shiva.Core/Shiva.Core.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETStandard,Version=v2.0": [
       "NETStandard.Library >= 2.0.0",
+      "Shiva.Core >= 1.0.0",
       "SimpleInjector >= 4.0.12"
     ]
   },
@@ -433,7 +449,11 @@
       },
       "frameworks": {
         "netstandard2.0": {
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Projects\\GitHub\\Shiva\\Shiva\\Shiva\\Shiva.Core\\Shiva.Core.csproj": {
+              "projectPath": "C:\\Projects\\GitHub\\Shiva\\Shiva\\Shiva\\Shiva.Core\\Shiva.Core.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
