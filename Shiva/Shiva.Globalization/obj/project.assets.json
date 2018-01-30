@@ -177,7 +177,7 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\adrien\\.nuget\\packages\\": {},
+    "C:\\Users\\anfossi_a\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
@@ -187,18 +187,18 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "C:\\Projects\\GitHub\\Shiva\\Shiva\\Shiva\\Shiva.Globalization\\Shiva.Globalization.csproj",
+      "projectUniqueName": "C:\\Projet\\GitHub\\Shiva\\Shiva\\Shiva.Globalization\\Shiva.Globalization.csproj",
       "projectName": "Shiva.Globalization",
-      "projectPath": "C:\\Projects\\GitHub\\Shiva\\Shiva\\Shiva\\Shiva.Globalization\\Shiva.Globalization.csproj",
-      "packagesPath": "C:\\Users\\adrien\\.nuget\\packages\\",
-      "outputPath": "C:\\Projects\\GitHub\\Shiva\\Shiva\\Shiva\\Shiva.Globalization\\obj\\",
+      "projectPath": "C:\\Projet\\GitHub\\Shiva\\Shiva\\Shiva.Globalization\\Shiva.Globalization.csproj",
+      "packagesPath": "C:\\Users\\anfossi_a\\.nuget\\packages\\",
+      "outputPath": "C:\\Projet\\GitHub\\Shiva\\Shiva\\Shiva.Globalization\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\adrien\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\anfossi_a\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config"
       ],

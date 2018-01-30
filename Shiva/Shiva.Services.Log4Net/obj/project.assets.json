@@ -4715,7 +4715,7 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\adrien\\.nuget\\packages\\": {},
+    "C:\\Users\\anfossi_a\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
@@ -4725,18 +4725,18 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "C:\\Projects\\GitHub\\Shiva\\Shiva\\Shiva\\Shiva.Services.Log4Net\\Shiva.Services.Log4Net.csproj",
+      "projectUniqueName": "C:\\Projet\\GitHub\\Shiva\\Shiva\\Shiva.Services.Log4Net\\Shiva.Services.Log4Net.csproj",
       "projectName": "Shiva.Services.Log4Net",
-      "projectPath": "C:\\Projects\\GitHub\\Shiva\\Shiva\\Shiva\\Shiva.Services.Log4Net\\Shiva.Services.Log4Net.csproj",
-      "packagesPath": "C:\\Users\\adrien\\.nuget\\packages\\",
-      "outputPath": "C:\\Projects\\GitHub\\Shiva\\Shiva\\Shiva\\Shiva.Services.Log4Net\\obj\\",
+      "projectPath": "C:\\Projet\\GitHub\\Shiva\\Shiva\\Shiva.Services.Log4Net\\Shiva.Services.Log4Net.csproj",
+      "packagesPath": "C:\\Users\\anfossi_a\\.nuget\\packages\\",
+      "outputPath": "C:\\Projet\\GitHub\\Shiva\\Shiva\\Shiva.Services.Log4Net\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\adrien\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\anfossi_a\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config"
       ],
@@ -4750,8 +4750,8 @@
       "frameworks": {
         "netstandard2.0": {
           "projectReferences": {
-            "C:\\Projects\\GitHub\\Shiva\\Shiva\\Shiva\\Shiva.Core\\Shiva.Core.csproj": {
-              "projectPath": "C:\\Projects\\GitHub\\Shiva\\Shiva\\Shiva\\Shiva.Core\\Shiva.Core.csproj"
+            "C:\\Projet\\GitHub\\Shiva\\Shiva\\Shiva.Core\\Shiva.Core.csproj": {
+              "projectPath": "C:\\Projet\\GitHub\\Shiva\\Shiva\\Shiva.Core\\Shiva.Core.csproj"
             }
           }
         }

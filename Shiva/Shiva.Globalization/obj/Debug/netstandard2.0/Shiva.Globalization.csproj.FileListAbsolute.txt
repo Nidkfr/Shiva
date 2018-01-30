@@ -7,3 +7,13 @@ C:\Projects\GitHub\Shiva\Shiva\Shiva\Shiva.Globalization\obj\Debug\netstandard2.
 C:\Projects\GitHub\Shiva\Shiva\Shiva\Shiva.Globalization\obj\Debug\netstandard2.0\Shiva.Globalization.AssemblyInfo.cs
 C:\Projects\GitHub\Shiva\Shiva\Shiva\Shiva.Globalization\obj\Debug\netstandard2.0\Shiva.Globalization.dll
 C:\Projects\GitHub\Shiva\Shiva\Shiva\Shiva.Globalization\obj\Debug\netstandard2.0\Shiva.Globalization.pdb
+C:\Projet\GitHub\Shiva\Shiva\Shiva.Globalization\bin\Debug\netstandard2.0\Shiva.Globalization.xml
+C:\Projet\GitHub\Shiva\Shiva\Shiva.Globalization\bin\Debug\netstandard2.0\Shiva.Globalization.deps.json
+C:\Projet\GitHub\Shiva\Shiva\Shiva.Globalization\bin\Debug\netstandard2.0\Shiva.Globalization.dll
+C:\Projet\GitHub\Shiva\Shiva\Shiva.Globalization\bin\Debug\netstandard2.0\Shiva.Globalization.pdb
+C:\Projet\GitHub\Shiva\Shiva\Shiva.Globalization\obj\Debug\netstandard2.0\Shiva.Globalization.csproj.CoreCompileInputs.cache
+C:\Projet\GitHub\Shiva\Shiva\Shiva.Globalization\obj\Debug\netstandard2.0\Shiva.Globalization.AssemblyInfoInputs.cache
+C:\Projet\GitHub\Shiva\Shiva\Shiva.Globalization\obj\Debug\netstandard2.0\Shiva.Globalization.AssemblyInfo.cs
+C:\Projet\GitHub\Shiva\Shiva\Shiva.Globalization\obj\Debug\netstandard2.0\Shiva.Globalization.dll
+C:\Projet\GitHub\Shiva\Shiva\Shiva.Globalization\obj\Debug\netstandard2.0\Shiva.Globalization.pdb
+C:\Projet\GitHub\Shiva\Shiva\Shiva.Globalization\obj\Debug\netstandard2.0\Shiva.Globalization.csprojResolveAssemblyReference.cache

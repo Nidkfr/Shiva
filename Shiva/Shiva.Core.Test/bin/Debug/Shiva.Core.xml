@@ -415,6 +415,19 @@
             <param name="message">The message.</param>
             <exception cref="T:System.NotImplementedException"></exception>
         </member>
+        <member name="T:Shiva.Core.Tasks.TaskWorkingInformation">
+            <summary>
+            A simple working Task Information
+            </summary>
+        </member>
+        <member name="P:Shiva.Core.Tasks.TaskWorkingInformation.WorkingInformation">
+            <summary>
+            Gets or sets the working information.
+            </summary>
+            <value>
+            The working information.
+            </value>
+        </member>
         <member name="T:Shiva.Exceptions.InvalidTypeConstructorForServiceContainerException">
             <summary>
             Exception : Type constructor is invalid for service container

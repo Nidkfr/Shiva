@@ -142,6 +142,11 @@
             Log 4 net log manager Implementation
             </summary>
         </member>
+        <member name="M:Shiva.Services.Log4NetLogManager.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Shiva.Services.Log4NetLogManager"/> class.
+            </summary>
+        </member>
         <member name="M:Shiva.Services.Log4NetLogManager.CreateLogger(System.String)">
             <summary>
             Creates the logger.
