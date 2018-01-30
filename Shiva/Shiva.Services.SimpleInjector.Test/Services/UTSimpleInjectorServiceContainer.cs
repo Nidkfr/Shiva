@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace Shiva.Services
 {
     [TestClass]
-    public class UTSimpleInjectorServiceContainer:BaseTest
+    public class UTSimpleInjectorServiceContainer:Shiva.BaseTest
     {
         [ClassInitialize]
         public new static void ClassInit(TestContext context)

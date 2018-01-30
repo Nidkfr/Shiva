@@ -11,6 +11,15 @@ namespace Shiva.Services
     /// </summary>
     public sealed class Log4NetLogManager : ILogManager
     {
+        private log4net.Repository.ILoggerRepository _repository;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Log4NetLogManager"/> class.
+        /// </summary>
+        public Log4NetLogManager()
+        {
+            this._repository = LogManager.GetRepository(this.GetType().Assembly);
+        }
 
         /// <summary>
         /// Creates the logger.
@@ -20,8 +29,8 @@ namespace Shiva.Services
         /// a logger
         /// </returns>
         public ILogger CreateLogger(string name)
-        {
-            throw new NotSupportedException();
+        {            
+           return new Log4NetLogger(LogManager.GetLogger(this._repository.Name,name));
         }
 
         /// <summary>

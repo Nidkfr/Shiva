@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Shiva",
+    "\\Shiva\\Shiva.Globalization",
+    "\\Shiva\\Shiva.Globalization\\Globalization"
   ],
+  "SelectedNode": "\\Shiva\\Shiva.Globalization\\Globalization\\IRessourceManager.cs",
   "PreviewInSolutionExplorer": false
 }

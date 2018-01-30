@@ -76,11 +76,24 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Globalization\TesterIRessourceManagerBase.cs" />
+    <Compile Include="Globalization\UTRessourceManagerBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Shiva.Core\Shiva.Core.csproj">
+      <Project>{2ac0dbc3-c995-401c-a536-ea6e78eb0799}</Project>
+      <Name>Shiva.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shiva.Globalization\Shiva.Globalization.csproj">
+      <Project>{7d244a9e-0319-4e5b-80bc-71d67d7f8e65}</Project>
+      <Name>Shiva.Globalization</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -41,7 +41,7 @@ namespace Shiva
                 
         public static void ClassInit(TestContext context)
         {
-            var _logger = _logm.CreateLogger(Type.GetType(context.FullyQualifiedTestClassName));
+            var _logger = _logm.CreateLogger(context.FullyQualifiedTestClassName);
             if (_logger.DebugIsEnabled)
             {
                 _logger.Debug(_separatorTest);

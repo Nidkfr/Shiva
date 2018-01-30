@@ -11,23 +11,8 @@ namespace Shiva.Globalization
     /// </summary>
     public interface IRessourceManager
     {
-        /// <summary>
-        /// Loads All string from culture in merory.
-        /// </summary>
-        /// <param name="culture">The culture, if null then current culture of ressourceManager.</param>
-        /// <returns>IRessrouceStringService</returns>
-        Task<IRessourceStringService> LoadStringService(CultureInfo culture=null);
 
-        /// <summary>
-        /// Change the current culture.
-        /// </summary>
-        /// <param name="culture">The culture.</param>
-        void SetCurrentCulture(CultureInfo culture);
-
-        /// <summary>
-        /// Occurs when [current culture changed].
-        /// </summary>
-        event EventHandler<RessourceManagerCultureArgs> CurrentCultureChanged;
+        
 
         /// <summary>
         /// Gets the current culture.
@@ -36,6 +21,37 @@ namespace Shiva.Globalization
         /// The current culture.
         /// </value>
         CultureInfo CurrentCulture { get; }
+
+        /// <summary>
+        /// Gets the current UI culture.
+        /// </summary>
+        /// <value>
+        /// The current UI culture.
+        /// </value>
+        CultureInfo CurrentUICulture { get; }
+
+        /// <summary>
+        /// Sets the culture.
+        /// </summary>
+        /// <param name="culture">The culture.</param>
+        void SetCulture(CultureInfo culture);
+
+        /// <summary>
+        /// Sets the UI culture.
+        /// </summary>
+        /// <param name="culture">The culture.</param>
+        void SetUICulture(CultureInfo culture);
+
+        /// <summary>
+        /// Occurs when [culture changed].
+        /// </summary>
+        event EventHandler<RessourceManagerCultureArgs> CultureChanged;
+
+        /// <summary>
+        /// Occurs when [culture UI changed].
+        /// </summary>
+        event EventHandler<RessourceManagerCultureArgs> CultureUIChanged;
+
     }
 
     /// <summary>
@@ -44,6 +60,31 @@ namespace Shiva.Globalization
     /// <seealso cref="System.EventArgs" />
     public sealed class RessourceManagerCultureArgs : EventArgs
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RessourceManagerCultureArgs"/> class.
+        /// </summary>
+        /// <param name="oldculture">The oldculture.</param>
+        /// <param name="newculture">The newculture.</param>
+        public RessourceManagerCultureArgs(CultureInfo oldculture ,CultureInfo newculture)
+        {
+            this.OldCulture = oldculture ?? throw new ArgumentNullException(nameof(oldculture));
+            this.NewCulture = newculture ?? throw new ArgumentNullException(nameof(newculture));
+        }
 
+        /// <summary>
+        /// Gets the old culture.
+        /// </summary>
+        /// <value>
+        /// The old culture.
+        /// </value>
+        public CultureInfo OldCulture { get; private set; }
+
+        /// <summary>
+        /// Gets the new culture.
+        /// </summary>
+        /// <value>
+        /// The new culture.
+        /// </value>
+        public CultureInfo NewCulture { get; private set; }
     }
 }

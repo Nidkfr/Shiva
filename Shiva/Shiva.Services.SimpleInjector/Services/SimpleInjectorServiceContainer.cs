@@ -87,9 +87,12 @@ namespace Shiva.Services
         /// <param name="service">The service.</param>
         public override void RegisterSingleton<TService>(TService service)
         {
+            if (service == null)
+                throw new ArgumentNullException(nameof(service));
+
             if (this.Logger.InfoIsEnabled)
                 this.Logger.Info("Register Type {0} with instance {1}  in singleton scope mode", typeof(TService), service.GetType());
-
+           
             this._container.RegisterSingleton<TService>(service);
         }
     }
