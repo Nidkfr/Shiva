@@ -9,4 +9,8 @@
     <DocumentationFile>bin\Debug\netstandard2.0\Shiva.Globalization.xml</DocumentationFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Shiva.Core\Shiva.Core.csproj" />
+  </ItemGroup>
+
 </Project>
