@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 
-namespace Shiva.Core.Identity
+namespace Shiva.Core.Identities
 {
     /// <summary>
     /// Namespace representation with tool
@@ -34,8 +34,8 @@ namespace Shiva.Core.Identity
         {
             if (string.IsNullOrWhiteSpace(ns))
                 throw new ArgumentNullException(nameof(ns));
-            this._ns = ns;
-            this._decodeString(ns);
+            this._ns = ns.TrimEnd(NamespaceSeparator[0]);
+            this._decodeString(this._ns);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Shiva.Core.Identity
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator ==(Namespace ns1, string ns2)
+        public static bool operator ==(Namespace ns1, Namespace ns2)
         {
             if (!object.ReferenceEquals(ns1,null))
                 return ns1.Equals(ns2);
@@ -92,7 +92,7 @@ namespace Shiva.Core.Identity
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator !=(Namespace ns1, string ns2)
+        public static bool operator !=(Namespace ns1, Namespace ns2)
         {
             if (!object.ReferenceEquals(ns1, null))
                 return !ns1.Equals(ns2);
@@ -145,8 +145,9 @@ namespace Shiva.Core.Identity
         {
             foreach (var node in ns.Split(NamespaceSeparator[0]))
             {
-                this._nodes.AddLast(new NamespaceNode(this,node));
+                this._nodes.AddLast(new NamespaceNode(this,node.Trim()));
             }
+            this._ns = string.Join(Namespace.NamespaceSeparator, this._nodes);
         }
 
         /// <summary>

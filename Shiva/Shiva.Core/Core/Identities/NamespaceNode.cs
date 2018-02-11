@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Shiva.Core.Identity
+namespace Shiva.Core.Identities
 {
     /// <summary>
     /// Namespace Node
@@ -54,7 +54,7 @@ namespace Shiva.Core.Identity
         public NamespaceNode NextNode => this.Root.GetNextNode(this);
 
         /// <summary>
-        /// Performs an implicit conversion from <see cref="Shiva.Core.Identity.NamespaceNode" /> to <see cref="System.String" />.
+        /// Performs an implicit conversion from <see cref="Shiva.Core.Identities.NamespaceNode" /> to <see cref="System.String" />.
         /// </summary>
         /// <param name="nsn">The NSN.</param>
         /// <returns>
@@ -115,6 +115,9 @@ namespace Shiva.Core.Identity
         /// </returns>
         public override bool Equals(object obj)
         {
+            if (object.ReferenceEquals(this, obj))
+                return true;
+
             if (obj is string nsnstring)
                 return this._node == nsnstring;
 

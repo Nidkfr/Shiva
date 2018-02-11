@@ -5,7 +5,7 @@ using Moq;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Shiva.Core.Identity
+namespace Shiva.Core.Identities
 {
     [TestClass]
     public class UTNamespace
@@ -14,6 +14,12 @@ namespace Shiva.Core.Identity
         public void TestInitialization()
         {
             var ns = new Namespace("Shiva.Core.Identity");
+            Assert.IsTrue(ns == "Shiva.Core.Identity");
+            Assert.IsTrue(ns.RootNode == "Shiva");
+            Assert.IsTrue(ns.LastNode == "Identity");
+
+            ns = new Namespace(" Shiva . Core . Identity ");
+            Assert.IsTrue(ns == "Shiva.Core.Identity");
             Assert.IsTrue(ns.RootNode == "Shiva");
             Assert.IsTrue(ns.LastNode == "Identity");
         }
@@ -51,6 +57,9 @@ namespace Shiva.Core.Identity
             Assert.IsTrue("Shiva.Core.Identity" == ns);
             Assert.IsTrue("Shiva.Core.Identity.1" != ns);
             Assert.IsTrue(ns != "Shiva.Core.Identity.1");
+            Assert.IsTrue(Namespace.Null == "");
+            Assert.IsTrue("" == Namespace.Null);
+
 
             var l = new List<string>();
             l.Invoking(x => x.Add(ns)).ShouldNotThrow();
