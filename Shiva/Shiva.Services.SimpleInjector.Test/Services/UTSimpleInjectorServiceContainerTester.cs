@@ -29,6 +29,12 @@ namespace Shiva.Core.Ioc
         }
 
         [TestMethod]
+        public void TestRegisterInitializer()
+        {
+            this.Tester.TestRegisterInitializer(new SimpleInjectorServiceContainer(new Container(), this.LogManager));
+        }
+
+        [TestMethod]
         public void TestRegisterSingleton()
         {
             this.Tester.TestRegisterSingleton(new SimpleInjectorServiceContainer(new Container(), this.LogManager));
@@ -36,7 +42,7 @@ namespace Shiva.Core.Ioc
 
         [TestMethod]
         public void TestResolveType()
-        {
+        {       
             this.Tester.TestResolveType(new SimpleInjectorServiceContainer(new Container(), this.LogManager));
         }
     }

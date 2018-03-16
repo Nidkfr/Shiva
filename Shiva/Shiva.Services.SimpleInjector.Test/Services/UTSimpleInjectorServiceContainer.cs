@@ -29,7 +29,7 @@ namespace Shiva.Services
         public void FailInitialization()
         {
             Action _ctor = () => new SimpleInjectorServiceContainer(null);
-            _ctor.Invoking(x => x()).ShouldThrow<ArgumentNullException>();
+            _ctor.Invoking(x => x()).Should().Throw<ArgumentNullException>();
         }
 
         [TestMethod]

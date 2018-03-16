@@ -21,8 +21,8 @@ namespace Shiva.Services
         /// <param name="container">The container.</param>
         /// <param name="logmanager">LogManager</param>
         public SimpleInjectorServiceContainer(Container container, ILogManager logmanager = null):base(logmanager)
-        {
-            this._container = container ?? throw new ArgumentNullException(nameof(container));
+        {            
+            this._container = container ?? throw new ArgumentNullException(nameof(container));            
         }
 
         /// <summary>
@@ -94,6 +94,16 @@ namespace Shiva.Services
                 this.Logger.Info("Register Type {0} with instance {1}  in singleton scope mode", typeof(TService), service.GetType());
            
             this._container.RegisterSingleton<TService>(service);
+        }
+
+        /// <summary>
+        /// Internals the register initializer.
+        /// </summary>
+        /// <typeparam name="TService">The type of the service.</typeparam>
+        /// <param name="initializer">The initializer.</param>
+        protected override void InternalRegisterInitializer<TService>(Action<TService> initializer)
+        {
+            this._container.RegisterInitializer(initializer);
         }
     }
 }
