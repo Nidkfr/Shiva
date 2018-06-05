@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
-using System.Threading.Tasks;
-using Shiva.Core.Caches;
 
-namespace Shiva.Globalization
+namespace Shiva.Ressources
 {
     /// <summary>
     /// Ressource
     /// </summary>
-    public interface IRessourceReader : ICachable
+    public interface IRessource
     {
         /// <summary>
         /// Gets the culture of ressource.
@@ -19,15 +17,5 @@ namespace Shiva.Globalization
         /// The culture.
         /// </value>
         CultureInfo Culture { get; }
-
-    }
-
-    /// <summary>
-    /// Typed Ressource
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IRessourceReader<T> : IRessourceReader
-    {
-
     }
 }

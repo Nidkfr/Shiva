@@ -121,10 +121,13 @@ namespace Shiva.Core.Identities
                 current = new Namespace(nsstring);
 
             if (obj is Namespace ns)
-                current = ns;
+                current = ns;            
 
             if (current == null)
-                return false;
+            {
+                return object.ReferenceEquals(this, Namespace.Null);                
+            }
+                
 
             return this.ToString() == current.ToString();
 

@@ -8,6 +8,12 @@ namespace Shiva.Core.Ioc
     [TestClass]
     public class UTSimpleInjectorServiceContainerTester : BaseTest, ITesterIServiceContainer
     {
+        [ClassInitialize]
+        public new static void ClassInit(TestContext context)
+        {
+            BaseTest.ClassInit(context);
+        }
+
         public TesterIServiceContainer Tester { get => new TesterIServiceContainer(); }
 
         [TestMethod]

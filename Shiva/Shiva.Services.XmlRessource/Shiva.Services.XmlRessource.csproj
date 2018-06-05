@@ -5,4 +5,8 @@
     <RootNamespace>Shiva</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Shiva.Core\Shiva.Core.csproj" />
+  </ItemGroup>
+
 </Project>

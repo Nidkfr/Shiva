@@ -38,5 +38,12 @@ namespace Shiva.Core.Ioc
         /// <typeparam name="TService">Service Contract</typeparam>
         /// <returns>Service implementation</returns>
         TService ResolveType<TService>() where TService:class;
+
+        /// <summary>
+        /// Registers the initialize.
+        /// </summary>
+        /// <typeparam name="TService">The type of the service.</typeparam>
+        /// <param name="initializer">The initializer.</param>
+        void RegisterInitialize<TService>(Action<TService> initializer) where TService : class;
     }
 }

@@ -33,6 +33,17 @@ namespace Shiva.Core.Ioc
             instance.Register<ILogManager>(() => this.LogManager, ScopeServiceEnum.Singleton);
             instance.Register<ILogManager, Log4NetLogManager>();
         }
+
+        [TestMethod]
+        public void TestRegisterInitializer()
+        {
+            var mock = new Mock<ServiceContainerBase>(this.LogManager);
+            var instance = mock.Object;
+                        
+            instance.Register<ILogManager>(() => this.LogManager, ScopeServiceEnum.Singleton);
+            instance.Register<ILogManager, Log4NetLogManager>();
+            instance.RegisterInitialize<ILogManager>(x => { var ok= true; });            
+        }
         
     }
 }

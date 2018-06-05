@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shiva.Core.Services;
 using Shiva.Mocks;
 
 namespace Shiva.Core.Ioc
@@ -21,7 +22,7 @@ namespace Shiva.Core.Ioc
 
         public void FailRegister(IServiceContainer container)
         {
-            container.Invoking(x => x.Register<IEnumerable<string>>(null)).ShouldThrow<ArgumentNullException>();
+            container.Invoking(x => x.Register<IEnumerable<string>>(null)).Should().Throw<ArgumentNullException>();
         }
 
         public void TestRegisterSingleton(IServiceContainer container)
@@ -31,11 +32,12 @@ namespace Shiva.Core.Ioc
 
         public void FailRegisterSingleton(IServiceContainer container)
         {
-            container.Invoking(x => x.RegisterSingleton<IEnumerable<string>>(null)).ShouldThrow<ArgumentNullException>();
+            container.Invoking(x => x.RegisterSingleton<IEnumerable<string>>(null)).Should().Throw<ArgumentNullException>();
         }
 
         public void TestResolveType(IServiceContainer container)
         {
+            container.Register<ILogger, NoLogger>(ScopeServiceEnum.Singleton);
             this.TestRegister(container);
             Assert.IsNotNull(container.ResolveType<IEnumerable<string>>());
             Assert.IsTrue(container.ResolveType<IEnumerable<string>>() is IEnumerable<string>);
@@ -49,6 +51,18 @@ namespace Shiva.Core.Ioc
             Assert.IsNotNull(container.ResolveType<AbstractVoidClass<bool>>());
             Assert.IsTrue(container.ResolveType<AbstractVoidClass<bool>>() == container.ResolveType<AbstractVoidClass<bool>>());
         }
+
+        public void TestRegisterInitializer(IServiceContainer container)
+        {            
+            container.Register<AbstractVoidClass<string>, VoidClass1<string>>();
+            container.Register<ILogger, NoLogger>();
+            container.RegisterInitialize<AbstractVoidClass<string>>(x => 
+            {
+                x.Value = "test";
+            });
+            var val = container.ResolveType<AbstractVoidClass<string>>();
+            Assert.IsTrue(val.Value == "test");
+        }
     }
 
     public interface ITesterIServiceContainer
@@ -61,5 +75,6 @@ namespace Shiva.Core.Ioc
         void TestRegisterSingleton();
         void FailRegisterSingleton();
         void TestResolveType();
+        void TestRegisterInitializer();
     }
 }

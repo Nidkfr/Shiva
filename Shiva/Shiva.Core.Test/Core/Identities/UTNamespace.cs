@@ -8,8 +8,14 @@ using System.Linq;
 namespace Shiva.Core.Identities
 {
     [TestClass]
-    public class UTNamespace
+    public class UTNamespace:BaseTest
     {
+        [ClassInitialize]
+        public new static void ClassInit(TestContext context)
+        {
+            BaseTest.ClassInit(context);
+        }
+
         [TestMethod]
         public void TestInitialization()
         {
@@ -29,7 +35,7 @@ namespace Shiva.Core.Identities
         {
             Action<string> ctor = x => new Namespace(x);
 
-            ctor.Invoking(x => x(null)).ShouldThrow<ArgumentNullException>();
+            ctor.Invoking(x => x(null)).Should().Throw<ArgumentNullException>();
         }
 
         [TestMethod]
@@ -45,7 +51,7 @@ namespace Shiva.Core.Identities
         public void FailGetNextNode()
         {
             var ns = new Namespace("Shiva.Core.Identity");
-            ns.Invoking(x => x.GetNextNode(null)).ShouldThrow<ArgumentNullException>();
+            ns.Invoking(x => x.GetNextNode(null)).Should().Throw<ArgumentNullException>();
         }
 
         [TestMethod]
@@ -62,10 +68,10 @@ namespace Shiva.Core.Identities
 
 
             var l = new List<string>();
-            l.Invoking(x => x.Add(ns)).ShouldNotThrow();
+            l.Invoking(x => x.Add(ns)).Should().NotThrow();
 
             var l2 = new List<Namespace>();
-            l2.Invoking(x => x.Add("Shiva.Core.Identity")).ShouldNotThrow();
+            l2.Invoking(x => x.Add("Shiva.Core.Identity")).Should().NotThrow();
 
         }
     }

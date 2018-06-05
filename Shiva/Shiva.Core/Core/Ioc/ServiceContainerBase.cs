@@ -119,5 +119,30 @@ namespace Shiva.Core.Ioc
         /// <param name="serviceFactory">The service factory.</param>
         /// <param name="scope">The scope.</param>
         protected abstract void InternalRegister<TService>(Func<TService> serviceFactory, ScopeServiceEnum scope) where TService:class;
+
+        /// <summary>
+        /// Registers the initialize.
+        /// </summary>
+        /// <typeparam name="TService">The type of the service.</typeparam>
+        /// <param name="initializer">The initializer.</param>
+        /// <exception cref="NotImplementedException"></exception>
+        public void RegisterInitialize<TService>(Action<TService> initializer) where TService : class
+        {
+            if (initializer == null)
+                throw new ArgumentNullException(nameof(initializer));
+
+            if (this.Logger.InfoIsEnabled)
+                this.Logger.Info($"Register a initializer for type {typeof(TService)}");
+
+            this.InternalRegisterInitializer<TService>(initializer);
+            
+        }
+
+        /// <summary>
+        /// Internals the register initializer.
+        /// </summary>
+        /// <typeparam name="TService">The type of the service.</typeparam>
+        /// <param name="initializer">The initializer.</param>
+        protected abstract void InternalRegisterInitializer<TService>(Action<TService> initializer) where TService : class;
     }
 }

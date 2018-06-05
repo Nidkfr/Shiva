@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Shiva
 {
     [TestClass]
+    [DeploymentItem("Log.xml")]
     public abstract class BaseTest
     {
         private static ILogManager _logm;
@@ -21,8 +22,7 @@ namespace Shiva
 
         static BaseTest()
         {
-            log4net.Config.XmlConfigurator.Configure(new FileInfo("Log.xml"));
-            _logm = new Log4NetLogManager();
+            
         }
 
         public TestContext TestContext
@@ -38,9 +38,13 @@ namespace Shiva
         }
 
         public ILogManager LogManager => _logm;
-                
+              
         public static void ClassInit(TestContext context)
         {
+            log4net.GlobalContext.Properties["LogName"] = context.FullyQualifiedTestClassName;
+            log4net.Config.XmlConfigurator.Configure(new FileInfo("Log.xml"));            
+            _logm = new Log4NetLogManager();
+
             var _logger = _logm.CreateLogger(context.FullyQualifiedTestClassName);
             if (_logger.DebugIsEnabled)
             {

@@ -31,12 +31,12 @@ namespace Shiva.Core.Identities
             if(nodes.Length == 1)
             {
                 this.Namespace = Namespace.Null;
-                this.Id = fullid.Trim();
+                this.Key = fullid.Trim();
             }
             else
             {
-                this.Id = nodes.Last().Trim();
-                this.Namespace = fullid.Substring(0,(fullid.LastIndexOf(this.Id) - 1));
+                this.Key = nodes.Last().Trim();
+                this.Namespace = fullid.Substring(0,(fullid.LastIndexOf(this.Key) - 1));
             }
         }
 
@@ -51,7 +51,7 @@ namespace Shiva.Core.Identities
             if (string.IsNullOrWhiteSpace(id))
                 throw new ArgumentNullException(nameof(id));
 
-            this.Id = id;
+            this.Key = id;
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Shiva.Core.Identities
         /// <summary>
         /// Id value
         /// </summary>
-        public string Id { get; private set; }
+        public string Key { get; private set; }
 
 
         /// <summary>
@@ -78,9 +78,9 @@ namespace Shiva.Core.Identities
         public override string ToString()
         {
             if (this.Namespace == null)
-                return this.Id;
+                return this.Key;
             else
-                return $"{this.Namespace}.{this.Id}";
+                return $"{this.Namespace}.{this.Key}";
         }
 
         /// <summary>
