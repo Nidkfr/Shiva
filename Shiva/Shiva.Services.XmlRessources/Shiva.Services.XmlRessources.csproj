@@ -6,7 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Ressources\" />
+    <ProjectReference Include="..\Shiva.Core\Shiva.Core.csproj" />
+    <ProjectReference Include="..\Shiva.Ressources\Shiva.Ressources.csproj" />
   </ItemGroup>
 
 </Project>
