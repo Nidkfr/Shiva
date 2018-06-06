@@ -4,6 +4,7 @@ using System.Text;
 using System.Globalization;
 using Shiva.Core.Identities;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Shiva.Ressources
 {
@@ -33,7 +34,7 @@ namespace Shiva.Ressources
         /// </summary>
         /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <returns></returns>
-        Task<TRessource> GetRessourceAsync<TRessource>(Identity ressourceId) where TRessource : IRessource;
+        Task<TRessource> GetRessourceAsync<TRessource>(Identity ressourceId,CancellationToken? cancelToken=null) where TRessource : IRessource;
 
         /// <summary>
         /// Saves the ressource.
@@ -47,8 +48,9 @@ namespace Shiva.Ressources
         /// </summary>
         /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <param name="ressource">The ressource.</param>
+        /// <param name="cancelToken">cancel token</param>
         /// <returns></returns>
-        Task SaveRessourceAsync<TRessource>(TRessource ressource) where TRessource : IRessource;
+        Task SaveRessourceAsync<TRessource>(TRessource ressource,CancellationToken? cancelToken= null) where TRessource : IRessource;
 
         /// <summary>
         /// Gets the group ressource.
@@ -71,16 +73,18 @@ namespace Shiva.Ressources
         /// </summary>
         /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <param name="groupRessourceId">The group ressource identifier.</param>
+        /// <param name="cancelToken">cancel token</param>
         /// <returns></returns>
-        Task<IRessourcesGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Identity groupRessourceId) where TRessource : IRessource;
+        Task<IRessourcesGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Identity groupRessourceId, CancellationToken? cancelToken = null) where TRessource : IRessource;
 
         /// <summary>
         /// Gets the group ressource asynchronous.
         /// </summary>
         /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <param name="groupNamespaceRessource">The group namespace ressource.</param>
+        /// <param name="cancelToken">cancel token</param>
         /// <returns></returns>
-        Task<IRessourcesGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Namespace groupNamespaceRessource) where TRessource : IRessource;
+        Task<IRessourcesGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Namespace groupNamespaceRessource, CancellationToken? cancelToken = null) where TRessource : IRessource;
 
         /// <summary>
         /// Attaches the ressource to group.
@@ -94,8 +98,9 @@ namespace Shiva.Ressources
         /// </summary>
         /// <param name="ressourceId">The ressource identifier.</param>
         /// <param name="groupRessourceId">The group ressource identifier.</param>
+        /// <param name="cancelToken">cancel token</param>
         /// <returns></returns>
-        Task AttachRessourceToGroupAsync(Identity ressourceId, Identity groupRessourceId);
+        Task AttachRessourceToGroupAsync(Identity ressourceId, Identity groupRessourceId, CancellationToken? cancelToken = null);
 
         /// <summary>
         /// Removes the group.
@@ -107,8 +112,9 @@ namespace Shiva.Ressources
         /// Removes the group asynchronous.
         /// </summary>
         /// <param name="groupRessourceId">The group ressource identifier.</param>
+        /// <param name="cancelToken">cancel token</param>
         /// <returns></returns>
-        Task RemoveGroupAsync(Identity groupRessourceId);
+        Task RemoveGroupAsync(Identity groupRessourceId, CancellationToken? cancelToken = null);
 
         /// <summary>
         /// Gets the group list.
@@ -120,6 +126,6 @@ namespace Shiva.Ressources
         /// Gets the group list asynchronous.
         /// </summary>
         /// <returns></returns>
-        Task<IEnumerable<Identity>> GetAllGroupsAsync();
+        Task<IEnumerable<Identity>> GetAllGroupsAsync(CancellationToken? cancelToken = null);
     }
 }
