@@ -5,6 +5,10 @@
     <RootNamespace>Shiva</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\Shiva.Ressources.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Shiva.Core\Shiva.Core.csproj" />
   </ItemGroup>

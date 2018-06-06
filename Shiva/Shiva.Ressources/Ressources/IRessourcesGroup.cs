@@ -20,20 +20,22 @@ namespace Shiva.Ressources
         Identity Id { get; }
     }
 
+    /// <summary>
+    /// Ressource Groups
+    /// </summary>
+    /// <typeparam name="TRessource">The type of the ressource.</typeparam>
     public interface IRessourcesGroup<TRessource> : IRessourcesGroup where TRessource:IRessource
     {
         /// <summary>
         /// Gets the ressource.
-        /// </summary>
-        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        /// </summary>       
         /// <param name="ressourceID">The ressource identifier.</param>
         /// <returns></returns>
         TRessource GetRessource(Identity ressourceID);
 
         /// <summary>
         /// Gets the ressource asynchronous.
-        /// </summary>
-        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        /// </summary>        
         /// <param name="ressourceID">The ressource identifier.</param>
         /// <returns></returns>
         Task<TRessource> GetRessourceAsync(Identity ressourceID);

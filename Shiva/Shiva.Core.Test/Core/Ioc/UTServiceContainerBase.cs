@@ -37,6 +37,7 @@ namespace Shiva.Core.Ioc
         [TestMethod]
         public void TestRegisterInitializer()
         {
+            #pragma warning disable 0219
             var mock = new Mock<ServiceContainerBase>(this.LogManager);
             var instance = mock.Object;
                         

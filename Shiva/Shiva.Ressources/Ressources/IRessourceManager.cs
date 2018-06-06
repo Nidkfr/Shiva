@@ -32,7 +32,6 @@ namespace Shiva.Ressources
         /// Gets the ressource asynchronous.
         /// </summary>
         /// <typeparam name="TRessource">The type of the ressource.</typeparam>
-        /// <param name="ressourceID">The ressource identifier.</param>
         /// <returns></returns>
         Task<TRessource> GetRessourceAsync<TRessource>(Identity ressourceId) where TRessource : IRessource;
 
