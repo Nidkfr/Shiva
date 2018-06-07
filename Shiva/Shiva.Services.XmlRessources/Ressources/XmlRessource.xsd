@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="XmlRessource"
+    targetNamespace="http://shiva.org/XmlRessource.xsd"
+    elementFormDefault="qualified"
+    xmlns:xr="http://shiva.org/XmlRessource.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:element name="RessourcesDefinitions">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">Ressources file definitions</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:all maxOccurs="1" minOccurs="0">
+        <xs:element name="Ressources" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Ressources definitions </xs:documentation>      
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="Groups" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Groups definitions</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
