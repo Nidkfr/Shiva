@@ -127,5 +127,39 @@ namespace Shiva.Ressources
         /// </summary>
         /// <returns></returns>
         Task<IEnumerable<Identity>> GetAllGroupsAsync(CancellationToken? cancelToken = null);
+
+        /// <summary>
+        /// Determines whether the specified identifier ressource contains ressource.
+        /// </summary>
+        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        /// <param name="idRessource">The identifier ressource.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified identifier ressource contains ressource; otherwise, <c>false</c>.
+        /// </returns>
+        bool ContainsRessource<TRessource>(Identity idRessource);
+
+        /// <summary>
+        /// Determines whether [contains ressource asynchronous] [the specified identifier ressource].
+        /// </summary>
+        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        /// <param name="idRessource">The identifier ressource.</param>
+        /// <param name="cancelToken">The cancel token.</param>
+        /// <returns></returns>
+        Task<bool> ContainsRessourceAsync<TRessource>(Identity idRessource, CancellationToken? cancelToken = null);
+
+        /// <summary>
+        /// Removes the ressource.
+        /// </summary>
+        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        /// <param name="idRessource">The identifier ressource.</param>
+        void RemoveRessource<TRessource>(Identity idRessource);
+
+        /// <summary>
+        /// Removes the ressource asynchronous.
+        /// </summary>
+        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        /// <param name="idRessource">The identifier ressource.</param>
+        /// <returns></returns>
+        Task RemoveRessourceAsync<TRessource>(Identity idRessource);
     }
 }

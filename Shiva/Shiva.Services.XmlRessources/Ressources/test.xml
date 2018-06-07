@@ -1,4 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <xr:RessourcesDefinitions xmlns:xr="http://shiva.org/XmlRessource.xsd">
-  
+  <xr:Ressources>
+    <xr:Ressource id="A.B.Cc"/>    
+  </xr:Ressources>
 </xr:RessourcesDefinitions>

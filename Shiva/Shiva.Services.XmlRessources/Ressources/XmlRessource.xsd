@@ -15,6 +15,26 @@
           <xs:annotation>
             <xs:documentation xml:lang="en">Ressources definitions </xs:documentation>      
           </xs:annotation>
+          <xs:complexType>
+            <xs:sequence maxOccurs="unbounded" minOccurs="0">
+              <xs:element name="Ressource">
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">Ressource</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:attribute  name="id" type="xr:IdElement" use="required">
+                    <xs:annotation>
+                      <xs:documentation>Id of ressource</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                </xs:complexType>                
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+          <xs:key name="RessourceID">
+            <xs:selector xpath="xr:Ressource"></xs:selector>
+            <xs:field xpath="@id"/>
+          </xs:key>
         </xs:element>
         <xs:element name="Groups" minOccurs="0" maxOccurs="1">
           <xs:annotation>
@@ -24,4 +44,14 @@
       </xs:all>
     </xs:complexType>
   </xs:element>
+  <!--************************ Type de finition  **********************************************-->
+  <xs:simpleType name="IdElement">
+    <xs:annotation>
+      <xs:documentation>Id of element</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z_][A-Za-z0-9_.]*[a-z0-9]"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--************************ Type de finition  **********************************************-->
 </xs:schema>

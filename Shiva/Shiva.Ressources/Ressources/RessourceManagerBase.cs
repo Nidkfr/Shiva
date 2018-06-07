@@ -42,6 +42,28 @@ namespace Shiva.Ressources
         }
 
         /// <summary>
+        /// Determines whether the specified identifier ressource contains ressource.
+        /// </summary>
+        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        /// <param name="idRessource">The identifier ressource.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified identifier ressource contains ressource; otherwise, <c>false</c>.
+        /// </returns>
+        public abstract bool ContainsRessource<TRessource>(Identity idRessource);
+
+        /// <summary>
+        /// Determines whether [contains ressource asynchronous] [the specified identifier ressource].
+        /// </summary>
+        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        /// <param name="idRessource">The identifier ressource.</param>
+        /// <param name="cancelToken">The cancel token.</param>
+        /// <returns></returns>
+        public async Task<bool> ContainsRessourceAsync<TRessource>(Identity idRessource, CancellationToken? cancelToken = null)
+        {
+            return await Task.Run(() => this.ContainsRessource<TRessource>(idRessource));
+        }
+
+        /// <summary>
         /// Gets the group list.
         /// </summary>
         /// <returns></returns>
@@ -132,6 +154,24 @@ namespace Shiva.Ressources
         public async Task RemoveGroupAsync(Identity groupRessourceId, CancellationToken? cancelToken = null)
         {
             await Task.Run(() => this.RemoveGroup(groupRessourceId), cancelToken ?? CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Removes the ressource.
+        /// </summary>
+        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        /// <param name="idRessource">The identifier ressource.</param>
+        public abstract void RemoveRessource<TRessource>(Identity idRessource);
+
+        /// <summary>
+        /// Removes the ressource asynchronous.
+        /// </summary>
+        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        /// <param name="idRessource">The identifier ressource.</param>
+        /// <returns></returns>
+        public async Task RemoveRessourceAsync<TRessource>(Identity idRessource)
+        {
+            await Task.Run(() => this.RemoveRessource<TRessource>(idRessource));
         }
 
         /// <summary>

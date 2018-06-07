@@ -41,6 +41,11 @@ namespace Shiva.Ressources
             throw new NotImplementedException();
         }
 
+        public override bool ContainsRessource<TRessource>(Identity idRessource)
+        {
+            throw new NotImplementedException();
+        }
+
         public override IEnumerable<Identity> GetAllGroups()
         {
             throw new NotImplementedException();
@@ -62,6 +67,11 @@ namespace Shiva.Ressources
         }
 
         public override void RemoveGroup(Identity groupRessourceId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void RemoveRessource<TRessource>(Identity idRessource)
         {
             throw new NotImplementedException();
         }

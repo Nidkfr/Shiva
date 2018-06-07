@@ -93,7 +93,7 @@ namespace Shiva.Services
             if (this.Logger.InfoIsEnabled)
                 this.Logger.Info("Register Type {0} with instance {1}  in singleton scope mode", typeof(TService), service.GetType());
            
-            this._container.RegisterSingleton<TService>(service);
+            this._container.RegisterInstance<TService>(service);
         }
 
         /// <summary>
