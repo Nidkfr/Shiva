@@ -5,7 +5,7 @@ using System.Text;
 using Shiva.Core.Identities;
 using System.IO;
 using System.Xml;
-using Shiva.IO;
+
 
 namespace Shiva.Ressources
 {
@@ -15,41 +15,18 @@ namespace Shiva.Ressources
     public class XmlRessourceManager : RessourceManagerBase
     {
         private readonly CultureInfo _culture;
-        private readonly StreamSource _source;
-
+        private readonly Stream _stream;
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlRessourceManager"/> class.
         /// </summary>
         /// <param name="culture">The culture.</param>
-        public XmlRessourceManager(CultureInfo culture, StreamSource dataXml)
+        public XmlRessourceManager(CultureInfo culture, Stream dataXml)
         {
             this._culture = culture ?? throw new ArgumentNullException(nameof(culture));
-            this._source = dataXml ?? throw new ArgumentNullException(nameof(dataXml));
+            this._stream = dataXml ?? throw new ArgumentNullException(nameof(dataXml));
         }
 
-        /// <summary>
-        /// Gets the culture.
-        /// </summary>
-        /// <value>
-        /// The culture.
-        /// </value>
-        public override CultureInfo Culture => this._culture;
-
-
-        public override void AttachRessourceToGroup(Identity ressourceId, Identity groupRessourceId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool ContainsRessource<TRessource>(Identity idRessource)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override IEnumerable<Identity> GetAllGroups()
-        {
-            throw new NotImplementedException();
-        }
+        public override CultureInfo Culture => throw new NotImplementedException();
 
         public override IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Identity groupRessourceId)
         {
@@ -61,22 +38,27 @@ namespace Shiva.Ressources
             throw new NotImplementedException();
         }
 
-        public override TRessource GetRessource<TRessource>(Identity ressourceID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void RemoveGroup(Identity groupRessourceId)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void RemoveRessource<TRessource>(Identity idRessource)
         {
             throw new NotImplementedException();
         }
 
-        public override void SaveRessource<TRessource>(TRessource ressource)
+        public override void Save(Stream stream)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool ContainsRessourceInternal<TRessource>(Identity ressourceID)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override IEnumerable<Identity> GetAllGroupsInternal()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override TRessource GetRessourceInternal<TRessource>(Identity ressourceID)
         {
             throw new NotImplementedException();
         }

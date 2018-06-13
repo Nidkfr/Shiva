@@ -5,6 +5,7 @@ using System.Globalization;
 using Shiva.Core.Identities;
 using System.Threading.Tasks;
 using System.Threading;
+using System.IO;
 
 namespace Shiva.Ressources
 {
@@ -41,7 +42,7 @@ namespace Shiva.Ressources
         /// </summary>
         /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <param name="ressource">The ressource.</param>
-        void SaveRessource<TRessource>(TRessource ressource) where TRessource : IRessource;
+        void SetRessource<TRessource>(TRessource ressource) where TRessource : IRessource;
 
         /// <summary>
         /// Saves the ressource asynchronous.
@@ -50,7 +51,7 @@ namespace Shiva.Ressources
         /// <param name="ressource">The ressource.</param>
         /// <param name="cancelToken">cancel token</param>
         /// <returns></returns>
-        Task SaveRessourceAsync<TRessource>(TRessource ressource,CancellationToken? cancelToken= null) where TRessource : IRessource;
+        Task SetRessourceAsync<TRessource>(TRessource ressource,CancellationToken? cancelToken= null) where TRessource : IRessource;
 
         /// <summary>
         /// Gets the group ressource.
@@ -161,5 +162,16 @@ namespace Shiva.Ressources
         /// <param name="idRessource">The identifier ressource.</param>
         /// <returns></returns>
         Task RemoveRessourceAsync<TRessource>(Identity idRessource);
+
+        /// <summary>
+        /// Flushes this instance.
+        /// </summary>
+        void Save(Stream stream);
+
+        /// <summary>
+        /// Flushes the asyn.
+        /// </summary>
+        /// <returns></returns>
+        Task SaveAsyn(Stream stream);
     }
 }

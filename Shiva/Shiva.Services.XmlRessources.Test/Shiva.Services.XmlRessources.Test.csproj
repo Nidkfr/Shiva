@@ -61,6 +61,10 @@
       <Project>{2ac0dbc3-c995-401c-a536-ea6e78eb0799}</Project>
       <Name>Shiva.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Shiva.Ressources.Test\Shiva.Ressources.Test.csproj">
+      <Project>{208b0c54-9715-42fa-bc69-95f0b645b507}</Project>
+      <Name>Shiva.Ressources.Test</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Shiva.Ressources\Shiva.Ressources.csproj">
       <Project>{4fd464c9-9473-4a60-b65a-75220043082b}</Project>
       <Name>Shiva.Ressources</Name>

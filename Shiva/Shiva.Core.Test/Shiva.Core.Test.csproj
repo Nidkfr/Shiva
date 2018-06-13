@@ -80,7 +80,6 @@
     <Compile Include="Core\Identities\UTNamespace.cs" />
     <Compile Include="Core\Ioc\TesterIServiceContainer.cs" />
     <Compile Include="Core\Ioc\UTServiceContainerBase.cs" />
-    <Compile Include="IO\UTFileSource.cs" />
     <Compile Include="Mocks\VoidClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\UTStringTools.cs" />
