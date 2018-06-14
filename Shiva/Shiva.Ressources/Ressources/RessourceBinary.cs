@@ -22,11 +22,11 @@ namespace Shiva.Ressources
         /// <param name="idRessource">The identifier ressource.</param>
         /// <param name="data">The stream.</param>
         /// <param name="culture">The culture.</param>
-        public RessourceBinary(Identity idRessource, byte[] data, CultureInfo culture)
+        public RessourceBinary(Identity idRessource, byte[] data, CultureInfo culture=null)
         {
             this._id = idRessource ?? throw new ArgumentNullException(nameof(idRessource));
             this._data = data ?? throw new ArgumentNullException(nameof(data));
-            this._culture = culture ?? throw new ArgumentNullException(nameof(culture));
+            this._culture = culture;
         }
 
         /// <summary>

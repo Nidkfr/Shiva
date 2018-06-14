@@ -16,7 +16,7 @@ namespace Shiva.Ressources
     /// <seealso cref="Shiva.Ressources.IRessourceManager" />
     public abstract class RessourceManagerBase : IRessourceManager
     {
-        private readonly IDictionary<Identity, IDictionary<Type,IRessource>> _removedRessources = new Dictionary<Identity, IDictionary<Type, IRessource>>();
+        private readonly IDictionary<Identity, IDictionary<Type, IRessource>> _removedRessources = new Dictionary<Identity, IDictionary<Type, IRessource>>();
         private readonly IDictionary<Identity, IDictionary<Type, IRessource>> _addedRessources = new Dictionary<Identity, IDictionary<Type, IRessource>>();
         private readonly IDictionary<Identity, IDictionary<Type, IRessource>> _editedRessources = new Dictionary<Identity, IDictionary<Type, IRessource>>();
         private readonly IDictionary<Identity, IList<Identity>> _editedGroup = new Dictionary<Identity, IList<Identity>>();
@@ -43,7 +43,7 @@ namespace Shiva.Ressources
             if (groupRessourceId == null)
                 throw new ArgumentNullException(nameof(groupRessourceId));
 
-            if(!this._editedGroup.ContainsKey(groupRessourceId))
+            if (!this._editedGroup.ContainsKey(groupRessourceId))
                 this._editedGroup.Add(groupRessourceId, new List<Identity>());
 
             if (!this._editedGroup[groupRessourceId].Any(x => x == ressourceId))
@@ -73,12 +73,12 @@ namespace Shiva.Ressources
         /// <returns>
         ///   <c>true</c> if the specified identifier ressource contains ressource; otherwise, <c>false</c>.
         /// </returns>
-        public  bool ContainsRessource<TRessource>(Identity idRessource)
+        public bool ContainsRessource<TRessource>(Identity idRessource)
         {
             if (idRessource == null)
                 throw new ArgumentNullException(nameof(idRessource));
 
-            if(this._addedRessources.ContainsKey(idRessource))
+            if (this._addedRessources.ContainsKey(idRessource))
             {
                 var elements = this._addedRessources[idRessource];
                 if (elements.ContainsKey(typeof(TRessource))) return true;
@@ -113,7 +113,7 @@ namespace Shiva.Ressources
         /// Gets the group list.
         /// </summary>
         /// <returns></returns>
-        public  IEnumerable<Identity> GetAllGroups()
+        public IEnumerable<Identity> GetAllGroups()
         {
             var groups = new List<Identity>();
             groups.AddRange(this._editedGroup.Keys);
@@ -183,19 +183,19 @@ namespace Shiva.Ressources
         /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <param name="ressourceID">The ressource identifier.</param>
         /// <returns></returns>
-        public  TRessource GetRessource<TRessource>(Identity ressourceID) where TRessource : IRessource
+        public TRessource GetRessource<TRessource>(Identity ressourceID) where TRessource : IRessource
         {
             if (ressourceID == null)
                 throw new ArgumentNullException(nameof(ressourceID));
 
             //search first in added ressource
-            if(this._addedRessources.ContainsKey(ressourceID))
+            if (this._addedRessources.ContainsKey(ressourceID))
             {
                 var ressources = this._addedRessources[ressourceID];
                 if (ressources.ContainsKey(typeof(TRessource)))
                     return (TRessource)ressources[typeof(TRessource)];
             }
-            
+
             return this.GetRessourceInternal<TRessource>(ressourceID);
         }
 
@@ -265,7 +265,7 @@ namespace Shiva.Ressources
         /// <param name="stream"></param>
         /// <exception cref="NotImplementedException"></exception>
         public abstract void Save(Stream stream);
-        
+
 
         /// <summary>
         /// Flushes the asyn.
@@ -279,7 +279,7 @@ namespace Shiva.Ressources
         }
 
         /// <summary>
-        /// Saves the ressource.
+        /// Saves the ressource in culture.
         /// </summary>
         /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <param name="ressource">The ressource.</param>
@@ -290,7 +290,7 @@ namespace Shiva.Ressources
 
             //add ressource
             if (!this._addedRessources.ContainsKey(ressource.Id))
-                this._addedRessources.Add(ressource.Id, new Dictionary<Type,IRessource>());
+                this._addedRessources.Add(ressource.Id, new Dictionary<Type, IRessource>());
 
             var elts = this._addedRessources[ressource.Id];
             var typeRessouce = ressource.GetType();
@@ -303,12 +303,12 @@ namespace Shiva.Ressources
             if (this._removedRessources.ContainsKey(ressource.Id))
                 if (this._removedRessources[ressource.Id].ContainsKey(typeRessouce))
                     this._removedRessources[ressource.Id].Remove(typeRessouce);
-                
+
 
         }
 
         /// <summary>
-        /// Saves the ressource asynchronous.
+        /// Saves the ressource in the culture asynchronous.
         /// </summary>
         /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <param name="ressource">The ressource.</param>
@@ -319,6 +319,6 @@ namespace Shiva.Ressources
             await Task.Run(() => this.SetRessource<TRessource>(ressource), cancelToken ?? CancellationToken.None);
         }
 
-        
+
     }
 }

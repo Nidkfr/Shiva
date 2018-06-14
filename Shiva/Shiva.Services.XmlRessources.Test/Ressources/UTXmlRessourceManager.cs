@@ -14,24 +14,29 @@ namespace Shiva.Ressources
         [TestMethod]
         public void TestInitializer()
         {
-            var manager = new XmlRessourceManager(CultureInfo.GetCultureInfo("fr"), File.OpenRead("./ressources.xml"));
-            Assert.IsTrue(manager.Culture == CultureInfo.GetCultureInfo("fr"));            
+            using (var manager = new XmlRessourceManager(CultureInfo.GetCultureInfo("fr"), File.Open("./ressources.xml", FileMode.OpenOrCreate)))
+            {
+                Assert.IsTrue(manager.Culture == CultureInfo.GetCultureInfo("fr"));
+            }
         }
 
         [TestMethod]
         public void FailInitializer()
         {
             Action<CultureInfo, Stream> _ctor = (x, y) => new XmlRessourceManager(x, y);
-
-            _ctor.Invoking(x => x(null, File.OpenRead("./ressources.xml"))).Should().Throw<ArgumentNullException>();
+            var stream = File.Open("./ressources.xml", FileMode.OpenOrCreate);
+            _ctor.Invoking(x => x(null,stream )).Should().Throw<ArgumentNullException>();
             _ctor.Invoking(x => x(CultureInfo.GetCultureInfo("fr"), null)).Should().Throw<ArgumentNullException>();
+            stream.Close();
         }
 
         [TestMethod]
         public void TestGetRessource()
         {
-            var manager = new XmlRessourceManager(CultureInfo.GetCultureInfo("fr"), File.OpenRead("./ressources.xml"));
-            this._tester.TestGetRessource(manager);
+            using (var manager = new XmlRessourceManager(CultureInfo.GetCultureInfo("fr"), File.Open("./ressources.xml", FileMode.OpenOrCreate)))
+            {
+                this._tester.TestGetRessource(manager);
+            }
         }
     }
 }

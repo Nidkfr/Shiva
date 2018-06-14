@@ -21,10 +21,10 @@ namespace Shiva.Ressources
         /// <param name="id">id</param>
         /// <param name="value">The value.</param>
         /// <param name="culture">culture</param>
-        public RessourceString(Identity id, string value,CultureInfo culture)
+        public RessourceString(Identity id, string value,CultureInfo culture=null)
         {
             this._value = value;
-            this._culture = culture ?? throw new ArgumentNullException(nameof(culture));
+            this._culture = culture;
             this._id = id?? throw new ArgumentNullException(nameof(id));
         }
 

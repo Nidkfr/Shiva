@@ -18,9 +18,8 @@ namespace Shiva.Ressources
     {
         public void TestGetRessource(IRessourceManager manager)
         {
-            manager.SetRessource(new RessourceString("Test.Ressource1", "test value", CultureInfo.GetCultureInfo("en")));
-            manager.SetRessource(new RessourceString("Test.Ressource1", "test value", CultureInfo.GetCultureInfo("fr")));
-            manager.SetRessource(new RessourceBinary("Test.Ressource1", System.Text.Encoding.ASCII.GetBytes("test value"), CultureInfo.GetCultureInfo("en")));
+            manager.SetRessource(new RessourceString("Test.Ressource1", "test value", CultureInfo.GetCultureInfo("en")));            
+            manager.SetRessource(new RessourceBinary("Test.Ressource1", System.Text.Encoding.ASCII.GetBytes("test value")));
 
             var ressource = manager.GetRessource<RessourceString>("Test.Ressource1");
             Assert.IsTrue(ressource.Id == "Test.Ressource1");

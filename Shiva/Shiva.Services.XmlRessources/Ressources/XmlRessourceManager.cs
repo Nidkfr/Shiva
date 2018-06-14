@@ -12,7 +12,7 @@ namespace Shiva.Ressources
     /// <summary>
     /// Xml ressource Manager
     /// </summary>
-    public class XmlRessourceManager : RessourceManagerBase
+    public class XmlRessourceManager : RessourceManagerBase, IDisposable
     {
         private readonly CultureInfo _culture;
         private readonly Stream _stream;
@@ -26,7 +26,17 @@ namespace Shiva.Ressources
             this._stream = dataXml ?? throw new ArgumentNullException(nameof(dataXml));
         }
 
-        public override CultureInfo Culture => throw new NotImplementedException();
+        public override CultureInfo Culture =>this._culture;
+
+        ~XmlRessourceManager()
+        {
+            this.Dispose();
+        }
+
+        public void Dispose()
+        {
+            this._stream.Close();
+        }
 
         public override IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Identity groupRessourceId)
         {
