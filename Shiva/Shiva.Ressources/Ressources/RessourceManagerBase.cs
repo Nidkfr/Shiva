@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Shiva.Core.Identities;
 using System.Linq;
+using Shiva.Core.Services;
 
 namespace Shiva.Ressources
 {
@@ -16,11 +17,27 @@ namespace Shiva.Ressources
     /// <seealso cref="Shiva.Ressources.IRessourceManager" />
     public abstract class RessourceManagerBase : IRessourceManager
     {
-        private readonly IDictionary<Identity, IDictionary<Type, IRessource>> _removedRessources = new Dictionary<Identity, IDictionary<Type, IRessource>>();
+        private readonly IDictionary<Identity, IList<Type>> _removedRessources = new Dictionary<Identity, IList<Type>>();
         private readonly IDictionary<Identity, IDictionary<Type, IRessource>> _addedRessources = new Dictionary<Identity, IDictionary<Type, IRessource>>();
-        private readonly IDictionary<Identity, IDictionary<Type, IRessource>> _editedRessources = new Dictionary<Identity, IDictionary<Type, IRessource>>();
         private readonly IDictionary<Identity, IList<Identity>> _editedGroup = new Dictionary<Identity, IList<Identity>>();
         private readonly IList<Identity> _removeGroup = new List<Identity>();
+
+        /// <summary>
+        /// Gets or sets the logger.
+        /// </summary>
+        /// <value>
+        /// The logger.
+        /// </value>
+        private ILogger Logger { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RessourceManagerBase"/> class.
+        /// </summary>
+        /// <param name="logmanager">The logmanager.</param>
+        protected RessourceManagerBase(ILogManager logmanager=null)
+        {
+            this.Logger = logmanager?.CreateLogger(this.GetType()) ?? new NoLogger();
+        }
 
         /// <summary>
         /// Gets the culture of ressources.
@@ -42,6 +59,9 @@ namespace Shiva.Ressources
 
             if (groupRessourceId == null)
                 throw new ArgumentNullException(nameof(groupRessourceId));
+
+            if (this.Logger.InfoIsEnabled)
+                this.Logger.Info($"Attach Ressource {ressourceId} to group {groupRessourceId} in culutre {this.Culture}");
 
             if (!this._editedGroup.ContainsKey(groupRessourceId))
                 this._editedGroup.Add(groupRessourceId, new List<Identity>());
@@ -81,10 +101,20 @@ namespace Shiva.Ressources
             if (this._addedRessources.ContainsKey(idRessource))
             {
                 var elements = this._addedRessources[idRessource];
-                if (elements.ContainsKey(typeof(TRessource))) return true;
+                if (elements.ContainsKey(typeof(TRessource)))
+                {
+                    if (this.Logger.InfoIsEnabled)
+                        this.Logger.Info($"Ressource Manager contains ressource {idRessource} in culture {this.Culture}");
+                    return true;
+                }
             }
 
-            return this.ContainsRessourceInternal<TRessource>(idRessource);
+            var internalResponse = this.ContainsRessourceInternal<TRessource>(idRessource);
+
+            if (this.Logger.InfoIsEnabled)
+                this.Logger.Info($"Ressource Manager {(internalResponse?"Contains" : "not contains" )} ressource {idRessource} in culture {this.Culture}");
+
+            return internalResponse;
         }
 
         /// <summary>
@@ -115,9 +145,21 @@ namespace Shiva.Ressources
         /// <returns></returns>
         public IEnumerable<Identity> GetAllGroups()
         {
+            if (this.Logger.InfoIsEnabled)
+                this.Logger.Info($"Ressource Maanger get All groups from culture {this.Culture}");
+
             var groups = new List<Identity>();
             groups.AddRange(this._editedGroup.Keys);
             groups.AddRange(this.GetAllGroupsInternal());
+
+            if(this.Logger.DebugIsEnabled)
+            {
+                foreach (var group in groups)
+                {
+                    this.Logger.Debug($"Group : {group}");
+                }
+            }
+
             return groups;
         }
 
@@ -188,12 +230,19 @@ namespace Shiva.Ressources
             if (ressourceID == null)
                 throw new ArgumentNullException(nameof(ressourceID));
 
+            if (this.Logger.InfoIsEnabled)
+                this.Logger.Info($"Get Ressource {ressourceID}");
+
             //search first in added ressource
             if (this._addedRessources.ContainsKey(ressourceID))
             {
                 var ressources = this._addedRessources[ressourceID];
                 if (ressources.ContainsKey(typeof(TRessource)))
+                {
+                    if (this.Logger.DebugIsEnabled)
+                        this.Logger.Debug($"Ressource {ressourceID} is in cache");
                     return (TRessource)ressources[typeof(TRessource)];
+                }
             }
 
             return this.GetRessourceInternal<TRessource>(ressourceID);
@@ -226,6 +275,8 @@ namespace Shiva.Ressources
         /// <param name="groupRessourceId">The group ressource identifier.</param>
         public void RemoveGroup(Identity groupRessourceId)
         {
+            if (this.Logger.InfoIsEnabled)
+                this.Logger.Info($"Remove group {groupRessourceId} in culture {this.Culture}");
             this._removeGroup.Add(groupRessourceId);
             this._editedGroup.Remove(groupRessourceId);
         }
@@ -246,7 +297,31 @@ namespace Shiva.Ressources
         /// </summary>
         /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <param name="idRessource">The identifier ressource.</param>
-        public abstract void RemoveRessource<TRessource>(Identity idRessource);
+        public void RemoveRessource<TRessource>(Identity idRessource)
+        {
+            if (idRessource == null)
+                throw new ArgumentNullException(nameof(idRessource));
+
+            if (this.Logger.InfoIsEnabled)
+                this.Logger.Info($"Remove ressource {idRessource} in culture {this.Culture}");
+
+            //add ressource
+            if (!this._removedRessources.ContainsKey(idRessource))
+                this._removedRessources.Add(idRessource, new List<Type>());
+
+            var elts = this._removedRessources[idRessource];
+            var typeRessouce = typeof(TRessource);
+            if (!elts.Any(x=> typeRessouce == x))
+                elts.Add(typeRessouce);
+
+
+            //remove from added ressource et edit ressource
+            if (this._addedRessources.ContainsKey(idRessource))
+                if (this._addedRessources[idRessource].ContainsKey(typeRessouce))
+                    this._addedRessources[idRessource].Remove(typeRessouce);
+
+            
+        }
 
         /// <summary>
         /// Removes the ressource asynchronous.
@@ -291,6 +366,9 @@ namespace Shiva.Ressources
             ressource = (TRessource)ressource.Clone();
             ressource.SetCulture(this.Culture);
 
+            if (this.Logger.InfoIsEnabled)
+                this.Logger.Info($"Add ressource {ressource} in culture {this.Culture}");
+
             //add ressource
             if (!this._addedRessources.ContainsKey(ressource.Id))
                 this._addedRessources.Add(ressource.Id, new Dictionary<Type, IRessource>());
@@ -304,7 +382,7 @@ namespace Shiva.Ressources
 
             //remove from removed ressource
             if (this._removedRessources.ContainsKey(ressource.Id))
-                if (this._removedRessources[ressource.Id].ContainsKey(typeRessouce))
+                if (this._removedRessources[ressource.Id].Contains(typeRessouce))
                     this._removedRessources[ressource.Id].Remove(typeRessouce);
 
 

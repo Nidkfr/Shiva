@@ -57,6 +57,10 @@
     <Compile Include="Ressources\UTXmlRessourceManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Shiva.Core.Test\Shiva.Core.Test.csproj">
+      <Project>{55d0ba0b-dfb0-425e-83a6-921a6294a6d8}</Project>
+      <Name>Shiva.Core.Test</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Shiva.Core\Shiva.Core.csproj">
       <Project>{2ac0dbc3-c995-401c-a536-ea6e78eb0799}</Project>
       <Name>Shiva.Core</Name>
@@ -74,11 +78,17 @@
       <Name>Shiva.Services.XmlRessources</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DeployItems\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DeployItems\RessourceXml.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Log.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

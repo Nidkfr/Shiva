@@ -6,36 +6,69 @@ using FluentAssertions;
 
 namespace Shiva.Ressources
 {
-    [TestClass]
-    public class UTXmlRessourceManager: IRessourceManagerTester
+    [TestClass]    
+    public class UTXmlRessourceManager:BaseTest, IRessourceManagerTester
     {
+
         private RessourceManagerTester _tester = new RessourceManagerTester();
+
+        [ClassInitialize]
+        public new static void ClassInit(TestContext context)
+        {
+            BaseTest.ClassInit(context);
+        }
+
 
         [TestMethod]
         public void TestInitializer()
         {
-            using (var manager = new XmlRessourceManager(CultureInfo.GetCultureInfo("fr"), File.Open("./ressources.xml", FileMode.OpenOrCreate)))
+            using (var manager = new XmlRessourceManager(this.LogManager))
             {
-                Assert.IsTrue(manager.Culture == CultureInfo.GetCultureInfo("fr"));
+                Assert.IsNull(manager.Culture);
+                Assert.IsFalse(manager.IsInitialized);
             }
         }
 
         [TestMethod]
-        public void FailInitializer()
+        [DeploymentItem("DeployItems/RessourceXml.xml", "Data")]
+        public void TestIntialize()
         {
-            Action<CultureInfo, Stream> _ctor = (x, y) => new XmlRessourceManager(x, y);
-            var stream = File.Open("./ressources.xml", FileMode.OpenOrCreate);
-            _ctor.Invoking(x => x(null,stream )).Should().Throw<ArgumentNullException>();
-            _ctor.Invoking(x => x(CultureInfo.GetCultureInfo("fr"), null)).Should().Throw<ArgumentNullException>();
-            stream.Close();
+            using (var stream = File.Open("./Data/RessourceXml.xml", FileMode.Open))
+            {
+                using (var manager = new XmlRessourceManager(this.LogManager))
+                {
+                    manager.Initialize(CultureInfo.GetCultureInfo("en"),stream);
+                    Assert.IsTrue(manager.Culture == CultureInfo.GetCultureInfo("en"));
+                    Assert.IsTrue(manager.IsInitialized);
+                }
+            }
         }
 
         [TestMethod]
+        [DeploymentItem("DeployItems/RessourceXml.xml", "Data")]
+        public void FailInitialize()
+        {
+            using (var stream = File.Open("./Data/RessourceXml.xml", FileMode.Open))
+            {
+                using (var manager = new XmlRessourceManager(this.LogManager))
+                {
+                    manager.Invoking(x => x.Initialize(null, stream)).Should().Throw<ArgumentNullException>();
+                    manager.Invoking(x => x.Initialize(CultureInfo.GetCultureInfo("en"), null)).Should().Throw<ArgumentNullException>();
+                }
+            }
+        }
+
+        [TestMethod]
+        [DeploymentItem("DeployItems/RessourceXml.xml", "Data")]
         public void TestGetRessource()
         {
-            using (var manager = new XmlRessourceManager(CultureInfo.GetCultureInfo("en"), File.Open("./ressources.xml", FileMode.OpenOrCreate)))
+            using (var stream = File.Open("./Data/RessourceXml.xml", FileMode.Open))
             {
-                this._tester.TestGetRessource(manager);
+                using (var manager = new XmlRessourceManager(this.LogManager))
+                {
+                    manager.Initialize(CultureInfo.GetCultureInfo("en"), stream);
+                    this._tester.TestGetRessource(manager);
+                }
             }
         }
     }

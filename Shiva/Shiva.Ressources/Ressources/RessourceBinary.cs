@@ -52,5 +52,16 @@ namespace Shiva.Ressources
         {
             return new RessourceBinary(this.Id, this.Value, this.Culture);
         }
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            return $"{{{this.GetType().FullName}::{this.Value.Length} byte}}";
+        }
     }
 }

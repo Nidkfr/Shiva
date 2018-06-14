@@ -56,6 +56,5 @@ namespace Shiva.Ressources
             this._culture = culture ?? throw new ArgumentNullException(nameof(culture));
         }
 
-        
     }
 }

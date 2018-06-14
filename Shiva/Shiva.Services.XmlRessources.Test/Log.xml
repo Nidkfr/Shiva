@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<log4net>
+  <appender name="RollingFile" type="log4net.Appender.RollingFileAppender">
+    <file value="c:\temp\shiva\%property{LogName}.log" type="log4net.Util.PatternString"/>
+    <appendToFile value="false" />
+    <maximumFileSize value="1MB" />
+    <maxSizeRollBackups value="5" />
+    <layout type="log4net.Layout.PatternLayout">
+      <conversionPattern value="[%thread] %date %-5level  %-30logger - %message%newline" />
+    </layout>
+  </appender>
+  <root>
+    <level value="DEBUG" />    
+    <appender-ref ref="RollingFile" />
+  </root>
+</log4net>

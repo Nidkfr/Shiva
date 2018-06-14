@@ -22,9 +22,31 @@
                   <xs:documentation xml:lang="en">Ressource</xs:documentation>
                 </xs:annotation>
                 <xs:complexType>
+                  <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="Value">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Value of ressource</xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType mixed="true">
+                        <xs:sequence minOccurs="0" maxOccurs="1">
+                          <xs:any processContents="skip"/>
+                        </xs:sequence>
+                        <xs:attribute name="lang" use="required" type="xs:language">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">Culture of Value</xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
                   <xs:attribute  name="id" type="xr:IdElement" use="required">
                     <xs:annotation>
                       <xs:documentation>Id of ressource</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute  name="type" type="xr:Csharp_Type" use="required">
+                    <xs:annotation>
+                      <xs:documentation>type of ressource</xs:documentation>
                     </xs:annotation>
                   </xs:attribute>
                 </xs:complexType>                
@@ -46,6 +68,14 @@
   </xs:element>
   <!--************************ Type de finition  **********************************************-->
   <xs:simpleType name="IdElement">
+    <xs:annotation>
+      <xs:documentation>Id of element</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z_][A-Za-z0-9_.]*[a-z0-9]"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Csharp_Type">
     <xs:annotation>
       <xs:documentation>Id of element</xs:documentation>
     </xs:annotation>

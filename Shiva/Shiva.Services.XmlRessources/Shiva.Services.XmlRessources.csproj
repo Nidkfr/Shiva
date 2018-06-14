@@ -6,6 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Ressources\XmlRessource.xsd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Ressources\XmlRessource.xsd" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Shiva.Core\Shiva.Core.csproj" />
     <ProjectReference Include="..\Shiva.Ressources\Shiva.Ressources.csproj" />
   </ItemGroup>

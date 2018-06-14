@@ -17,8 +17,8 @@ namespace Shiva
     {
         private static ILogManager _logm;
         private TestContext _testContextInstance;        
-        private const string _separatorTest = "*****************************************************************************************************************";
-        private const string _separatorClass = "----------------------------------------------------------------------------------------------------------------";
+        private const string _SEPARATORTEST = "*****************************************************************************************************************";
+        private const string _SEPARATORCLASS = "----------------------------------------------------------------------------------------------------------------";
 
         static BaseTest()
         {
@@ -48,11 +48,11 @@ namespace Shiva
             var _logger = _logm.CreateLogger(context.FullyQualifiedTestClassName);
             if (_logger.DebugIsEnabled)
             {
-                _logger.Debug(_separatorTest);
-                _logger.Debug(_separatorClass);
+                _logger.Debug(_SEPARATORTEST);
+                _logger.Debug(_SEPARATORCLASS);
                 _logger.Debug($" Initialisation of {context.FullyQualifiedTestClassName} class Test.");
-                _logger.Debug(_separatorClass);
-                _logger.Debug(_separatorTest);
+                _logger.Debug(_SEPARATORCLASS);
+                _logger.Debug(_SEPARATORTEST);
             }
         }
 
@@ -62,10 +62,10 @@ namespace Shiva
             var _logger = _logm.CreateLogger(this.GetType());
             if (_logger.DebugIsEnabled)
             {
-                _logger.Debug(_separatorTest);             
+                _logger.Debug(_SEPARATORTEST);             
                 _logger.Debug($" Initialisation of {this.TestContext.TestName} Test.");
                 _logger.Debug($" DeployDirectory: {this.TestContext.DeploymentDirectory} TestDir{this.TestContext.TestDir}.");                
-                _logger.Debug(_separatorTest);
+                _logger.Debug(_SEPARATORTEST);
              
             }
         }
