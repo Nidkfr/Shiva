@@ -9,11 +9,9 @@ namespace Shiva.Ressources
     /// <summary>
     /// Ressource String
     /// </summary>    
-    public class RessourceString : IRessource<string>
+    public class RessourceString :RessourceBase, IRessource<string>
     {
-        private readonly string _value;
-        private readonly CultureInfo _culture;
-        private readonly Identity _id;
+        private readonly string _value;       
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RessourceString"/> class.
@@ -21,11 +19,9 @@ namespace Shiva.Ressources
         /// <param name="id">id</param>
         /// <param name="value">The value.</param>
         /// <param name="culture">culture</param>
-        public RessourceString(Identity id, string value,CultureInfo culture=null)
+        public RessourceString(Identity id, string value,CultureInfo culture=null):base(id,culture)
         {
-            this._value = value;
-            this._culture = culture;
-            this._id = id?? throw new ArgumentNullException(nameof(id));
+            this._value = value;           
         }
 
         /// <summary>
@@ -37,19 +33,21 @@ namespace Shiva.Ressources
         public string Value => this._value;
 
         /// <summary>
-        /// Gets the culture.
+        /// Clones this instance.
         /// </summary>
-        /// <value>
-        /// The culture.
-        /// </value>
-        public CultureInfo Culture => this._culture;
+        /// <returns></returns>
+        public override IRessource Clone()
+        {
+            return ((IRessource<string>)this).Clone();
+        }
 
         /// <summary>
-        /// Gets the identifier.
+        /// Clones this instance.
         /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public Identity Id => this._id;
+        /// <returns></returns>
+        IRessource<string> IRessource<string>.Clone()
+        {
+            return new RessourceString(this.Id, this.Value, this.Culture);
+        }
     }
 }

@@ -26,6 +26,19 @@ namespace Shiva.Ressources
         /// The identifier.
         /// </value>
         Identity Id { get; }
+
+        /// <summary>
+        /// Change culture of ressource
+        /// </summary>
+        /// <param name="culture">The culture.</param>
+        void SetCulture(CultureInfo culture);
+
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns></returns>
+        IRessource Clone();
+
     }
 
     /// <summary>
@@ -41,5 +54,11 @@ namespace Shiva.Ressources
         /// The value.
         /// </value>
         TValue Value { get; }
+
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns></returns>
+        new IRessource<TValue> Clone();
     }
 }

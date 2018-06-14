@@ -16,6 +16,8 @@ namespace Shiva.Ressources
     {
         private readonly CultureInfo _culture;
         private readonly Stream _stream;
+
+
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlRessourceManager"/> class.
         /// </summary>

@@ -288,6 +288,9 @@ namespace Shiva.Ressources
             if (ressource == null)
                 throw new ArgumentNullException(nameof(ressource));
 
+            ressource = (TRessource)ressource.Clone();
+            ressource.SetCulture(this.Culture);
+
             //add ressource
             if (!this._addedRessources.ContainsKey(ressource.Id))
                 this._addedRessources.Add(ressource.Id, new Dictionary<Type, IRessource>());

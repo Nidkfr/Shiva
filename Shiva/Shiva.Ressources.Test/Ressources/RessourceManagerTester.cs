@@ -18,7 +18,8 @@ namespace Shiva.Ressources
     {
         public void TestGetRessource(IRessourceManager manager)
         {
-            manager.SetRessource(new RessourceString("Test.Ressource1", "test value", CultureInfo.GetCultureInfo("en")));            
+            //create 2 resource with different type
+            manager.SetRessource(new RessourceString("Test.Ressource1", "test value"));            
             manager.SetRessource(new RessourceBinary("Test.Ressource1", System.Text.Encoding.ASCII.GetBytes("test value")));
 
             var ressource = manager.GetRessource<RessourceString>("Test.Ressource1");
@@ -35,6 +36,16 @@ namespace Shiva.Ressources
             Assert.IsTrue(ressourceb.Id == "Test.Ressource1");
             Assert.IsTrue(ressourceb.Culture == CultureInfo.GetCultureInfo("en"));
             Assert.IsTrue(System.Text.Encoding.ASCII.GetString(ressourceb.Value) == "test value");
+
+            //add ressource with another culture
+            manager.SetRessource(new RessourceString("Test.Ressource1", "test value in fr",CultureInfo.GetCultureInfo("fr")));
+
+            //ressource is overrided but save in culture of ressource manager
+            ressource = manager.GetRessource<RessourceString>("Test.Ressource1");
+            Assert.IsTrue(ressource.Id == "Test.Ressource1");
+            Assert.IsTrue(ressource.Culture == CultureInfo.GetCultureInfo("en"));
+            Assert.IsTrue(ressource.Value == "test value in fr");
+
         }
     }
 }

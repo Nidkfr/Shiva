@@ -33,7 +33,7 @@ namespace Shiva.Ressources
         [TestMethod]
         public void TestGetRessource()
         {
-            using (var manager = new XmlRessourceManager(CultureInfo.GetCultureInfo("fr"), File.Open("./ressources.xml", FileMode.OpenOrCreate)))
+            using (var manager = new XmlRessourceManager(CultureInfo.GetCultureInfo("en"), File.Open("./ressources.xml", FileMode.OpenOrCreate)))
             {
                 this._tester.TestGetRessource(manager);
             }
