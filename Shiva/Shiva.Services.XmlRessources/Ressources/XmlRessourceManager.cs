@@ -8,6 +8,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using Shiva.Core.Services;
+using Shiva.Core.IO;
 
 namespace Shiva.Ressources
 {
@@ -17,7 +18,7 @@ namespace Shiva.Ressources
     public class XmlRessourceManager : RessourceManagerBase, IDisposable
     {
         private CultureInfo _culture;
-        private Stream _stream;
+        private StreamSource _streamSource;
         private readonly IList<string> _validationXml = new List<string>();
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace Shiva.Ressources
         /// Initializes a new instance of the <see cref="XmlRessourceManager"/> class.
         /// </summary>
         /// <param name="logmanager">The logmanager.</param>
-        public XmlRessourceManager(ILogManager logmanager=null):base(logmanager)
+        public XmlRessourceManager(ILogManager logmanager = null) : base(logmanager)
         {
             this.Logger = logmanager?.CreateLogger<XmlRessourceManager>() ?? new NoLogger();
         }
@@ -44,14 +45,14 @@ namespace Shiva.Ressources
         /// </summary>
         /// <param name="culture">The culture.</param>
         /// <param name="dataXml">The data XML.</param>
-        public void Initialize(CultureInfo culture, Stream dataXml)
+        public void Initialize(CultureInfo culture, StreamSource source)
         {
             this.IsInitialized = false;
             if (this.Logger.InfoIsEnabled)
                 this.Logger.Info($"Initialize Ressource mananger to culture {culture}");
 
             this._culture = culture ?? throw new ArgumentNullException(nameof(culture));
-            this._stream = dataXml ?? throw new ArgumentNullException(nameof(dataXml));
+            this._streamSource = source ?? throw new ArgumentNullException(nameof(source));
 
             this._ValidateXml();
 
@@ -69,7 +70,7 @@ namespace Shiva.Ressources
         {
             if (this.Logger.DebugIsEnabled)
                 this.Logger.Debug("Ressource Manager is disposed");
-            this._stream?.Close();
+            this._streamSource?.Dispose();
         }
 
         public override IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Identity groupRessourceId)
@@ -79,13 +80,6 @@ namespace Shiva.Ressources
         }
 
         public override IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Namespace groupNamespaceRessource)
-        {
-            this._CheckInit();
-            throw new NotImplementedException();
-        }
-
-
-        public override void Save(Stream stream)
         {
             this._CheckInit();
             throw new NotImplementedException();
@@ -114,12 +108,13 @@ namespace Shiva.Ressources
             throw new NotImplementedException();
         }
 
-        private XElement _GetRessource(Identity id,Type ressource)
-        {            
+        private XElement _GetRessource(Identity id, Type ressource)
+        {
             var validParent = false;
 
-            this._stream.Seek(0, SeekOrigin.Begin);
-            using (var reader = XmlReader.Create(this._stream))
+            var stream = this._streamSource.GetStream();
+            stream.Seek(0, SeekOrigin.Begin);
+            using (var reader = XmlReader.Create(stream))
             {
                 while (reader.Read())
                 {
@@ -169,15 +164,15 @@ namespace Shiva.Ressources
                 settings.Schemas.Add(xsdSet);
                 settings.ValidationEventHandler += new ValidationEventHandler(this._Xml_ValidationEventHandler);
 
-                using (var reader = XmlReader.Create(this._stream, settings))
+                using (var reader = XmlReader.Create(this._streamSource.GetStream(), settings))
                     while (reader.Read())
                     {
                     }
-                if(this._validationXml.Count>0)
+                if (this._validationXml.Count > 0)
                     throw new XmlSchemaValidationException($"Ressource Xml stream validation fail :\n\r {string.Join("\n\r", this._validationXml)}");
             }
             else
-                throw new XmlSchemaValidationException($"Ressource Xml schema is not valid :\n\r {string.Join("\n\r",this._validationXml)}");
+                throw new XmlSchemaValidationException($"Ressource Xml schema is not valid :\n\r {string.Join("\n\r", this._validationXml)}");
 
         }
 
@@ -185,12 +180,43 @@ namespace Shiva.Ressources
         {
             this._validationXml.Add(e.Message);
         }
-        
+
         private void _CheckInit()
         {
             if (!this.IsInitialized)
                 throw new InvalidOperationException("XmlRessourceManager is not initialized");
         }
+
+        protected override void FlushInternal(RessourcesEditInfo editInformation)
+        {
+            var settings = new XmlWriterSettings
+            {
+                Indent = true,
+            };
+
+            using (var writer = XmlWriter.Create(this._streamSource.GetSaveStream(), settings))
+            {
+                var stream = this._streamSource.GetStream();
+                stream.Seek(0, SeekOrigin.Begin);
+                using (var reader = XmlReader.Create(stream))
+                {
+                    //start
+                    writer.WriteStartDocument();
+                    //root
+                    writer.WriteStartElement(PREFIX, ELEMENT_ROOT, NAMESPACE);
+
+                    //Ressources
+                    writer.WriteStartElement(PREFIX, ELEMENT_RESSOURCES, NAMESPACE);
+                    //end Ressource
+                    writer.WriteEndElement();
+                    //End root
+                    writer.WriteEndElement();
+                    //end Document
+                    writer.WriteEndDocument();
+                }
+            }
+        }
+
         private const string ELEMENT_RESSOURCE = "Ressource";
         private const string ELEMENT_RESSOURCES = "Ressources";
         private const string ELEMENT_VALUE = "Value";
@@ -198,5 +224,8 @@ namespace Shiva.Ressources
         private const string ATTRIBUTE_TYPE = "type";
         private const string ATTRIBUTE_LANG = "lang";
         private const string RESSOURCE_SCHEMA = "Shiva.Ressources.XmlRessource.xsd";
+        private const string ELEMENT_ROOT = "RessourcesDefinitions";
+        private const string NAMESPACE = "http://shiva.org/XmlRessource.xsd";
+        private const string PREFIX = "xr";
     }
 }

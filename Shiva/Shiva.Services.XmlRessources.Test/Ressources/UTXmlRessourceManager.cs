@@ -3,11 +3,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Globalization;
 using System.IO;
 using FluentAssertions;
+using Shiva.Core.IO;
 
 namespace Shiva.Ressources
 {
-    [TestClass]    
-    public class UTXmlRessourceManager:BaseTest, IRessourceManagerTester
+    [TestClass]
+    public class UTXmlRessourceManager : BaseTest, IRessourceManagerTester
     {
 
         private RessourceManagerTester _tester = new RessourceManagerTester();
@@ -33,11 +34,11 @@ namespace Shiva.Ressources
         [DeploymentItem("DeployItems/RessourceXml.xml", "Data")]
         public void TestIntialize()
         {
-            using (var stream = File.Open("./Data/RessourceXml.xml", FileMode.Open))
+            using (var streamsource = new FileSource("./Data/RessourceXml.xml"))
             {
                 using (var manager = new XmlRessourceManager(this.LogManager))
                 {
-                    manager.Initialize(CultureInfo.GetCultureInfo("en"),stream);
+                    manager.Initialize(CultureInfo.GetCultureInfo("en"), streamsource);
                     Assert.IsTrue(manager.Culture == CultureInfo.GetCultureInfo("en"));
                     Assert.IsTrue(manager.IsInitialized);
                 }
@@ -48,11 +49,11 @@ namespace Shiva.Ressources
         [DeploymentItem("DeployItems/RessourceXml.xml", "Data")]
         public void FailInitialize()
         {
-            using (var stream = File.Open("./Data/RessourceXml.xml", FileMode.Open))
+            using (var streamsource = new FileSource("./Data/RessourceXml.xml"))
             {
                 using (var manager = new XmlRessourceManager(this.LogManager))
                 {
-                    manager.Invoking(x => x.Initialize(null, stream)).Should().Throw<ArgumentNullException>();
+                    manager.Invoking(x => x.Initialize(null, streamsource)).Should().Throw<ArgumentNullException>();
                     manager.Invoking(x => x.Initialize(CultureInfo.GetCultureInfo("en"), null)).Should().Throw<ArgumentNullException>();
                 }
             }
@@ -62,12 +63,28 @@ namespace Shiva.Ressources
         [DeploymentItem("DeployItems/RessourceXml.xml", "Data")]
         public void TestGetRessource()
         {
-            using (var stream = File.Open("./Data/RessourceXml.xml", FileMode.Open))
+
+            using (var streamsource = new FileSource("./Data/RessourceXml.xml"))
             {
                 using (var manager = new XmlRessourceManager(this.LogManager))
                 {
-                    manager.Initialize(CultureInfo.GetCultureInfo("en"), stream);
+                    manager.Initialize(CultureInfo.GetCultureInfo("en"), streamsource);
                     this._tester.TestGetRessource(manager);
+                }
+            }
+
+        }
+
+        [TestMethod]
+        [DeploymentItem("DeployItems/RessourceXml.xml", "Data")]
+        public void TestGetRessourceAsync()
+        {
+            using (var streamsource = new FileSource("./Data/RessourceXml.xml"))
+            {
+                using (var manager = new XmlRessourceManager(this.LogManager))
+                {
+                    manager.Initialize(CultureInfo.GetCultureInfo("en"), streamsource);
+                    this._tester.TestGetRessourceAsync(manager);
                 }
             }
         }

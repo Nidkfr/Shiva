@@ -166,12 +166,12 @@ namespace Shiva.Ressources
         /// <summary>
         /// Flushes this instance.
         /// </summary>
-        void Save(Stream stream);
+        void Flush();
 
         /// <summary>
         /// Flushes the asyn.
         /// </summary>
         /// <returns></returns>
-        Task SaveAsyn(Stream stream);
+        Task FlushAsyn();
     }
 }

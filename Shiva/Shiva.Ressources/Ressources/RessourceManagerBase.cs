@@ -34,7 +34,7 @@ namespace Shiva.Ressources
         /// Initializes a new instance of the <see cref="RessourceManagerBase"/> class.
         /// </summary>
         /// <param name="logmanager">The logmanager.</param>
-        protected RessourceManagerBase(ILogManager logmanager=null)
+        protected RessourceManagerBase(ILogManager logmanager = null)
         {
             this.Logger = logmanager?.CreateLogger(this.GetType()) ?? new NoLogger();
         }
@@ -112,7 +112,7 @@ namespace Shiva.Ressources
             var internalResponse = this.ContainsRessourceInternal<TRessource>(idRessource);
 
             if (this.Logger.InfoIsEnabled)
-                this.Logger.Info($"Ressource Manager {(internalResponse?"Contains" : "not contains" )} ressource {idRessource} in culture {this.Culture}");
+                this.Logger.Info($"Ressource Manager {(internalResponse ? "Contains" : "not contains")} ressource {idRessource} in culture {this.Culture}");
 
             return internalResponse;
         }
@@ -152,7 +152,7 @@ namespace Shiva.Ressources
             groups.AddRange(this._editedGroup.Keys);
             groups.AddRange(this.GetAllGroupsInternal());
 
-            if(this.Logger.DebugIsEnabled)
+            if (this.Logger.DebugIsEnabled)
             {
                 foreach (var group in groups)
                 {
@@ -311,7 +311,7 @@ namespace Shiva.Ressources
 
             var elts = this._removedRessources[idRessource];
             var typeRessouce = typeof(TRessource);
-            if (!elts.Any(x=> typeRessouce == x))
+            if (!elts.Any(x => typeRessouce == x))
                 elts.Add(typeRessouce);
 
 
@@ -320,7 +320,7 @@ namespace Shiva.Ressources
                 if (this._addedRessources[idRessource].ContainsKey(typeRessouce))
                     this._addedRessources[idRessource].Remove(typeRessouce);
 
-            
+
         }
 
         /// <summary>
@@ -336,21 +336,40 @@ namespace Shiva.Ressources
 
         /// <summary>
         /// Flushes this instance.
-        /// </summary>
-        /// <param name="stream"></param>
+        /// </summary>        
         /// <exception cref="NotImplementedException"></exception>
-        public abstract void Save(Stream stream);
+        public void Flush()
+        {
+            var info = new RessourcesEditInfo()
+            {
+                RemovedRessources = this._removedRessources
+                .SelectMany(x => x.Value.Select(type => new { type, x.Key }))
+                .ToDictionary(x => x.type, x => x.Key),
+            };
 
+
+
+            this.FlushInternal(info);
+
+            this._addedRessources.Clear();
+            this._editedGroup.Clear();
+            this._removedRessources.Clear();
+            this._removeGroup.Clear();
+        }
+
+        /// <summary>
+        /// Flushes the internal.
+        /// </summary>
+        protected abstract void FlushInternal(RessourcesEditInfo editInformation);
 
         /// <summary>
         /// Flushes the asyn.
-        /// </summary>
-        /// <param name="stream"></param>
+        /// </summary>        
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task SaveAsyn(Stream stream)
+        public async Task FlushAsyn()
         {
-            await Task.Run(() => this.Save(stream));
+            await Task.Run(() => this.Flush());
         }
 
         /// <summary>
