@@ -105,6 +105,7 @@ namespace Shiva.Ressources
         protected override TRessource GetRessourceInternal<TRessource>(Identity ressourceID)
         {
             this._CheckInit();
+            var elt = this._GetRessource(ressourceID, typeof(TRessource));
             throw new NotImplementedException();
         }
 
@@ -194,27 +195,113 @@ namespace Shiva.Ressources
                 Indent = true,
             };
 
+            var rootIsWrited = false;
+            var ressourcesIsWrited = false;            
+
             using (var writer = XmlWriter.Create(this._streamSource.GetSaveStream(), settings))
             {
                 var stream = this._streamSource.GetStream();
                 stream.Seek(0, SeekOrigin.Begin);
+                writer.WriteStartDocument();
                 using (var reader = XmlReader.Create(stream))
                 {
-                    //start
-                    writer.WriteStartDocument();
-                    //root
-                    writer.WriteStartElement(PREFIX, ELEMENT_ROOT, NAMESPACE);
+                    while (reader.Read())
+                    {
+                        switch (reader.NodeType)
+                        {
+                            case XmlNodeType.Comment:
+                                writer.WriteComment(reader.Value);
+                                break;
+                            case XmlNodeType.CDATA:
+                                writer.WriteCData(reader.Value);
+                                break;
+                            case XmlNodeType.Element:
+                                if (rootIsWrited)
+                                {
+                                    if (ressourcesIsWrited)
+                                    {
+                                        if (reader.Name == ELEMENT_RESSOURCE)
+                                        {
+                                            var id = reader.GetAttribute(ATTRIBUTE_ID);
+                                            var type = reader.GetAttribute(ATTRIBUTE_TYPE);
+                                            if (!editInformation.RemovedRessources.Any(x => x.Key.FullName == type && x.Value == id))
+                                            {
+                                                var elt = (XElement)XElement.ReadFrom(reader);
+                                                var addressource = editInformation.AddedRessources.First(x => x.Id == id && x.GetType().FullName == type);
+                                                if (addressource!=null)
+                                                {
+                                                    var value = elt.Elements(ELEMENT_VALUE)
+                                                        .FirstOrDefault(x => x.Attribute(ATTRIBUTE_LANG).Value == addressource.Culture.TwoLetterISOLanguageName);
 
-                    //Ressources
-                    writer.WriteStartElement(PREFIX, ELEMENT_RESSOURCES, NAMESPACE);
-                    //end Ressource
-                    writer.WriteEndElement();
-                    //End root
-                    writer.WriteEndElement();
-                    //end Document
-                    writer.WriteEndDocument();
+                                                    if (value !=null)
+                                                    {
+                                                        var valueElt = addressource.Serialize();
+                                                        value.ReplaceNodes(valueElt);
+                                                        editInformation.AddedRessources.Remove(addressource);
+                                                    }
+                                                }
+                                                elt.WriteTo(writer);                                                
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (reader.Name == ELEMENT_RESSOURCES)
+                                        {
+                                            writer.WriteStartElement(PREFIX, ELEMENT_ROOT, NAMESPACE);
+                                            ressourcesIsWrited = true;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (reader.Name == ELEMENT_ROOT)
+                                    {
+                                        writer.WriteStartElement(PREFIX, ELEMENT_ROOT, NAMESPACE);
+                                        rootIsWrited = true;
+                                    }
+                                }
+                                break;
+                            case XmlNodeType.EndElement:
+                                if(reader.Name == ELEMENT_RESSOURCES)
+                                {
+                                    foreach (var ressource in editInformation.AddedRessources)
+                                    {
+                                        this._writeRessource(ressource, writer);
+                                    }
+                                }
+                                writer.WriteEndElement();
+                                break;
+                        }
+                    }
+
+                    if (!rootIsWrited)
+                    {
+                        this._writeNewRoot(writer);
+                    }
+
                 }
+                writer.WriteEndDocument();
             }
+        }
+
+        private void _writeNewRoot(XmlWriter writer)
+        {
+            writer.WriteStartElement(PREFIX, ELEMENT_ROOT, NAMESPACE);
+            writer.WriteEndElement();
+        }
+
+        private void _writeRessource(IRessource ressource, XmlWriter writer)
+        {
+            writer.WriteStartElement(PREFIX, ELEMENT_RESSOURCE, NAMESPACE);
+            writer.WriteAttributeString(PREFIX, ATTRIBUTE_ID, NAMESPACE, ressource.Id);
+            writer.WriteAttributeString(PREFIX, ATTRIBUTE_TYPE, NAMESPACE, ressource.GetType().FullName);
+            writer.WriteStartElement(PREFIX, ELEMENT_VALUE, NAMESPACE);
+            writer.WriteAttributeString(PREFIX, ATTRIBUTE_LANG, NAMESPACE, ressource.Culture.TwoLetterISOLanguageName);
+            var elt = ressource.Serialize();
+            elt.WriteTo(writer);
+            writer.WriteEndElement();
+            writer.WriteEndElement();
         }
 
         private const string ELEMENT_RESSOURCE = "Ressource";

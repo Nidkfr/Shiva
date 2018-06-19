@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
 using Shiva.Core.Identities;
+using System.Xml.Linq;
 
 namespace Shiva.Ressources
 {
@@ -38,6 +39,18 @@ namespace Shiva.Ressources
         /// </summary>
         /// <returns></returns>
         IRessource Clone();
+
+        /// <summary>
+        /// Serializes this instance.
+        /// </summary>
+        /// <returns></returns>
+        XElement Serialize();
+
+        /// <summary>
+        /// Unserialize.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        void UnSerialize(XElement value);
 
     }
 

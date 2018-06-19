@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using System.Xml.Linq;
 using Shiva.Core.Identities;
 
 namespace Shiva.Ressources
@@ -48,6 +49,12 @@ namespace Shiva.Ressources
         public abstract IRessource Clone();
 
         /// <summary>
+        /// Serializes this instance.
+        /// </summary>
+        /// <returns></returns>
+        public abstract XElement Serialize();
+
+        /// <summary>
         /// Sets the culture.
         /// </summary>
         /// <param name="culture">The culture.</param>
@@ -56,5 +63,10 @@ namespace Shiva.Ressources
             this._culture = culture ?? throw new ArgumentNullException(nameof(culture));
         }
 
+        /// <summary>
+        /// Uns the serialize.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public abstract void UnSerialize(XElement value);
     }
 }

@@ -22,6 +22,17 @@ namespace Shiva.Ressources
             set;
         }
 
+        /// <summary>
+        /// Gets or sets the added ressources.
+        /// </summary>
+        /// <value>
+        /// The added ressources.
+        /// </value>
+        public IList<IRessource> AddedRessources
+        {
+            get;
+            set;
+        }
 
     }
 }

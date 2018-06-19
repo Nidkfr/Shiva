@@ -345,6 +345,7 @@ namespace Shiva.Ressources
                 RemovedRessources = this._removedRessources
                 .SelectMany(x => x.Value.Select(type => new { type, x.Key }))
                 .ToDictionary(x => x.type, x => x.Key),
+                AddedRessources = this._addedRessources.SelectMany(x=>x.Value.Values).ToList()
             };
 
 

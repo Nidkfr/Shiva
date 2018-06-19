@@ -4,6 +4,7 @@ using System.Text;
 using System.IO;
 using Shiva.Core.Identities;
 using System.Globalization;
+using System.Xml.Linq;
 
 namespace Shiva.Ressources
 {
@@ -62,6 +63,24 @@ namespace Shiva.Ressources
         public override string ToString()
         {
             return $"{{{this.GetType().FullName}::{this.Value.Length} byte}}";
+        }
+
+        /// <summary>
+        /// Serializes this instance.
+        /// </summary>
+        /// <returns></returns>
+        public override XElement Serialize()
+        {
+            return new XElement("Data", Convert.ToBase64String(this.Value));
+        }
+
+        /// <summary>
+        /// Uns the serialize.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public override void UnSerialize(XElement value)
+        {
+            throw new NotImplementedException();
         }
     }
 }
