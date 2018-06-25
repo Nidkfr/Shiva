@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 using Shiva.Core.Identities;
 
@@ -49,10 +50,11 @@ namespace Shiva.Ressources
         public abstract IRessource Clone();
 
         /// <summary>
-        /// Serializes this instance.
+        /// Serializes the specified writer.
         /// </summary>
-        /// <returns></returns>
-        public abstract XElement Serialize();
+        /// <param name="writer">The writer.</param>
+        public abstract void Serialize(XmlWriter writer);
+
 
         /// <summary>
         /// Sets the culture.
@@ -66,7 +68,7 @@ namespace Shiva.Ressources
         /// <summary>
         /// Uns the serialize.
         /// </summary>
-        /// <param name="value">The value.</param>
-        public abstract void UnSerialize(XElement value);
+        /// <param name="reader">The reader.</param>
+        public abstract void UnSerialize(XmlReader reader);
     }
 }

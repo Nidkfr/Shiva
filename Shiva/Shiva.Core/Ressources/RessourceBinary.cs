@@ -5,6 +5,7 @@ using System.IO;
 using Shiva.Core.Identities;
 using System.Globalization;
 using System.Xml.Linq;
+using System.Xml;
 
 namespace Shiva.Ressources
 {
@@ -64,21 +65,24 @@ namespace Shiva.Ressources
         {
             return $"{{{this.GetType().FullName}::{this.Value.Length} byte}}";
         }
+       
 
         /// <summary>
-        /// Serializes this instance.
+        /// Serializes the specified writer.
         /// </summary>
-        /// <returns></returns>
-        public override XElement Serialize()
+        /// <param name="writer">The writer.</param>
+        public override void Serialize(XmlWriter writer)
         {
-            return new XElement("Data", Convert.ToBase64String(this.Value));
+            writer.WriteStartElement("Data");
+            writer.WriteValue(Convert.ToBase64String(this.Value));
+            writer.WriteEndElement();
         }
 
         /// <summary>
         /// Uns the serialize.
         /// </summary>
-        /// <param name="value">The value.</param>
-        public override void UnSerialize(XElement value)
+        /// <param name="reader">The reader.</param>
+        public override void UnSerialize(XmlReader reader)
         {
             throw new NotImplementedException();
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 using Shiva.Core.Identities;
 
@@ -60,24 +61,25 @@ namespace Shiva.Ressources
         public override string ToString()
         {
             return $"{{{this.GetType().FullName}::{this.Value}}}";
-        }
+        }      
 
         /// <summary>
-        /// Serializes this instance.
+        /// Serializes the specified writer.
         /// </summary>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public override XElement Serialize()
+        /// <param name="writer">The writer.</param>
+        public override void Serialize(XmlWriter writer)
         {
-            return new XElement("String", this.Value);
+            writer.WriteStartElement("String");
+            writer.WriteValue(this.Value);
+            writer.WriteEndElement();
         }
 
         /// <summary>
         /// Uns the serialize.
         /// </summary>
-        /// <param name="value">The value.</param>
+        /// <param name="reader">The reader.</param>
         /// <exception cref="NotImplementedException"></exception>
-        public override void UnSerialize(XElement value)
+        public override void UnSerialize(XmlReader reader)
         {
             throw new NotImplementedException();
         }

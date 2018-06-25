@@ -5,7 +5,7 @@ using System.IO;
 using FluentAssertions;
 using Shiva.Core.IO;
 
-namespace Shiva.Ressources
+namespace Shiva.Ressources.Xml
 {
     [TestClass]
     public class UTXmlRessourceManager : BaseTest, IRessourceManagerTester

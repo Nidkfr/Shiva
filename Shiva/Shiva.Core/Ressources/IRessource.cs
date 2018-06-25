@@ -4,6 +4,7 @@ using System.Text;
 using System.Globalization;
 using Shiva.Core.Identities;
 using System.Xml.Linq;
+using System.Xml;
 
 namespace Shiva.Ressources
 {
@@ -43,14 +44,15 @@ namespace Shiva.Ressources
         /// <summary>
         /// Serializes this instance.
         /// </summary>
+        /// <param name="writer">writer</param>
         /// <returns></returns>
-        XElement Serialize();
+        void Serialize(XmlWriter writer);
 
         /// <summary>
         /// Unserialize.
         /// </summary>
-        /// <param name="value">The value.</param>
-        void UnSerialize(XElement value);
+        /// <param name="reader">The value.</param>
+        void UnSerialize(XmlReader reader);
 
     }
 

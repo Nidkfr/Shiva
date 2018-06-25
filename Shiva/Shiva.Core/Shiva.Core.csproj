@@ -14,4 +14,12 @@
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Ressources\XmlRessource.xsd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Ressources\Xml\XmlRessource.xsd" />
+  </ItemGroup>
+
 </Project>

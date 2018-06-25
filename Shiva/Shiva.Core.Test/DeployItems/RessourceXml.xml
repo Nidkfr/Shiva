@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Exemple of File-->
 <xr:RessourcesDefinitions xmlns:xr="http://shiva.org/XmlRessource.xsd">
+  <!-- Exemple of comment-->
   <xr:Ressources>  
   </xr:Ressources>
 </xr:RessourcesDefinitions>
