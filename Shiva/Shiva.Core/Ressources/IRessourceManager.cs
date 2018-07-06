@@ -53,39 +53,39 @@ namespace Shiva.Ressources
         /// <returns></returns>
         Task SetRessourceAsync<TRessource>(TRessource ressource,CancellationToken? cancelToken= null) where TRessource : IRessource;
 
-        /// <summary>
-        /// Gets the group ressource.
-        /// </summary>
-        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
-        /// <param name="groupRessourceId">The group ressource identifier.</param>
-        /// <returns></returns>
-        IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Identity groupRessourceId) where TRessource : IRessource;
+        ///// <summary>
+        ///// Gets the group ressource.
+        ///// </summary>
+        ///// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        ///// <param name="groupRessourceId">The group ressource identifier.</param>
+        ///// <returns></returns>
+        //IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Identity groupRessourceId) where TRessource : IRessource;
 
-        /// <summary>
-        /// Gets the group ressource.
-        /// </summary>
-        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
-        /// <param name="groupNamespaceRessource">The group namespace ressource.</param>
-        /// <returns></returns>
-        IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Namespace groupNamespaceRessource) where TRessource : IRessource;
+        ///// <summary>
+        ///// Gets the group ressource.
+        ///// </summary>
+        ///// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        ///// <param name="groupNamespaceRessource">The group namespace ressource.</param>
+        ///// <returns></returns>
+        //IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Namespace groupNamespaceRessource) where TRessource : IRessource;
 
-        /// <summary>
-        /// Gets the group ressource asynchronous.
-        /// </summary>
-        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
-        /// <param name="groupRessourceId">The group ressource identifier.</param>
-        /// <param name="cancelToken">cancel token</param>
-        /// <returns></returns>
-        Task<IRessourcesGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Identity groupRessourceId, CancellationToken? cancelToken = null) where TRessource : IRessource;
+        ///// <summary>
+        ///// Gets the group ressource asynchronous.
+        ///// </summary>
+        ///// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        ///// <param name="groupRessourceId">The group ressource identifier.</param>
+        ///// <param name="cancelToken">cancel token</param>
+        ///// <returns></returns>
+        //Task<IRessourcesGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Identity groupRessourceId, CancellationToken? cancelToken = null) where TRessource : IRessource;
 
-        /// <summary>
-        /// Gets the group ressource asynchronous.
-        /// </summary>
-        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
-        /// <param name="groupNamespaceRessource">The group namespace ressource.</param>
-        /// <param name="cancelToken">cancel token</param>
-        /// <returns></returns>
-        Task<IRessourcesGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Namespace groupNamespaceRessource, CancellationToken? cancelToken = null) where TRessource : IRessource;
+        ///// <summary>
+        ///// Gets the group ressource asynchronous.
+        ///// </summary>
+        ///// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        ///// <param name="groupNamespaceRessource">The group namespace ressource.</param>
+        ///// <param name="cancelToken">cancel token</param>
+        ///// <returns></returns>
+        //Task<IRessourcesGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Namespace groupNamespaceRessource, CancellationToken? cancelToken = null) where TRessource : IRessource;
 
         /// <summary>
         /// Attaches the ressource to group.

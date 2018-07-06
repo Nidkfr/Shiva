@@ -16,7 +16,7 @@ namespace Shiva.Ressources
         /// <value>
         /// The removed ressources.
         /// </value>
-        public Dictionary<Type,Identity> RemovedRessources
+        public Dictionary<Type,IEnumerable<Identity>> RemovedRessources
         {
             get;
             set;

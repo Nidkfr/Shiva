@@ -9,13 +9,14 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 using Shiva.Core.Services;
 using Shiva.Core.IO;
+using XD = Shiva.Ressources.Xml.RessourceXmlDefinitions;
 
 namespace Shiva.Ressources.Xml
 {
     /// <summary>
     /// Xml ressource Manager
     /// </summary>
-    public class XmlRessourceManager : RessourceManagerBase, IDisposable
+    public class RessourceXmlManager : RessourceManagerBase, IDisposable
     {
         private CultureInfo _culture;
         private StreamSource _streamSource;
@@ -32,12 +33,12 @@ namespace Shiva.Ressources.Xml
         private ILogger Logger { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="XmlRessourceManager"/> class.
+        /// Initializes a new instance of the <see cref="RessourceXmlManager"/> class.
         /// </summary>
         /// <param name="logmanager">The logmanager.</param>
-        public XmlRessourceManager(ILogManager logmanager = null) : base(logmanager)
+        public RessourceXmlManager(ILogManager logmanager = null) : base(logmanager)
         {
-            this.Logger = logmanager?.CreateLogger<XmlRessourceManager>() ?? new NoLogger();
+            this.Logger = logmanager?.CreateLogger<RessourceXmlManager>() ?? new NoLogger();
         }
 
         /// <summary>
@@ -68,9 +69,9 @@ namespace Shiva.Ressources.Xml
         public override CultureInfo Culture => this._culture;
 
         /// <summary>
-        /// Finalizes an instance of the <see cref="XmlRessourceManager" /> class.
+        /// Finalizes an instance of the <see cref="RessourceXmlManager" /> class.
         /// </summary>
-        ~XmlRessourceManager()
+        ~RessourceXmlManager()
         {
             this.Dispose();
         }
@@ -85,29 +86,29 @@ namespace Shiva.Ressources.Xml
             this._streamSource?.Dispose();
         }
 
-        /// <summary>
-        /// Gets the group ressources.
-        /// </summary>
-        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
-        /// <param name="groupRessourceId">The group ressource identifier.</param>
-        /// <returns></returns>
-        public override IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Identity groupRessourceId)
-        {
-            this._CheckInit();
-            throw new NotImplementedException();
-        }
+        ///// <summary>
+        ///// Gets the group ressources.
+        ///// </summary>
+        ///// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        ///// <param name="groupRessourceId">The group ressource identifier.</param>
+        ///// <returns></returns>
+        //public override IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Identity groupRessourceId)
+        //{
+        //    this._CheckInit();
+        //    throw new NotImplementedException();
+        //}
 
-        /// <summary>
-        /// Gets the group ressources.
-        /// </summary>
-        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
-        /// <param name="groupNamespaceRessource">The group namespace ressource.</param>
-        /// <returns></returns>
-        public override IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Namespace groupNamespaceRessource)
-        {
-            this._CheckInit();
-            throw new NotImplementedException();
-        }
+        ///// <summary>
+        ///// Gets the group ressources.
+        ///// </summary>
+        ///// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        ///// <param name="groupNamespaceRessource">The group namespace ressource.</param>
+        ///// <returns></returns>
+        //public override IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Namespace groupNamespaceRessource)
+        //{
+        //    this._CheckInit();
+        //    throw new NotImplementedException();
+        //}
 
         /// <summary>
         /// Determines whether [contains ressource internal] [the specified ressource identifier].
@@ -123,7 +124,7 @@ namespace Shiva.Ressources.Xml
             var elt = this._GetRessource(ressourceID, typeof(TRessource));
             if (elt == null) return false;
 
-            if (elt.Elements(XmlRessourceDefinitions.ELEMENT_VALUE).Any(x => x.Attribute(XmlRessourceDefinitions.ATTRIBUTE_LANG).Value == this.Culture.TwoLetterISOLanguageName))
+            if (elt.Elements(XD.ELEMENT_VALUE).Any(x => x.Attribute(XD.ATTRIBUTE_LANG).Value == this.Culture.TwoLetterISOLanguageName))
                 return true;
             return false;
         }
@@ -163,12 +164,12 @@ namespace Shiva.Ressources.Xml
                 {
                     if (reader.NodeType == XmlNodeType.Element)
                     {
-                        if (reader.Name == XmlRessourceDefinitions.ELEMENT_RESSOURCES)
+                        if (reader.Name == XD.ELEMENT_RESSOURCES)
                         {
                             validParent = true;
                         }
 
-                        if (reader.Name == XmlRessourceDefinitions.ELEMENT_RESSOURCE)
+                        if (reader.Name == XD.ELEMENT_RESSOURCE)
                         {
                             if (id == reader.GetAttribute("id") && ressource.FullName == reader.GetAttribute("type"))
                             {
@@ -179,7 +180,7 @@ namespace Shiva.Ressources.Xml
 
                     if (reader.NodeType == XmlNodeType.EndElement)
                     {
-                        if (reader.Name == XmlRessourceDefinitions.ELEMENT_RESSOURCES)
+                        if (reader.Name == XD.ELEMENT_RESSOURCES)
                         {
                             if (validParent) return null;
                         }
@@ -192,7 +193,7 @@ namespace Shiva.Ressources.Xml
         {
             this._validationXml.Clear();
             var ressource = this.GetType().Assembly.GetManifestResourceNames();
-            var schema = XmlSchema.Read(this.GetType().Assembly.GetManifestResourceStream(XmlRessourceDefinitions.RESSOURCE_SCHEMA), this._Xml_ValidationEventHandler);
+            var schema = XmlSchema.Read(this.GetType().Assembly.GetManifestResourceStream(XD.RESSOURCE_SCHEMA), this._Xml_ValidationEventHandler);
 
             if (this._validationXml.Count == 0)
             {
@@ -236,22 +237,12 @@ namespace Shiva.Ressources.Xml
         /// <param name="editInformation">The edit information.</param>
         protected override void FlushInternal(RessourcesEditInfo editInformation)
         {
-            var settings = new XmlWriterSettings
-            {
-                Indent = true,
-            };
 
-            using (var writer = XmlWriter.Create(this._streamSource.GetSaveStream(), settings))
-            {
-                var stream = this._streamSource.GetStream();
-                stream.Seek(0, SeekOrigin.Begin);
+            var parser = new RessourceXmlParser(editInformation);
+            parser.Update(this._streamSource.GetStream(), this._streamSource.GetSaveStream());
 
-                using (var reader = XmlReader.Create(stream))
-                {
-                    var parser = new XmlRessourceDefinitionParser(reader, writer);
-                    parser.Parse(editInformation);
-                }
-            }
+            this._streamSource.Flush();
+
         }
 
 

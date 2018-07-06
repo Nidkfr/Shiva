@@ -23,7 +23,7 @@ namespace Shiva.Ressources.Xml
         [TestMethod]
         public void TestInitializer()
         {
-            using (var manager = new XmlRessourceManager(this.LogManager))
+            using (var manager = new RessourceXmlManager(this.LogManager))
             {
                 Assert.IsNull(manager.Culture);
                 Assert.IsFalse(manager.IsInitialized);
@@ -36,7 +36,7 @@ namespace Shiva.Ressources.Xml
         {
             using (var streamsource = new FileSource("./Data/RessourceXml.xml"))
             {
-                using (var manager = new XmlRessourceManager(this.LogManager))
+                using (var manager = new RessourceXmlManager(this.LogManager))
                 {
                     manager.Initialize(CultureInfo.GetCultureInfo("en"), streamsource);
                     Assert.IsTrue(manager.Culture == CultureInfo.GetCultureInfo("en"));
@@ -51,7 +51,7 @@ namespace Shiva.Ressources.Xml
         {
             using (var streamsource = new FileSource("./Data/RessourceXml.xml"))
             {
-                using (var manager = new XmlRessourceManager(this.LogManager))
+                using (var manager = new RessourceXmlManager(this.LogManager))
                 {
                     manager.Invoking(x => x.Initialize(null, streamsource)).Should().Throw<ArgumentNullException>();
                     manager.Invoking(x => x.Initialize(CultureInfo.GetCultureInfo("en"), null)).Should().Throw<ArgumentNullException>();
@@ -64,9 +64,9 @@ namespace Shiva.Ressources.Xml
         public void TestGetRessource()
         {
 
-            using (var streamsource = new FileSource("./Data/RessourceXml.xml"))
+            using (var streamsource = new FileSource("./Data/RessourceXml.xml", FileSourceSaveModeEnum.KEEPALLPREVIOUSVERSION))
             {
-                using (var manager = new XmlRessourceManager(this.LogManager))
+                using (var manager = new RessourceXmlManager(this.LogManager))
                 {
                     manager.Initialize(CultureInfo.GetCultureInfo("en"), streamsource);
                     this._tester.TestGetRessource(manager);
@@ -81,7 +81,7 @@ namespace Shiva.Ressources.Xml
         {
             using (var streamsource = new FileSource("./Data/RessourceXml.xml"))
             {
-                using (var manager = new XmlRessourceManager(this.LogManager))
+                using (var manager = new RessourceXmlManager(this.LogManager))
                 {
                     manager.Initialize(CultureInfo.GetCultureInfo("en"), streamsource);
                     this._tester.TestGetRessourceAsync(manager);

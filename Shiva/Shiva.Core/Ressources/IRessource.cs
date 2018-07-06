@@ -11,7 +11,7 @@ namespace Shiva.Ressources
     /// <summary>
     /// Ressource
     /// </summary>
-    public interface IRessource
+    public interface IRessource:IIdentifiable
     {
         /// <summary>
         /// Gets the culture of ressource.
@@ -21,13 +21,7 @@ namespace Shiva.Ressources
         /// </value>
         CultureInfo Culture { get; }
 
-        /// <summary>
-        /// Gets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        Identity Id { get; }
+       
 
         /// <summary>
         /// Change culture of ressource

@@ -9,35 +9,22 @@ namespace Shiva.Ressources
     /// <summary>
     /// Ressource Groups
     /// </summary>
-    public interface IRessourcesGroup
-    {
-        /// <summary>
-        /// Gets the identifier of group.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        Identity Id { get; }
-    }
-
-    /// <summary>
-    /// Ressource Groups
-    /// </summary>
-    /// <typeparam name="TRessource">The type of the ressource.</typeparam>
-    public interface IRessourcesGroup<TRessource> : IRessourcesGroup where TRessource:IRessource
+    public interface IRessourcesGroup :IIdentifiable
     {
         /// <summary>
         /// Gets the ressource.
-        /// </summary>       
+        /// </summary>
+        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <param name="ressourceID">The ressource identifier.</param>
         /// <returns></returns>
-        TRessource GetRessource(Identity ressourceID);
+        TRessource GetRessource<TRessource>(Identity ressourceID) where TRessource:IRessource;
 
         /// <summary>
         /// Gets the ressource asynchronous.
-        /// </summary>        
+        /// </summary>
+        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <param name="ressourceID">The ressource identifier.</param>
         /// <returns></returns>
-        Task<TRessource> GetRessourceAsync(Identity ressourceID);
+        Task<TRessource> GetRessourceAsync<TRessource>(Identity ressourceID);
     }
 }

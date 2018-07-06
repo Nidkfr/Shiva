@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Shiva.Ressources.Xml
 {
-    static class XmlRessourceDefinitions
+    /// <summary>
+    /// Ressource Element xml definition
+    /// </summary>
+    static class RessourceXmlDefinitions
     {
         public const string ELEMENT_RESSOURCE = "Ressource";
         public const string ELEMENT_RESSOURCES = "Ressources";

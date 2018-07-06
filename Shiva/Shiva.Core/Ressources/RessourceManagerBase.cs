@@ -17,10 +17,8 @@ namespace Shiva.Ressources
     /// <seealso cref="Shiva.Ressources.IRessourceManager" />
     public abstract class RessourceManagerBase : IRessourceManager
     {
-        private readonly IDictionary<Identity, IList<Type>> _removedRessources = new Dictionary<Identity, IList<Type>>();
-        private readonly IDictionary<Identity, IDictionary<Type, IRessource>> _addedRessources = new Dictionary<Identity, IDictionary<Type, IRessource>>();
-        private readonly IDictionary<Identity, IList<Identity>> _editedGroup = new Dictionary<Identity, IList<Identity>>();
-        private readonly IList<Identity> _removeGroup = new List<Identity>();
+        private readonly IDictionary<Type, IdentifiableList<IRessource>> _ressources = new Dictionary<Type, IdentifiableList<IRessource>>();
+        private readonly IdentifiableList<RessourceCachedGroupe> _groupes = new IdentifiableList<RessourceCachedGroupe>();        
 
         /// <summary>
         /// Gets or sets the logger.
@@ -63,15 +61,11 @@ namespace Shiva.Ressources
             if (this.Logger.InfoIsEnabled)
                 this.Logger.Info($"Attach Ressource {ressourceId} to group {groupRessourceId} in culutre {this.Culture}");
 
-            if (!this._editedGroup.ContainsKey(groupRessourceId))
-                this._editedGroup.Add(groupRessourceId, new List<Identity>());
+            if (!this._groupes.Any(x=>x.Id == groupRessourceId))
+                this._groupes.Add(new RessourceCachedGroupe(groupRessourceId));
 
-            if (!this._editedGroup[groupRessourceId].Any(x => x == ressourceId))
-            {
-                this._editedGroup[groupRessourceId].Add(ressourceId);
-                this._removeGroup.Remove(groupRessourceId);
-            }
-        }
+
+        }        
 
         /// <summary>
         /// Attaches the ressource to group asynchronous.
@@ -98,10 +92,10 @@ namespace Shiva.Ressources
             if (idRessource == null)
                 throw new ArgumentNullException(nameof(idRessource));
 
-            if (this._addedRessources.ContainsKey(idRessource))
+            if (this._ressources.ContainsKey(typeof(TRessource)))
             {
-                var elements = this._addedRessources[idRessource];
-                if (elements.ContainsKey(typeof(TRessource)))
+                var elements = this._ressources[typeof(TRessource)];
+                if (elements.Contains(idRessource))
                 {
                     if (this.Logger.InfoIsEnabled)
                         this.Logger.Info($"Ressource Manager contains ressource {idRessource} in culture {this.Culture}");
@@ -146,12 +140,12 @@ namespace Shiva.Ressources
         public IEnumerable<Identity> GetAllGroups()
         {
             if (this.Logger.InfoIsEnabled)
-                this.Logger.Info($"Ressource Maanger get All groups from culture {this.Culture}");
+                this.Logger.Info($"Ressource Manager get All groups from culture {this.Culture}");
 
             var groups = new List<Identity>();
-            groups.AddRange(this._editedGroup.Keys);
+            groups.AddRange(this._groupes.Ids);
             groups.AddRange(this.GetAllGroupsInternal());
-
+            groups = groups.Distinct().ToList();
             if (this.Logger.DebugIsEnabled)
             {
                 foreach (var group in groups)
@@ -179,45 +173,45 @@ namespace Shiva.Ressources
             return await Task.Run(() => this.GetAllGroups(), cancelToken ?? CancellationToken.None);
         }
 
-        /// <summary>
-        /// Gets the group ressource.
-        /// </summary>
-        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
-        /// <param name="groupRessourceId">The group ressource identifier.</param>
-        /// <returns></returns>
-        public abstract IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Identity groupRessourceId) where TRessource : IRessource;
+        ///// <summary>
+        ///// Gets the group ressource.
+        ///// </summary>
+        ///// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        ///// <param name="groupRessourceId">The group ressource identifier.</param>
+        ///// <returns></returns>
+        //public abstract IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Identity groupRessourceId) where TRessource : IRessource;
 
-        /// <summary>
-        /// Gets the group ressource.
-        /// </summary>
-        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
-        /// <param name="groupNamespaceRessource">The group namespace ressource.</param>
-        /// <returns></returns>
-        public abstract IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Namespace groupNamespaceRessource) where TRessource : IRessource;
+        ///// <summary>
+        ///// Gets the group ressource.
+        ///// </summary>
+        ///// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        ///// <param name="groupNamespaceRessource">The group namespace ressource.</param>
+        ///// <returns></returns>
+        //public abstract IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Namespace groupNamespaceRessource) where TRessource : IRessource;
 
-        /// <summary>
-        /// Gets the group ressource asynchronous.
-        /// </summary>
-        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
-        /// <param name="groupRessourceId">The group ressource identifier.</param>
-        /// <param name="cancelToken">cancel token</param>
-        /// <returns></returns>
-        public async Task<IRessourcesGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Identity groupRessourceId, CancellationToken? cancelToken = null) where TRessource : IRessource
-        {
-            return await Task.Run(() => this.GetGroupRessources<TRessource>(groupRessourceId), cancelToken ?? CancellationToken.None);
-        }
+        ///// <summary>
+        ///// Gets the group ressource asynchronous.
+        ///// </summary>
+        ///// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        ///// <param name="groupRessourceId">The group ressource identifier.</param>
+        ///// <param name="cancelToken">cancel token</param>
+        ///// <returns></returns>
+        //public async Task<IRessourcesGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Identity groupRessourceId, CancellationToken? cancelToken = null) where TRessource : IRessource
+        //{
+        //    return await Task.Run(() => this.GetGroupRessources<TRessource>(groupRessourceId), cancelToken ?? CancellationToken.None);
+        //}
 
-        /// <summary>
-        /// Gets the group ressource asynchronous.
-        /// </summary>
-        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
-        /// <param name="groupNamespaceRessource">The group namespace ressource.</param>
-        /// <param name="cancelToken">cancel token</param>
-        /// <returns></returns>
-        public async Task<IRessourcesGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Namespace groupNamespaceRessource, CancellationToken? cancelToken = null) where TRessource : IRessource
-        {
-            return await Task.Run(() => this.GetGroupRessources<TRessource>(groupNamespaceRessource), cancelToken ?? CancellationToken.None);
-        }
+        ///// <summary>
+        ///// Gets the group ressource asynchronous.
+        ///// </summary>
+        ///// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        ///// <param name="groupNamespaceRessource">The group namespace ressource.</param>
+        ///// <param name="cancelToken">cancel token</param>
+        ///// <returns></returns>
+        //public async Task<IRessourcesGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Namespace groupNamespaceRessource, CancellationToken? cancelToken = null) where TRessource : IRessource
+        //{
+        //    return await Task.Run(() => this.GetGroupRessources<TRessource>(groupNamespaceRessource), cancelToken ?? CancellationToken.None);
+        //}
 
         /// <summary>
         /// Gets the ressource.
@@ -234,14 +228,14 @@ namespace Shiva.Ressources
                 this.Logger.Info($"Get Ressource {ressourceID}");
 
             //search first in added ressource
-            if (this._addedRessources.ContainsKey(ressourceID))
+            if (this._ressources.ContainsKey(typeof(TRessource)))
             {
-                var ressources = this._addedRessources[ressourceID];
-                if (ressources.ContainsKey(typeof(TRessource)))
+                var ressources = this._ressources[typeof(TRessource)];
+                if (ressources.Contains(ressourceID))
                 {
                     if (this.Logger.DebugIsEnabled)
                         this.Logger.Debug($"Ressource {ressourceID} is in cache");
-                    return (TRessource)ressources[typeof(TRessource)];
+                    return (TRessource)ressources[ressourceID];
                 }
             }
 
@@ -277,8 +271,7 @@ namespace Shiva.Ressources
         {
             if (this.Logger.InfoIsEnabled)
                 this.Logger.Info($"Remove group {groupRessourceId} in culture {this.Culture}");
-            this._removeGroup.Add(groupRessourceId);
-            this._editedGroup.Remove(groupRessourceId);
+            this._groupes.Remove(groupRessourceId);
         }
 
         /// <summary>
@@ -305,22 +298,8 @@ namespace Shiva.Ressources
             if (this.Logger.InfoIsEnabled)
                 this.Logger.Info($"Remove ressource {idRessource} in culture {this.Culture}");
 
-            //add ressource
-            if (!this._removedRessources.ContainsKey(idRessource))
-                this._removedRessources.Add(idRessource, new List<Type>());
-
-            var elts = this._removedRessources[idRessource];
-            var typeRessouce = typeof(TRessource);
-            if (!elts.Any(x => typeRessouce == x))
-                elts.Add(typeRessouce);
-
-
-            //remove from added ressource et edit ressource
-            if (this._addedRessources.ContainsKey(idRessource))
-                if (this._addedRessources[idRessource].ContainsKey(typeRessouce))
-                    this._addedRessources[idRessource].Remove(typeRessouce);
-
-
+            if (this._ressources.ContainsKey(typeof(TRessource)))
+                this._ressources[typeof(TRessource)].Remove(idRessource);
         }
 
         /// <summary>
@@ -342,20 +321,17 @@ namespace Shiva.Ressources
         {
             var info = new RessourcesEditInfo()
             {
-                RemovedRessources = this._removedRessources
-                .SelectMany(x => x.Value.Select(type => new { type, x.Key }))
-                .ToDictionary(x => x.type, x => x.Key),
-                AddedRessources = this._addedRessources.SelectMany(x=>x.Value.Values).ToList()
+                RemovedRessources = this._ressources                
+                .ToDictionary(x=>x.Key,x=>x.Value.RemovedElement),
+                AddedRessources = this._ressources.SelectMany(x=>x.Value).ToList()
             };
 
 
 
             this.FlushInternal(info);
 
-            this._addedRessources.Clear();
-            this._editedGroup.Clear();
-            this._removedRessources.Clear();
-            this._removeGroup.Clear();
+            this._ressources.Clear();
+            this._groupes.Clear();
         }
 
         /// <summary>
@@ -390,22 +366,9 @@ namespace Shiva.Ressources
                 this.Logger.Info($"Add ressource {ressource} in culture {this.Culture}");
 
             //add ressource
-            if (!this._addedRessources.ContainsKey(ressource.Id))
-                this._addedRessources.Add(ressource.Id, new Dictionary<Type, IRessource>());
-
-            var elts = this._addedRessources[ressource.Id];
-            var typeRessouce = ressource.GetType();
-            if (!elts.ContainsKey(typeRessouce))
-                elts.Add(typeRessouce, ressource);
-            else
-                elts[typeRessouce] = ressource;
-
-            //remove from removed ressource
-            if (this._removedRessources.ContainsKey(ressource.Id))
-                if (this._removedRessources[ressource.Id].Contains(typeRessouce))
-                    this._removedRessources[ressource.Id].Remove(typeRessouce);
-
-
+            if (!this._ressources.ContainsKey(typeof(TRessource)))
+                this._ressources.Add(typeof(TRessource), new IdentifiableList<IRessource>());
+            this._ressources[typeof(TRessource)].Add(ressource);
         }
 
         /// <summary>

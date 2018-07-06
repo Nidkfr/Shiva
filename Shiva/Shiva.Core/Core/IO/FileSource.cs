@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shiva.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -52,12 +53,21 @@ namespace Shiva.Core.IO
             this._currentStream = null;
             this._saveStream = null;
 
-            if (this.SaveMode == FileSourceSaveModeEnum.KEEPPREVIOUSVERSION)
-                File.Replace(this._fileSaveinfo.FullName, this._fileinfo.FullName, Path.ChangeExtension(this._fileSaveinfo.FullName, "backup"));
 
-            if(this.SaveMode == FileSourceSaveModeEnum.KEEPALL)
-                File.Replace(this._fileSaveinfo.FullName, this._fileinfo.FullName, Path.ChangeExtension(this._fileSaveinfo.FullName, "backup"));
-
+            switch (this.SaveMode)
+            {
+                case FileSourceSaveModeEnum.NONE:
+                    File.Copy(this._fileSaveinfo.FullName, this._fileinfo.FullName,true);
+                    break;
+                case FileSourceSaveModeEnum.KEEPPREVIOUSVERSION:
+                    File.Replace(this._fileSaveinfo.FullName, this._fileinfo.FullName, Path.ChangeExtension(this._fileSaveinfo.FullName, "backup"));
+                    break;
+                case FileSourceSaveModeEnum.KEEPALLPREVIOUSVERSION:                    
+                    File.Replace(this._fileSaveinfo.FullName, this._fileinfo.FullName, $"{this._fileinfo.Directory.FullName}\\{Path.GetFileNameWithoutExtension(this._fileinfo.FullName)}.{DateTime.Now.ToString("ddMMyyyyhhmmssffff")}.backup");
+                    break;
+                default:throw new InvalidEnumOptionException(this.SaveMode.ToString());                    
+            }            
+            
             File.Delete(this._fileSaveinfo.FullName);
         }
 
@@ -117,7 +127,7 @@ namespace Shiva.Core.IO
     public enum FileSourceSaveModeEnum
     {
         /// <summary>
-        /// The none
+        /// Aucune sauvegarde 
         /// </summary>
         NONE,
 
@@ -127,9 +137,9 @@ namespace Shiva.Core.IO
         KEEPPREVIOUSVERSION,
 
         /// <summary>
-        /// The keep all
+        /// The keep all previouse version
         /// </summary>
-        KEEPALL,
+        KEEPALLPREVIOUSVERSION,
 
     }
 }
