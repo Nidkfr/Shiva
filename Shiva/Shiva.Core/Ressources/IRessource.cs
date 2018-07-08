@@ -46,8 +46,15 @@ namespace Shiva.Ressources
         /// Unserialize.
         /// </summary>
         /// <param name="reader">The value.</param>
-        void UnSerialize(XmlReader reader);
+        void UnSerialize(XmlReader reader, Identity id, CultureInfo info);
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is initialized.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is initialized; otherwise, <c>false</c>.
+        /// </value>
+        bool IsEmptyRessource { get; }
     }
 
     /// <summary>

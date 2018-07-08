@@ -31,7 +31,22 @@ namespace Shiva.Ressources.Xml
         /// <exception cref="NotImplementedException"></exception>
         protected override void UpdateChildren(XmlReader reader, XmlWriter writer)
         {
-           
+            while (!reader.EOF)
+            {
+
+                if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == XD.ELEMENT_RESSOURCE)
+                    break;
+
+                if (reader.NodeType == XmlNodeType.Element && reader.LocalName == XD.ELEMENT_VALUE)
+                {
+                    var langattr = reader.GetAttribute(XD.ATTRIBUTE_LANG);
+                    if (langattr == this._ressource.Culture.TwoLetterISOLanguageName)
+                        continue;
+                }
+                XmlParserTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
+            }
+
+            this.WriteChildren(writer);
         }
 
         /// <summary>
@@ -40,7 +55,12 @@ namespace Shiva.Ressources.Xml
         /// <param name="writer">The writer.</param>
         protected override void WriteChildren(XmlWriter writer)
         {
-
+            writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_VALUE,XD.NAMESPACE);
+            writer.WriteStartAttribute(XD.PREFIX, XD.ATTRIBUTE_LANG, XD.NAMESPACE);
+            writer.WriteValue(this._ressource.Culture.TwoLetterISOLanguageName);
+            writer.WriteEndAttribute();
+            this._ressource.Serialize(writer);
+            writer.WriteEndElement();
         }
 
         /// <summary>

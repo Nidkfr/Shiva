@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using Shiva.Core.Identities;
+using Shiva.Xml;
 
 namespace Shiva.Ressources
 {
@@ -13,7 +14,15 @@ namespace Shiva.Ressources
     /// </summary>    
     public class RessourceString :RessourceBase, IRessource<string>
     {
-        private readonly string _value;       
+        private  string _value;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RessourceString"/> class.
+        /// </summary>
+        public RessourceString()
+        {
+
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RessourceString"/> class.
@@ -32,7 +41,15 @@ namespace Shiva.Ressources
         /// <value>
         /// The value.
         /// </value>
-        public string Value => this._value;
+        public string Value => this.IsEmptyRessource?$"[{this.GetType().FullName}]{{{this.Id}}}:{this.Culture.TwoLetterISOLanguageName}" : this._value;
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is initialized.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is initialized; otherwise, <c>false</c>.
+        /// </value>
+        public override bool IsEmptyRessource => string.IsNullOrEmpty(this._value);
 
         /// <summary>
         /// Clones this instance.
@@ -79,9 +96,16 @@ namespace Shiva.Ressources
         /// </summary>
         /// <param name="reader">The reader.</param>
         /// <exception cref="NotImplementedException"></exception>
-        public override void UnSerialize(XmlReader reader)
+        public override void UnSerialize(XmlReader reader,Identity id, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            base.UnSerialize(reader, id, culture);
+            if (XmlParserTool.MoveToElement(reader, "String"))
+            {
+                this._value = reader.ReadElementContentAsString();
+            }
+            else
+                throw new InvalidOperationException("Invalid Xml Ressource File");
+            
         }
     }
 }

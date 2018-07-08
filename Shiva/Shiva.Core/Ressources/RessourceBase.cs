@@ -13,15 +13,22 @@ namespace Shiva.Ressources
     /// </summary>
     public abstract class RessourceBase : IRessource
     {
-        private readonly Identity _id;
+        private Identity _id;
         private CultureInfo _culture;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RessourceBase"/> class.
+        /// </summary>
+        public RessourceBase()
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RessourceBase"/> class.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="culture">The culture.</param>
-        protected RessourceBase (Identity id, CultureInfo culture =null)
+        protected RessourceBase(Identity id, CultureInfo culture = null)
         {
             this._id = id ?? throw new ArgumentNullException(nameof(id));
             this._culture = culture;
@@ -42,6 +49,14 @@ namespace Shiva.Ressources
         /// The identifier.
         /// </value>
         public Identity Id => this._id;
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is initialized.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is initialized; otherwise, <c>false</c>.
+        /// </value>
+        public abstract bool IsEmptyRessource{ get; }
 
         /// <summary>
         /// Clones this instance.
@@ -69,6 +84,10 @@ namespace Shiva.Ressources
         /// Uns the serialize.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        public abstract void UnSerialize(XmlReader reader);
+        public virtual void UnSerialize(XmlReader reader, Identity id, CultureInfo culture)
+        {
+            this._id = id;
+            this._culture = culture;
+        }
     }
 }

@@ -32,14 +32,11 @@ namespace Shiva.Ressources.Xml
         /// <param name="writer">The writer.</param>
         protected override void UpdateChildren(XmlReader reader, XmlWriter writer)
         {
-            do
+            while(!reader.EOF)
             {
-                XmlParserTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
-                if(reader.EOF || reader.NodeType == XmlNodeType.EndElement)
-                {
-                    this.WriteChildren(writer);
-                    return;
-                }
+
+                if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == XD.ELEMENT_RESSOURCE)
+                    break;
 
                 var idattr = reader.GetAttribute(XD.ATTRIBUTE_ID);
                 var typeattr = reader.GetAttribute(XD.ATTRIBUTE_TYPE);
@@ -57,8 +54,9 @@ namespace Shiva.Ressources.Xml
                             this._editInfo.AddedRessources.Remove(ressource);
                         }
                     }
+                XmlParserTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
             }
-            while (reader.Read());
+            
             this.WriteChildren(writer);
         }
 

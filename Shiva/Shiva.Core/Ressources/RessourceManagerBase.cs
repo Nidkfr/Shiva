@@ -219,7 +219,7 @@ namespace Shiva.Ressources
         /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <param name="ressourceID">The ressource identifier.</param>
         /// <returns></returns>
-        public TRessource GetRessource<TRessource>(Identity ressourceID) where TRessource : IRessource
+        public TRessource GetRessource<TRessource>(Identity ressourceID) where TRessource : IRessource, new()
         {
             if (ressourceID == null)
                 throw new ArgumentNullException(nameof(ressourceID));
@@ -248,7 +248,7 @@ namespace Shiva.Ressources
         /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <param name="ressourceID">The ressource identifier.</param>
         /// <returns></returns>
-        protected abstract TRessource GetRessourceInternal<TRessource>(Identity ressourceID) where TRessource : IRessource;
+        protected abstract TRessource GetRessourceInternal<TRessource>(Identity ressourceID) where TRessource : IRessource, new();
 
 
         /// <summary>
@@ -258,7 +258,7 @@ namespace Shiva.Ressources
         /// <param name="ressourceId"></param>
         /// <param name="cancelToken"></param>
         /// <returns></returns>
-        public async Task<TRessource> GetRessourceAsync<TRessource>(Identity ressourceId, CancellationToken? cancelToken = null) where TRessource : IRessource
+        public async Task<TRessource> GetRessourceAsync<TRessource>(Identity ressourceId, CancellationToken? cancelToken = null) where TRessource : IRessource, new()
         {
             return await Task.Run(() => this.GetRessource<TRessource>(ressourceId), cancelToken ?? CancellationToken.None);
         }

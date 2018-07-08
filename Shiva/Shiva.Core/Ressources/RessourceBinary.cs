@@ -6,6 +6,7 @@ using Shiva.Core.Identities;
 using System.Globalization;
 using System.Xml.Linq;
 using System.Xml;
+using Shiva.Xml;
 
 namespace Shiva.Ressources
 {
@@ -14,7 +15,15 @@ namespace Shiva.Ressources
     /// </summary>    
     public class RessourceBinary : RessourceBase, IRessource<byte[]>
     {       
-        private readonly byte[] _data;       
+        private byte[] _data;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RessourceBinary"/> class.
+        /// </summary>
+        public RessourceBinary()
+        {
+
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RessourceBinary"/> class.
@@ -35,7 +44,16 @@ namespace Shiva.Ressources
         /// </value>
         public byte[] Value => this._data;
 
-       
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is empty ressource.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is empty ressource; otherwise, <c>false</c>.
+        /// </value>
+        public override bool IsEmptyRessource => this._data.Length == 0;
+
+
 
         /// <summary>
         /// Clones this instance.
@@ -82,9 +100,16 @@ namespace Shiva.Ressources
         /// Uns the serialize.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        public override void UnSerialize(XmlReader reader)
+        public override void UnSerialize(XmlReader reader, Identity id, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            if (XmlParserTool.MoveToElement(reader, "Data"))
+            {
+                this._data = Convert.FromBase64String(reader.ReadElementContentAsString());
+            }
+            else
+                throw new InvalidOperationException("Invalid Xml Ressource File");
+
+            base.UnSerialize(reader, id, culture);
         }
     }
 }

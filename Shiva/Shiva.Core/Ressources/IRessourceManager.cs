@@ -28,14 +28,14 @@ namespace Shiva.Ressources
         /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <param name="ressourceID">The ressource identifier.</param>
         /// <returns></returns>
-        TRessource GetRessource<TRessource>(Identity ressourceID) where TRessource:IRessource;
+        TRessource GetRessource<TRessource>(Identity ressourceID) where TRessource:IRessource,new();
 
         /// <summary>
         /// Gets the ressource asynchronous.
         /// </summary>
         /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <returns></returns>
-        Task<TRessource> GetRessourceAsync<TRessource>(Identity ressourceId,CancellationToken? cancelToken=null) where TRessource : IRessource;
+        Task<TRessource> GetRessourceAsync<TRessource>(Identity ressourceId,CancellationToken? cancelToken=null) where TRessource : IRessource, new();
 
         /// <summary>
         /// Saves the ressource.

@@ -10,6 +10,7 @@ using System.Xml.Schema;
 using Shiva.Core.Services;
 using Shiva.Core.IO;
 using XD = Shiva.Ressources.Xml.RessourceXmlDefinitions;
+using Shiva.Xml;
 
 namespace Shiva.Ressources.Xml
 {
@@ -55,7 +56,7 @@ namespace Shiva.Ressources.Xml
             this._culture = culture ?? throw new ArgumentNullException(nameof(culture));
             this._streamSource = source ?? throw new ArgumentNullException(nameof(source));
 
-            this._ValidateXml();
+            this.ValidateXml();
 
             this.IsInitialized = true;
         }
@@ -121,11 +122,7 @@ namespace Shiva.Ressources.Xml
         protected override bool ContainsRessourceInternal<TRessource>(Identity ressourceID)
         {
             this._CheckInit();
-            var elt = this._GetRessource(ressourceID, typeof(TRessource));
-            if (elt == null) return false;
-
-            if (elt.Elements(XD.ELEMENT_VALUE).Any(x => x.Attribute(XD.ATTRIBUTE_LANG).Value == this.Culture.TwoLetterISOLanguageName))
-                return true;
+            
             return false;
         }
 
@@ -148,48 +145,31 @@ namespace Shiva.Ressources.Xml
         protected override TRessource GetRessourceInternal<TRessource>(Identity ressourceID)
         {
             this._CheckInit();
-            var elt = this._GetRessource(ressourceID, typeof(TRessource));
-            throw new NotImplementedException();
+            return this._GetRessource<TRessource>(ressourceID, typeof(TRessource));                
         }
 
-        private XElement _GetRessource(Identity id, Type ressource)
+        private TRessource _GetRessource<TRessource>(Identity ressourceID, Type type) where TRessource : IRessource, new()
         {
-            var validParent = false;
-
-            var stream = this._streamSource.GetStream();
-            stream.Seek(0, SeekOrigin.Begin);
-            using (var reader = XmlReader.Create(stream))
+            this._streamSource.GetStream().Seek(0,SeekOrigin.Begin);
+            using (var reader = XmlReader.Create(this._streamSource.GetStream()))
             {
-                while (reader.Read())
+                if(XmlParserTool.MoveToElement(reader,XD.ELEMENT_RESSOURCE,x=>x[XD.ATTRIBUTE_ID] == ressourceID && x[XD.ATTRIBUTE_TYPE] == type.FullName))
                 {
-                    if (reader.NodeType == XmlNodeType.Element)
+                    if (XmlParserTool.MoveToElement(reader, XD.ELEMENT_VALUE, x => x[XD.ATTRIBUTE_LANG] == this.Culture.TwoLetterISOLanguageName))
                     {
-                        if (reader.Name == XD.ELEMENT_RESSOURCES)
-                        {
-                            validParent = true;
-                        }
-
-                        if (reader.Name == XD.ELEMENT_RESSOURCE)
-                        {
-                            if (id == reader.GetAttribute("id") && ressource.FullName == reader.GetAttribute("type"))
-                            {
-                                return (XElement)XElement.ReadFrom(reader);
-                            }
-                        }
-                    }
-
-                    if (reader.NodeType == XmlNodeType.EndElement)
-                    {
-                        if (reader.Name == XD.ELEMENT_RESSOURCES)
-                        {
-                            if (validParent) return null;
-                        }
+                        var ressource = new TRessource();
+                        ressource.UnSerialize(reader, ressourceID, this.Culture);
+                        return ressource;
                     }
                 }
             }
-            return null;
+            return default(TRessource);
         }
-        private void _ValidateXml()
+
+        /// <summary>
+        /// Validates the XML.
+        /// </summary>
+        public void ValidateXml()
         {
             this._validationXml.Clear();
             var ressource = this.GetType().Assembly.GetManifestResourceNames();
@@ -242,7 +222,7 @@ namespace Shiva.Ressources.Xml
             parser.Update(this._streamSource.GetStream(), this._streamSource.GetSaveStream());
 
             this._streamSource.Flush();
-
+            this.ValidateXml();
         }
 
 
