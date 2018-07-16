@@ -32,31 +32,46 @@ namespace Shiva.Ressources.Xml
         /// <param name="writer">The writer.</param>
         protected override void UpdateChildren(XmlReader reader, XmlWriter writer)
         {
-            while(!reader.EOF)
+            while (!reader.EOF)
             {
 
-                if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == XD.ELEMENT_RESSOURCE)
+                if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == XD.ELEMENT_RESSOURCES)
                     break;
 
-                var idattr = reader.GetAttribute(XD.ATTRIBUTE_ID);
-                var typeattr = reader.GetAttribute(XD.ATTRIBUTE_TYPE);
-                var type = Type.GetType(typeattr, false, true);
-                if (type != null)
-                    if (this._editInfo.RemovedRessources[type].ToList().Contains(idattr))                                            
-                        continue;
-                    else
-                    {
-                        var ressource = this._editInfo.AddedRessources.FirstOrDefault(x => x.Id == idattr && type == x.GetType());
-                        if(ressource!=null)
+                if (reader.NodeType == XmlNodeType.Element && reader.LocalName == XD.ELEMENT_RESSOURCE)
+                {
+                    var idattr = reader.GetAttribute(XD.ATTRIBUTE_ID);
+                    var typeattr = reader.GetAttribute(XD.ATTRIBUTE_TYPE);
+                    var type = Type.GetType(typeattr, false, true);
+                    if (type != null)
+                        if (this._editInfo.RemovedRessources[type].ToList().Contains(idattr))
+                            XmlParserTool.ReadToEndOfElement(reader, XD.ELEMENT_RESSOURCE);
+                        else
                         {
-                            var ressourceParser = new RessourceNodeXmlParser(ressource);
-                            ressourceParser.Update(reader, writer);
-                            this._editInfo.AddedRessources.Remove(ressource);
+                            var ressource = this._editInfo.AddedRessources.FirstOrDefault(x => x.Id == idattr && type == x.GetType());
+                            if (ressource != null)
+                            {
+                                var ressourceParser = new RessourceNodeXmlParser(ressource);
+                                ressourceParser.Update(reader, writer);
+                                this._editInfo.AddedRessources.Remove(ressource);                                
+                            }
+                            else
+                            {
+                                writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_RESSOURCE, XD.NAMESPACE);
+                                reader.MoveToElement();
+                                writer.WriteAttributes(reader, true);
+                                XmlParserTool.WriteToEndElement(reader, writer, XD.ELEMENT_RESSOURCE);
+                                writer.WriteEndElement();
+                            }
+                                
                         }
-                    }
-                XmlParserTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
+                    else
+                        XmlParserTool.ReadToEndOfElement(reader, XD.ELEMENT_RESSOURCE);
+                }
+                else
+                    XmlParserTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
             }
-            
+
             this.WriteChildren(writer);
         }
 

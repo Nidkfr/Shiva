@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema id="XmlRessource"
-    targetNamespace="http://shiva.org/XmlRessource.xsd"
+    targetNamespace="http://shiva.org/Ressources"
     elementFormDefault="qualified"
-    xmlns:xr="http://shiva.org/XmlRessource.xsd"
+    xmlns:xr="http://shiva.org/Ressources"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
 >
   <xs:element name="RessourcesDefinitions">
@@ -56,6 +56,7 @@
           <xs:key name="RessourceID">
             <xs:selector xpath="xr:Ressource"></xs:selector>
             <xs:field xpath="@id"/>
+            <xs:field xpath="@type"/>
           </xs:key>
         </xs:element>
         <xs:element name="Groups" minOccurs="0" maxOccurs="1">

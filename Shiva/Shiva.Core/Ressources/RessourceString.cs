@@ -95,11 +95,13 @@ namespace Shiva.Ressources
         /// Uns the serialize.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        /// <exception cref="NotImplementedException"></exception>
+        /// <param name="id"></param>
+        /// <param name="culture"></param>
+        /// <exception cref="System.InvalidOperationException">Invalid Xml Ressource File</exception>
         public override void UnSerialize(XmlReader reader,Identity id, CultureInfo culture)
         {
             base.UnSerialize(reader, id, culture);
-            if (XmlParserTool.MoveToElement(reader, "String"))
+            if (reader.ReadToDescendant("String"))
             {
                 this._value = reader.ReadElementContentAsString();
             }

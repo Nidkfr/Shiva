@@ -151,16 +151,53 @@ namespace Shiva.Ressources.Xml
         private TRessource _GetRessource<TRessource>(Identity ressourceID, Type type) where TRessource : IRessource, new()
         {
             this._streamSource.GetStream().Seek(0,SeekOrigin.Begin);
-            using (var reader = XmlReader.Create(this._streamSource.GetStream()))
+            var settings = new XmlReaderSettings
             {
-                if(XmlParserTool.MoveToElement(reader,XD.ELEMENT_RESSOURCE,x=>x[XD.ATTRIBUTE_ID] == ressourceID && x[XD.ATTRIBUTE_TYPE] == type.FullName))
+                CheckCharacters = false,
+                ConformanceLevel = ConformanceLevel.Document,
+                IgnoreComments = true,
+                IgnoreProcessingInstructions = true,
+                IgnoreWhitespace = true,
+                ValidationFlags = XmlSchemaValidationFlags.None,
+                ValidationType = ValidationType.None,
+            };
+            using (var reader = XmlReader.Create(this._streamSource.GetStream(), settings))
+            {                
+                while(reader.Read())
                 {
-                    if (XmlParserTool.MoveToElement(reader, XD.ELEMENT_VALUE, x => x[XD.ATTRIBUTE_LANG] == this.Culture.TwoLetterISOLanguageName))
+                    if (reader.IsStartElement())
                     {
-                        var ressource = new TRessource();
-                        ressource.UnSerialize(reader, ressourceID, this.Culture);
-                        return ressource;
+                        if(reader.LocalName == XD.ELEMENT_RESSOURCE)
+                        {
+                            var idattr = reader.GetAttribute(XD.ATTRIBUTE_ID);
+                            if (idattr == ressourceID)
+                            {
+                                var typeattr = reader.GetAttribute(XD.ATTRIBUTE_TYPE);
+                                if (typeattr == type.FullName)
+                                {
+                                    while (reader.ReadToFollowing(XD.ELEMENT_VALUE, XD.NAMESPACE))
+                                    {
+                                        var lang = reader.GetAttribute(XD.ATTRIBUTE_LANG);
+                                        if (lang == this.Culture.TwoLetterISOLanguageName)
+                                        {
+                                            var ressource = new TRessource();
+                                            ressource.UnSerialize(reader, ressourceID, this.Culture);
+                                            return ressource;
+                                        }                                        
+                                    }
+                                    return default(TRessource);
+
+                                }
+                                else continue;
+
+                            }
+                            else
+                                continue;
+                        }
                     }
+
+                    if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == XD.ELEMENT_RESSOURCES)
+                        break;
                 }
             }
             return default(TRessource);
@@ -183,12 +220,16 @@ namespace Shiva.Ressources.Xml
 
                 var settings = new XmlReaderSettings
                 {
-                    ValidationType = ValidationType.Schema
+                    ValidationType = ValidationType.Schema,
+                    IgnoreComments = true,
+                    IgnoreProcessingInstructions=true,
+                    IgnoreWhitespace=true,
                 };
                 settings.Schemas.Add(xsdSet);
                 settings.ValidationEventHandler += new ValidationEventHandler(this._Xml_ValidationEventHandler);
-
-                using (var reader = XmlReader.Create(this._streamSource.GetStream(), settings))
+                var stream = this._streamSource.GetStream();
+                stream.Seek(0, SeekOrigin.Begin);
+                using (var reader = XmlReader.Create(stream, settings))
                     while (reader.Read())
                     {
                     }

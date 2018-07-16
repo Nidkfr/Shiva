@@ -33,61 +33,68 @@ namespace Shiva.Xml
                             break;
                         case XmlNodeType.Text:
                             writer.WriteValue(reader.Value);
-                            break;
+                            break;                        
+                        /*case XmlNodeType.Whitespace: writer.WriteWhitespace(reader.Value); break;
+                        case XmlNodeType.ProcessingInstruction: writer.WriteProcessingInstruction(reader.Name, reader.Value); break;
+                        case XmlNodeType.SignificantWhitespace: writer.WriteWhitespace(reader.Value); break;*/
                         case XmlNodeType.EndElement:
                         case XmlNodeType.Element: return;
                     }
                 }
-        }
-
+        }        
 
         /// <summary>
-        /// Moves to element.
+        /// Reads to end of element.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        /// <param name="hieachicElementExpression">The hieachic element expression.</param>
-        /// <param name="elementSelector">The element selector.</param>
-        /// <returns></returns>
-        public static bool MoveToElement(XmlReader reader, string hieachicElementExpression, Predicate<IDictionary<string,string>> elementSelector = null)
-        {            
-            var path = new Stack<string>();
-            var pathExpressionLevel = hieachicElementExpression.Split('\\').Length;
-            
+        /// <param name="elementName">Name of the element.</param>
+        public static void ReadToEndOfElement(XmlReader reader, string elementName)
+        {
             do
             {
-                if(reader.NodeType == XmlNodeType.Element)
-                {
-                    path.Push(reader.LocalName);
-                    var currentPath = string.Join("\\", path.ToArray().Take(pathExpressionLevel));
-                    if (currentPath == hieachicElementExpression)
-                    {
-                        var attrList = new Dictionary<string, string>();
-                        if (elementSelector != null)
-                        {
-                            if (reader.MoveToFirstAttribute())
-                            {
-                                do
-                                {
-                                    attrList.Add(reader.LocalName, reader.ReadContentAsString());
-                                }
-                                while (reader.MoveToNextAttribute());
-                            }
-                            if (elementSelector.Invoke(attrList))
-                            {
-                                reader.MoveToContent();
-                                return true;
-                            }
-                        }
-                        else
-                        {
-                            reader.MoveToContent();
-                            return true;
-                        }
-                    }
-                }
+
+                if (reader.EOF)
+                    break;
+
+                if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == elementName)
+                    break;
             }
             while (reader.Read());
-            return false;
+        }
+
+        /// <summary>
+        /// Writes to end element.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="writer">The writer.</param>
+        /// <param name="elementName">Name of the element.</param>
+        public static void WriteToEndElement(XmlReader reader,XmlWriter writer,string elementName)
+        {
+            while (reader.Read())
+            {
+
+                if (reader.EOF)
+                    break;
+
+                if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == elementName)
+                    break;
+
+                switch(reader.NodeType)
+                {
+                    case XmlNodeType.Attribute:writer.WriteAttributes(reader, true); break;
+                    case XmlNodeType.CDATA:writer.WriteCData(reader.Value); break;
+                    case XmlNodeType.Comment:writer.WriteComment(reader.Value); break;
+                    case XmlNodeType.Element:
+                        writer.WriteStartElement(reader.Prefix,reader.LocalName,reader.NamespaceURI);
+                        writer.WriteAttributes(reader, true);
+                        break;
+                    case XmlNodeType.EndElement:writer.WriteEndElement(); break;
+                    case XmlNodeType.Text:writer.WriteString(reader.Value); break;
+                    case XmlNodeType.Whitespace:writer.WriteWhitespace(reader.Value); break;
+                    case XmlNodeType.ProcessingInstruction: writer.WriteProcessingInstruction(reader.Name,reader.Value);break;
+                    case XmlNodeType.SignificantWhitespace:writer.WriteWhitespace(reader.Value);break;                    
+                }
+            }           
         }
     }
 }

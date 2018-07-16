@@ -100,9 +100,11 @@ namespace Shiva.Ressources
         /// Uns the serialize.
         /// </summary>
         /// <param name="reader">The reader.</param>
+        /// <param name="id">The identifier.</param>
+        /// <param name="culture">The culture.</param>
         public override void UnSerialize(XmlReader reader, Identity id, CultureInfo culture)
         {
-            if (XmlParserTool.MoveToElement(reader, "Data"))
+            if (reader.ReadToDescendant("Data"))
             {
                 this._data = Convert.FromBase64String(reader.ReadElementContentAsString());
             }

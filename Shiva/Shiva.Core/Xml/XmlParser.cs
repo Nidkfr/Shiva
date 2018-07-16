@@ -23,6 +23,7 @@ namespace Shiva.Xml
             {
                 writer.WriteStartDocument();
                 this.WriteStartRoot(writer);
+                
                 this.WriteChildren(writer);
                 writer.WriteEndElement();
                 writer.WriteEndDocument();
@@ -39,7 +40,7 @@ namespace Shiva.Xml
             streamOrigin.Seek(0, SeekOrigin.Begin);
             using (var reader = XmlReader.Create(streamOrigin))
             {
-                using (var writer = XmlWriter.Create(streamDestination, new XmlWriterSettings { Indent = true }))
+                using (var writer = XmlWriter.Create(streamDestination, new XmlWriterSettings { Indent = true, }))
                 {
                     writer.WriteStartDocument();
                     XmlParserTool.ReadAndWriteToNextStartOrEndElement(reader, writer);

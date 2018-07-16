@@ -17,7 +17,7 @@ namespace Shiva.Ressources.Xml
         public const string ATTRIBUTE_LANG = "lang";
         public const string RESSOURCE_SCHEMA = "Shiva.Ressources.Xml.XmlRessource.xsd";
         public const string ELEMENT_ROOT = "RessourcesDefinitions";
-        public const string NAMESPACE = "http://shiva.org/XmlRessource.xsd";
+        public const string NAMESPACE = "http://shiva.org/Ressources";
         public const string PREFIX = "xr";
     }
 }

@@ -14,7 +14,9 @@ namespace Shiva.Ressources
         void TestGetRessource();
 
         void TestGetRessourceAsync();
-        
+
+        void TestPerformanceGetRessource();
+
     }
 
     public class RessourceManagerTester
@@ -22,7 +24,7 @@ namespace Shiva.Ressources
         public void TestGetRessource(IRessourceManager manager)
         {
             //create 2 resource with different type
-            manager.SetRessource(new RessourceString("Test.Ressource1", "test value"));            
+            manager.SetRessource(new RessourceString("Test.Ressource1", "test value"));
             manager.SetRessource(new RessourceBinary("Test.Ressource1", System.Text.Encoding.ASCII.GetBytes("test value")));
 
             var ressource = manager.GetRessource<RessourceString>("Test.Ressource1");
@@ -41,7 +43,7 @@ namespace Shiva.Ressources
             Assert.IsTrue(System.Text.Encoding.ASCII.GetString(ressourceb.Value) == "test value");
 
             //add ressource with another culture
-            manager.SetRessource(new RessourceString("Test.Ressource1", "test value in fr",CultureInfo.GetCultureInfo("fr")));
+            manager.SetRessource(new RessourceString("Test.Ressource1", "test value in fr", CultureInfo.GetCultureInfo("fr")));
 
             //ressource is overrided but save in culture of ressource manager
             ressource = manager.GetRessource<RessourceString>("Test.Ressource1");
@@ -113,6 +115,41 @@ namespace Shiva.Ressources
             Assert.IsTrue(ressourceb.Result.Id == "Test.Ressource1");
             Assert.IsTrue(ressourceb.Result.Culture == CultureInfo.GetCultureInfo("en"));
             Assert.IsTrue(System.Text.Encoding.ASCII.GetString(ressourceb.Result.Value) == "test value");
+        }
+
+        public void TestPerformanceGetRessource(IRessourceManager managerEn, IRessourceManager managerFr)
+        {
+            //i will create 100000 ressource string
+            var tot = 10000;
+            for (var i = 1; i <= tot; i++)
+            {
+                managerEn.SetRessource(new RessourceString($"Test.Ressource{i}", $"Test value {i}"));
+            }
+
+            managerEn.Flush();
+
+            for (var i = 1; i <= tot; i++)
+            {
+                managerFr.SetRessource(new RessourceString($"Test.Ressource{i}", $"Test value {i} in fr"));
+            }
+
+            managerFr.Flush();
+
+            var ressource = managerEn.GetRessource<RessourceString>($"Test.Ressource{tot}");
+            Assert.IsTrue(ressource.Id == $"Test.Ressource{tot}");
+            Assert.IsTrue(ressource.Culture == CultureInfo.GetCultureInfo("en"));
+            Assert.IsTrue(ressource.Value == $"Test value {tot}");
+
+            managerEn.SetRessource(new RessourceString($"Test.Ressource{tot}", $"Test value ok"));
+
+            managerEn.Flush();
+
+            ressource = managerEn.GetRessource<RessourceString>($"Test.Ressource{tot}");
+            Assert.IsTrue(ressource.Id == $"Test.Ressource{tot}");
+            Assert.IsTrue(ressource.Culture == CultureInfo.GetCultureInfo("en"));
+            Assert.IsTrue(ressource.Value == "Test value ok", ressource.Value);
+
+
         }
     }
 }

@@ -88,5 +88,23 @@ namespace Shiva.Ressources.Xml
                 }
             }
         }
+
+        [TestMethod]
+        [DeploymentItem("DeployItems/RessourceXml.xml", "DataPerformance")]
+        public void TestPerformanceGetRessource()
+        {
+            using (var streamsource = new FileSource("./DataPerformance/RessourceXml.xml"))
+            {
+                using (var managerEn = new RessourceXmlManager(this.LogManager))
+                {
+                    managerEn.Initialize(CultureInfo.GetCultureInfo("en"), streamsource);
+                    using (var managerFr = new RessourceXmlManager(this.LogManager))
+                    {
+                        managerFr.Initialize(CultureInfo.GetCultureInfo("fr"), streamsource);
+                        this._tester.TestPerformanceGetRessource(managerEn, managerFr);
+                    }
+                }
+            }
+        }
     }
 }

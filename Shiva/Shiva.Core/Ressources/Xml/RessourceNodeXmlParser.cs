@@ -21,14 +21,13 @@ namespace Shiva.Ressources.Xml
         /// <param name="ressource">The ressource.</param>
         public RessourceNodeXmlParser(IRessource ressource)
         {
-            this._ressource = ressource??throw new ArgumentNullException(nameof(ressource));
+            this._ressource = ressource;
         }
         /// <summary>
         /// Updates the children.
         /// </summary>
         /// <param name="reader">The reader.</param>
         /// <param name="writer">The writer.</param>
-        /// <exception cref="NotImplementedException"></exception>
         protected override void UpdateChildren(XmlReader reader, XmlWriter writer)
         {
             while (!reader.EOF)
@@ -41,9 +40,20 @@ namespace Shiva.Ressources.Xml
                 {
                     var langattr = reader.GetAttribute(XD.ATTRIBUTE_LANG);
                     if (langattr == this._ressource.Culture.TwoLetterISOLanguageName)
-                        continue;
+                    {
+                        XmlParserTool.ReadToEndOfElement(reader, XD.ELEMENT_VALUE);
+                    }
+                    else
+                    {
+                        writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_VALUE, XD.NAMESPACE);
+                        writer.WriteAttributes(reader, true);                        
+                        XmlParserTool.WriteToEndElement(reader, writer, XD.ELEMENT_VALUE);
+                        writer.WriteEndElement();
+                    }
+
                 }
-                XmlParserTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
+                else
+                    XmlParserTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
             }
 
             this.WriteChildren(writer);
@@ -55,8 +65,8 @@ namespace Shiva.Ressources.Xml
         /// <param name="writer">The writer.</param>
         protected override void WriteChildren(XmlWriter writer)
         {
-            writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_VALUE,XD.NAMESPACE);
-            writer.WriteStartAttribute(XD.PREFIX, XD.ATTRIBUTE_LANG, XD.NAMESPACE);
+            writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_VALUE, XD.NAMESPACE);
+            writer.WriteStartAttribute(XD.ATTRIBUTE_LANG);
             writer.WriteValue(this._ressource.Culture.TwoLetterISOLanguageName);
             writer.WriteEndAttribute();
             this._ressource.Serialize(writer);
@@ -71,10 +81,10 @@ namespace Shiva.Ressources.Xml
         protected override void WriteStartElement(XmlWriter writer)
         {
             writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_RESSOURCE, XD.NAMESPACE);
-            writer.WriteStartAttribute(XD.PREFIX, XD.ATTRIBUTE_ID, XD.NAMESPACE);
+            writer.WriteStartAttribute(XD.ATTRIBUTE_ID);
             writer.WriteValue(this._ressource.Id);
             writer.WriteEndAttribute();
-            writer.WriteStartAttribute(XD.PREFIX, XD.ATTRIBUTE_TYPE, XD.NAMESPACE);
+            writer.WriteStartAttribute(XD.ATTRIBUTE_TYPE);
             writer.WriteValue(this._ressource.GetType().FullName);
             writer.WriteEndAttribute();
         }

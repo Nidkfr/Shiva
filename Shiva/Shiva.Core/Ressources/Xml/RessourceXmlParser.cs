@@ -49,7 +49,8 @@ namespace Shiva.Ressources.Xml
         /// <param name="writer">The writer.</param>
         protected override void WriteStartRoot(XmlWriter writer)
         {
-            writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_ROOT, XD.NAMESPACE);           
+            writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_ROOT, XD.NAMESPACE);
+            writer.WriteAttributeString("xmlns", XD.PREFIX, null, XD.NAMESPACE);
         }
     }
 }
