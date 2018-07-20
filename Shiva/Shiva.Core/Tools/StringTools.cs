@@ -63,5 +63,20 @@ namespace Shiva.Tools
             else
                 return string.Format(rewrittenstringformat, values.Values.ToArray());
         }
+
+        /// <summary>
+        /// Removes the byte order mark UTF8.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        public static string RemoveByteOrderMarkUtf8(this string value)
+        {
+            var _byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
+            if (value.StartsWith(_byteOrderMarkUtf8))
+            {
+                return value.Remove(0, _byteOrderMarkUtf8.Length);
+            }
+            return value;
+        }
     }
 }

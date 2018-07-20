@@ -104,10 +104,11 @@ namespace Shiva.Core.IO
         }
 
         /// <summary>
-        /// Opens the current stream.
+        /// Get the current stream.
         /// </summary>
         /// <returns></returns>
         /// <exception cref="ObjectDisposedException">FileSource</exception>
+        /// <exception >All open file exception</exception>
         public override Stream GetStream()
         {
             if (!this._isDisposed)

@@ -41,7 +41,7 @@ namespace Shiva.Ressources
         /// <value>
         /// The value.
         /// </value>
-        public string Value => this.IsEmptyRessource?$"[{this.GetType().FullName}]{{{this.Id}}}:{this.Culture.TwoLetterISOLanguageName}" : this._value;
+        public string Value => !this.HasValue&&!this.IsEmptyRessource?$"[{this.GetType().FullName}]{{{this.Id}:{this.Culture.TwoLetterISOLanguageName}}}" : this._value;
 
         /// <summary>
         /// Gets a value indicating whether this instance is initialized.
@@ -49,7 +49,7 @@ namespace Shiva.Ressources
         /// <value>
         /// <c>true</c> if this instance is initialized; otherwise, <c>false</c>.
         /// </value>
-        public override bool IsEmptyRessource => string.IsNullOrEmpty(this._value);
+        public override bool HasValue =>!string.IsNullOrEmpty(this._value);
 
         /// <summary>
         /// Clones this instance.
@@ -86,6 +86,8 @@ namespace Shiva.Ressources
         /// <param name="writer">The writer.</param>
         public override void Serialize(XmlWriter writer)
         {
+            if (writer == null)
+                throw new ArgumentNullException(nameof(writer));
             writer.WriteStartElement("String");
             writer.WriteValue(this.Value);
             writer.WriteEndElement();
@@ -100,6 +102,8 @@ namespace Shiva.Ressources
         /// <exception cref="System.InvalidOperationException">Invalid Xml Ressource File</exception>
         public override void UnSerialize(XmlReader reader,Identity id, CultureInfo culture)
         {
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
             base.UnSerialize(reader, id, culture);
             if (reader.ReadToDescendant("String"))
             {

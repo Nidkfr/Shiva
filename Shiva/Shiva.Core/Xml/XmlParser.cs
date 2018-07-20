@@ -19,6 +19,8 @@ namespace Shiva.Xml
         /// <param name="streamDestination">The stream destination.</param>
         public void Write(Stream streamDestination)
         {
+            if (streamDestination == null)
+                throw new ArgumentNullException(nameof(streamDestination));
             using (var writer = XmlWriter.Create(streamDestination,new XmlWriterSettings { Indent=true }))
             {
                 writer.WriteStartDocument();
@@ -37,6 +39,12 @@ namespace Shiva.Xml
         /// <param name="streamDestination">The stream destination.</param>
         public void Update(Stream streamOrigin,Stream streamDestination)
         {
+            if (streamOrigin == null)
+                throw new ArgumentNullException(nameof(streamOrigin));
+
+            if (streamDestination == null)
+                throw new ArgumentNullException(nameof(streamDestination));
+
             streamOrigin.Seek(0, SeekOrigin.Begin);
             using (var reader = XmlReader.Create(streamOrigin))
             {

@@ -13,13 +13,13 @@ namespace Shiva.Ressources
     /// </summary>
     public abstract class RessourceBase : IRessource
     {
-        private Identity _id;
+        private  Identity _id;
         private CultureInfo _culture;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RessourceBase"/> class.
         /// </summary>
-        public RessourceBase()
+        protected RessourceBase()
         {
         }
 
@@ -51,12 +51,20 @@ namespace Shiva.Ressources
         public Identity Id => this._id;
 
         /// <summary>
-        /// Gets a value indicating whether this instance is initialized.
+        /// Gets a value indicating whether this instance is empty ressource.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if this instance is initialized; otherwise, <c>false</c>.
+        ///   <c>true</c> if this instance is empty ressource; otherwise, <c>false</c>.
         /// </value>
-        public abstract bool IsEmptyRessource{ get; }
+        public bool IsEmptyRessource => this._id == null && this._culture == null;
+
+        /// <summary>
+        /// Gets a value indicating whether this instance has value.
+        /// </summary>
+        /// <value>
+        ///  <c>true</c> if this instance has value; otherwise, <c>false</c>.
+        /// </value>
+        public abstract bool HasValue { get; }
 
         /// <summary>
         /// Clones this instance.
@@ -84,10 +92,12 @@ namespace Shiva.Ressources
         /// Uns the serialize.
         /// </summary>
         /// <param name="reader">The reader.</param>
+        /// <param name="id">The identifier.</param>
+        /// <param name="culture">The culture.</param>
         public virtual void UnSerialize(XmlReader reader, Identity id, CultureInfo culture)
         {
             this._id = id;
             this._culture = culture;
-        }
+        }        
     }
 }

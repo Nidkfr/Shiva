@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text;
 
 namespace Shiva.Tools
 {
@@ -32,6 +33,14 @@ namespace Shiva.Tools
                }, CultureInfo.GetCultureInfo("en"));
 
             Assert.IsTrue(formatvalue == "value1 test value2 Monday, January 1, 2018", message: formatvalue);
+        }
+
+        [TestMethod]
+        public void TestRemoveByteOrderMarkUtf8()
+        {
+            var value = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble()) + "test";
+            Assert.IsFalse(value == "test");
+            Assert.IsTrue(value.RemoveByteOrderMarkUtf8() == "test");
         }
     }
 }

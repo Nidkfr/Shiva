@@ -43,9 +43,11 @@ namespace Shiva.Ressources
         void Serialize(XmlWriter writer);
 
         /// <summary>
-        /// Unserialize.
+        /// Uns the serialize.
         /// </summary>
-        /// <param name="reader">The value.</param>
+        /// <param name="reader">The reader.</param>
+        /// <param name="id">The identifier.</param>
+        /// <param name="info">The information.</param>
         void UnSerialize(XmlReader reader, Identity id, CultureInfo info);
 
         /// <summary>

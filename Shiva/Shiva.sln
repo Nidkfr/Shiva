@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shiva.Services.Log4Net", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shiva.Performance.Test", "Shiva.Performance.Test\Shiva.Performance.Test.csproj", "{08862EDD-3DDF-487E-8358-CC4EBD83E9E3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Performance", "Performance", "{0C711004-A947-4689-9901-A9CCC147AD48}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Performances", "Performances", "{0C711004-A947-4689-9901-A9CCC147AD48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
