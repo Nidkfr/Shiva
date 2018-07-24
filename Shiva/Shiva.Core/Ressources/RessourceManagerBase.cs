@@ -17,7 +17,7 @@ namespace Shiva.Ressources
     /// <seealso cref="Shiva.Ressources.IRessourceManager" />
     public abstract class RessourceManagerBase : IRessourceManager
     {
-        private readonly IDictionary<Type, IdentifiableList<IRessource>> _ressources = new Dictionary<Type, IdentifiableList<IRessource>>();
+        private readonly IDictionary<Type, IdentifiableList<IRessource>> _ressources = new Dictionary<Type, IdentifiableList<IRessource>>();        
         private readonly IdentifiableList<RessourceCachedGroupe> _groupes = new IdentifiableList<RessourceCachedGroupe>();        
 
         /// <summary>
@@ -100,6 +100,11 @@ namespace Shiva.Ressources
                     if (this.Logger.InfoIsEnabled)
                         this.Logger.Info($"Ressource Manager contains ressource {idRessource} in culture {this.Culture}");
                     return true;
+                }
+                else
+                {
+                    if (elements.RemovedElement.Contains(idRessource))
+                        return false;
                 }
             }
 
@@ -237,6 +242,11 @@ namespace Shiva.Ressources
                         this.Logger.Debug($"Ressource {ressourceID} is in cache");
                     return (TRessource)ressources[ressourceID];
                 }
+                else
+                {
+                    if (this._ressources[typeof(TRessource)].RemovedElement.Contains(ressourceID))
+                        return default(TRessource);
+                }
             }
 
             return this.GetRessourceInternal<TRessource>(ressourceID);
@@ -321,8 +331,7 @@ namespace Shiva.Ressources
         {
             var info = new RessourcesEditInfo()
             {
-                RemovedRessources = this._ressources                
-                .ToDictionary(x=>x.Key,x=>x.Value.RemovedElement),
+                RemovedRessources = this._ressources.ToDictionary(x=>x.Key,x=>x.Value.RemovedElement),
                 AddedRessources = this._ressources.SelectMany(x=>x.Value).ToList()
             };
 
@@ -330,7 +339,10 @@ namespace Shiva.Ressources
 
             this.FlushInternal(info);
 
-            this._ressources.Clear();
+            foreach (var item in this._ressources)
+            {
+                item.Value.Clear();
+            }
             this._groupes.Clear();
         }
 
@@ -369,6 +381,7 @@ namespace Shiva.Ressources
             if (!this._ressources.ContainsKey(typeof(TRessource)))
                 this._ressources.Add(typeof(TRessource), new IdentifiableList<IRessource>());
             this._ressources[typeof(TRessource)].Add(ressource);
+            
         }
 
         /// <summary>

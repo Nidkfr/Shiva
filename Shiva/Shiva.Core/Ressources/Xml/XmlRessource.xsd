@@ -73,7 +73,7 @@
       <xs:documentation>Id of element</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
-      <xs:pattern value="[A-Z_][A-Za-z0-9_.]*[a-z0-9]"/>
+      <xs:pattern value="[A-Za-z_][A-Za-z0-9_.]*[a-z0-9]"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="Csharp_Type">

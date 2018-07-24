@@ -122,8 +122,45 @@ namespace Shiva.Ressources.Xml
         protected override bool ContainsRessourceInternal<TRessource>(Identity ressourceID)
         {
             this._CheckInit();
-            
-            return false;
+
+            using (var reader = XmlReader.Create(this._streamSource.GetStream(), this._getReadingPermformenceSettings()))
+            {
+                while (reader.Read())
+                {
+                    if (reader.IsStartElement())
+                    {
+                        if (reader.LocalName == XD.ELEMENT_RESSOURCE)
+                        {
+                            var idattr = reader.GetAttribute(XD.ATTRIBUTE_ID);
+                            if (idattr == ressourceID)
+                            {
+                                var typeattr = reader.GetAttribute(XD.ATTRIBUTE_TYPE);
+                                if (typeattr == typeof(TRessource).FullName)
+                                {
+                                    while (reader.ReadToFollowing(XD.ELEMENT_VALUE, XD.NAMESPACE))
+                                    {
+                                        var lang = reader.GetAttribute(XD.ATTRIBUTE_LANG);
+                                        if (lang == this.Culture.TwoLetterISOLanguageName)
+                                        {
+                                            return true;
+                                        }
+                                    }
+                                    return false;
+
+                                }
+                                else continue;
+
+                            }
+                            else
+                                continue;
+                        }
+                    }
+
+                    if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == XD.ELEMENT_RESSOURCES)
+                        break;
+                }
+                return false;
+            }
         }
 
         /// <summary>
@@ -145,35 +182,20 @@ namespace Shiva.Ressources.Xml
         protected override TRessource GetRessourceInternal<TRessource>(Identity ressourceID)
         {
             this._CheckInit();
-            return this._GetRessource<TRessource>(ressourceID, typeof(TRessource));                
-        }
-
-        private TRessource _GetRessource<TRessource>(Identity ressourceID, Type type) where TRessource : IRessource, new()
-        {
-            this._streamSource.GetStream().Seek(0,SeekOrigin.Begin);
-            var settings = new XmlReaderSettings
+            
+            using (var reader = XmlReader.Create(this._streamSource.GetStream(), this._getReadingPermformenceSettings()))
             {
-                CheckCharacters = false,
-                ConformanceLevel = ConformanceLevel.Document,
-                IgnoreComments = true,
-                IgnoreProcessingInstructions = true,
-                IgnoreWhitespace = true,
-                ValidationFlags = XmlSchemaValidationFlags.None,
-                ValidationType = ValidationType.None,
-            };
-            using (var reader = XmlReader.Create(this._streamSource.GetStream(), settings))
-            {                
-                while(reader.Read())
+                while (reader.Read())
                 {
                     if (reader.IsStartElement())
                     {
-                        if(reader.LocalName == XD.ELEMENT_RESSOURCE)
+                        if (reader.LocalName == XD.ELEMENT_RESSOURCE)
                         {
                             var idattr = reader.GetAttribute(XD.ATTRIBUTE_ID);
                             if (idattr == ressourceID)
                             {
                                 var typeattr = reader.GetAttribute(XD.ATTRIBUTE_TYPE);
-                                if (typeattr == type.FullName)
+                                if (typeattr == typeof(TRessource).FullName)
                                 {
                                     while (reader.ReadToFollowing(XD.ELEMENT_VALUE, XD.NAMESPACE))
                                     {
@@ -183,7 +205,7 @@ namespace Shiva.Ressources.Xml
                                             var ressource = new TRessource();
                                             ressource.UnSerialize(reader, ressourceID, this.Culture);
                                             return ressource;
-                                        }                                        
+                                        }
                                     }
                                     return default(TRessource);
 
@@ -227,8 +249,7 @@ namespace Shiva.Ressources.Xml
                 };
                 settings.Schemas.Add(xsdSet);
                 settings.ValidationEventHandler += new ValidationEventHandler(this._Xml_ValidationEventHandler);
-                var stream = this._streamSource.GetStream();
-                stream.Seek(0, SeekOrigin.Begin);
+                var stream = this._streamSource.GetStream();                
                 using (var reader = XmlReader.Create(stream, settings))
                     while (reader.Read())
                     {
@@ -267,6 +288,18 @@ namespace Shiva.Ressources.Xml
         }
 
 
-
+        private XmlReaderSettings _getReadingPermformenceSettings()
+        {
+            return new XmlReaderSettings
+            {
+                CheckCharacters = false,
+                ConformanceLevel = ConformanceLevel.Document,
+                IgnoreComments = true,
+                IgnoreProcessingInstructions = true,
+                IgnoreWhitespace = true,
+                ValidationFlags = XmlSchemaValidationFlags.None,
+                ValidationType = ValidationType.None,
+            };
+        }
     }
 }

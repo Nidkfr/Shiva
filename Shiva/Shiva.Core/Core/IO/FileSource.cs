@@ -96,6 +96,7 @@ namespace Shiva.Core.IO
             {
                 if (this._saveStream == null || !this._saveStream.CanWrite)
                     this._saveStream = File.Open(this._fileSaveinfo.FullName, FileMode.CreateNew, FileAccess.Write, FileShare.None);
+                this._saveStream.Seek(0, SeekOrigin.Begin);
                 return this._saveStream;
             }
             else
@@ -115,6 +116,7 @@ namespace Shiva.Core.IO
             {
                 if (this._currentStream == null || !this._currentStream.CanRead)
                     this._currentStream = File.Open(this._fileinfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
+                this._currentStream.Seek(0, SeekOrigin.Begin);
                 return this._currentStream;
             }
             else

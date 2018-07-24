@@ -7,8 +7,14 @@ using System.Text;
 namespace Shiva.Tools
 {
     [TestClass]
-    public class UTStringTools
+    public class UTStringTools:BaseTest
     {
+        [ClassInitialize]
+        public new static void ClassInit(TestContext context)
+        {
+            BaseTest.ClassInit(context);
+        }
+
         [TestMethod]
         public void TestFormatByName()
         {

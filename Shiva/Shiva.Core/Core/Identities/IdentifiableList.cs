@@ -69,10 +69,14 @@ namespace Shiva.Core.Identities
         /// <param name="id">The identifier.</param>
         public void Remove(Identity id)
         {
-            if (this._removedElement.Contains(id))
-                this._removedElement.Add(id);
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
 
-            this._addedElement.Remove(id);
+            if (!this._removedElement.Contains(id))
+            {
+                this._removedElement.Add(id);
+                this._addedElement.Remove(id);
+            }
         }
 
         /// <summary>

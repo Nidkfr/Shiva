@@ -11,17 +11,30 @@ namespace Shiva.Ressources
 {
     public interface IRessourceManagerTester
     {
-        void TestGetRessource();
+        void TestGeSettRessource();
 
-        void TestGetRessourceAsync();
+        void TestGetSetRessourceAsync();
+
+        void FailGetSetRessource();
+
+        void TestContainsRessource();
+
+        void TesContainsRessourceAsync();
+
+        void FailContainsRessource();
 
         void TestPerformanceGetRessource();
 
+        void TestRemoveRessource();
+
+        void TestRemoveRessourceAsync();
+
+        void FailRemoveRessourceAsync();
     }
 
     public class RessourceManagerTester
     {
-        public void TestGetRessource(IRessourceManager manager)
+        public void TestGetSetRessource(IRessourceManager manager)
         {
             //create 2 resource with different type
             manager.SetRessource(new RessourceString("Test.Ressource1", "test value"));
@@ -64,7 +77,7 @@ namespace Shiva.Ressources
             Assert.IsTrue(System.Text.Encoding.ASCII.GetString(ressourceb.Value) == "test value");
         }
 
-        public void TestGetRessourceAsync(IRessourceManager manager)
+        public void TestGetSetRessourceAsync(IRessourceManager manager)
         {
             //create 2 resource with different type
             manager.SetRessource(new RessourceString("Test.Ressource1", "test value"));
@@ -117,6 +130,54 @@ namespace Shiva.Ressources
             Assert.IsTrue(System.Text.Encoding.ASCII.GetString(ressourceb.Result.Value) == "test value");
         }
 
+        public void FailGetSetRessource(IRessourceManager manager)
+        {
+            manager.Invoking(x => x.GetRessource<RessourceString>(null)).Should().Throw<ArgumentNullException>();
+            Func<Task> call = () => manager.GetRessourceAsync<RessourceString>(null);
+            call.Should().Throw<ArgumentNullException>();
+
+            manager.Invoking(x => x.SetRessource<RessourceString>(null)).Should().Throw<ArgumentNullException>();
+            Func<Task> call2 = () => manager.SetRessourceAsync<RessourceString>(null);
+            call.Should().Throw<ArgumentNullException>();
+            
+        }
+
+        public void TestContainsRessource(IRessourceManager manager)
+        {
+            manager.SetRessource(new RessourceString("test", "value", CultureInfo.GetCultureInfo(1)));
+            Assert.IsTrue(manager.ContainsRessource<RessourceString>("test"));
+            Assert.IsFalse(manager.ContainsRessource<RessourceBinary>("test"));
+            manager.Flush();
+            Assert.IsTrue(manager.ContainsRessource<RessourceString>("test"));
+            Assert.IsFalse(manager.ContainsRessource<RessourceBinary>("test"));
+        }
+
+        public void TestContainsRessourceAsync(IRessourceManager manager)
+        {
+            manager.SetRessource(new RessourceString("test", "value", CultureInfo.GetCultureInfo(1)));
+            var waitingresult = manager.ContainsRessourceAsync<RessourceString>("test");
+            waitingresult.Wait(100);
+            Assert.IsTrue(waitingresult.Result);
+            waitingresult = manager.ContainsRessourceAsync<RessourceBinary>("test");
+            waitingresult.Wait(100);
+            Assert.IsFalse(waitingresult.Result);
+            manager.Flush();
+            waitingresult = manager.ContainsRessourceAsync<RessourceString>("test");
+            waitingresult.Wait(100);
+            Assert.IsTrue(waitingresult.Result);
+            waitingresult = manager.ContainsRessourceAsync<RessourceBinary>("test");
+            waitingresult.Wait(100);
+            Assert.IsFalse(waitingresult.Result);
+        }
+
+        public void FailContainsRessource(IRessourceManager manager)
+        {
+            manager.Invoking(x => x.ContainsRessource<RessourceString>(null)).Should().Throw<ArgumentNullException>();
+            var response = manager.ContainsRessourceAsync<RessourceString>(null);
+            Func<Task> call = () => manager.ContainsRessourceAsync<RessourceString>(null);
+            call.Should().Throw<ArgumentNullException>();
+        }
+
         public void TestPerformanceGetRessource(IRessourceManager managerEn, IRessourceManager managerFr)
         {
             //i will create 100000 ressource string
@@ -150,6 +211,65 @@ namespace Shiva.Ressources
             Assert.IsTrue(ressource.Value == "Test value ok", ressource.Value);
 
 
+        }
+
+        public void TestRemoveRessource(IRessourceManager manager)
+        {
+            manager.SetRessource<RessourceString>(new RessourceString("test", "value", CultureInfo.GetCultureInfo(1)));
+            manager.RemoveRessource<RessourceString>("test");
+            Assert.IsNull(manager.GetRessource<RessourceString>("test"));
+            Assert.IsFalse(manager.ContainsRessource<RessourceString>("test"));
+
+            manager.Flush();
+
+            Assert.IsNull(manager.GetRessource<RessourceString>("test"));
+            Assert.IsFalse(manager.ContainsRessource<RessourceString>("test"));
+
+            manager.SetRessource<RessourceString>(new RessourceString("test", "value", CultureInfo.GetCultureInfo(1)));
+            manager.Flush();
+            manager.RemoveRessource<RessourceString>("test");
+            Assert.IsNull(manager.GetRessource<RessourceString>("test"));
+            Assert.IsFalse(manager.ContainsRessource<RessourceString>("test"));
+
+            manager.Flush();
+
+            Assert.IsNull(manager.GetRessource<RessourceString>("test"));
+            Assert.IsFalse(manager.ContainsRessource<RessourceString>("test"));
+        }
+
+        public void TestRemoveRessourceAsync(IRessourceManager manager)
+        {
+            manager.SetRessource<RessourceString>(new RessourceString("test", "value", CultureInfo.GetCultureInfo(1)));
+            var awaitingResult = manager.RemoveRessourceAsync<RessourceString>("test");
+            awaitingResult.Wait(100);
+            Assert.IsNull(manager.GetRessource<RessourceString>("test"));
+            Assert.IsFalse(manager.ContainsRessource<RessourceString>("test"));
+
+            manager.Flush();
+
+            Assert.IsNull(manager.GetRessource<RessourceString>("test"));
+            Assert.IsFalse(manager.ContainsRessource<RessourceString>("test"));
+
+            manager.SetRessource<RessourceString>(new RessourceString("test", "value", CultureInfo.GetCultureInfo(1)));
+            manager.Flush();
+
+            awaitingResult = manager.RemoveRessourceAsync<RessourceString>("test");
+            awaitingResult.Wait(100);
+
+            Assert.IsNull(manager.GetRessource<RessourceString>("test"));
+            Assert.IsFalse(manager.ContainsRessource<RessourceString>("test"));
+
+            manager.Flush();
+
+            Assert.IsNull(manager.GetRessource<RessourceString>("test"));
+            Assert.IsFalse(manager.ContainsRessource<RessourceString>("test"));
+        }
+
+        public void FailRemoveRessourceAsync(IRessourceManager manager)
+        {
+            manager.Invoking(x => x.RemoveRessource<RessourceString>(null)).Should().Throw<ArgumentNullException>();
+            Func<Task> call = () => manager.RemoveRessourceAsync<RessourceString>(null);
+            call.Should().Throw<ArgumentNullException>();
         }
     }
 }

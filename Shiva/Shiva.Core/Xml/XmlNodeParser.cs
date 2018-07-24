@@ -18,6 +18,9 @@ namespace Shiva.Xml
         /// <param name="writer">The writer.</param>
         public void Write(XmlWriter writer)
         {
+            if (writer == null)
+                throw new ArgumentNullException(nameof(writer));
+
             this.WriteStartElement(writer);
             this.WriteChildren(writer);
             writer.WriteEndElement();
@@ -30,6 +33,12 @@ namespace Shiva.Xml
         /// <param name="writer">The writer.</param>
         public void Update(XmlReader reader, XmlWriter writer)
         {
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
+
+            if (writer == null)
+                throw new ArgumentNullException(nameof(writer));
+
             this.WriteStartElement(writer);
             XmlParserTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
             if (reader.EOF || reader.NodeType == XmlNodeType.EndElement)

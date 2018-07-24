@@ -33,10 +33,7 @@ namespace Shiva.Xml
                             break;
                         case XmlNodeType.Text:
                             writer.WriteValue(reader.Value);
-                            break;                        
-                        /*case XmlNodeType.Whitespace: writer.WriteWhitespace(reader.Value); break;
-                        case XmlNodeType.ProcessingInstruction: writer.WriteProcessingInstruction(reader.Name, reader.Value); break;
-                        case XmlNodeType.SignificantWhitespace: writer.WriteWhitespace(reader.Value); break;*/
+                            break;                                                
                         case XmlNodeType.EndElement:
                         case XmlNodeType.Element: return;
                     }
@@ -70,6 +67,13 @@ namespace Shiva.Xml
         /// <param name="elementName">Name of the element.</param>
         public static void WriteToEndElement(XmlReader reader,XmlWriter writer,string elementName)
         {
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
+
+            if (writer == null)
+                throw new ArgumentNullException(nameof(writer));
+
+            
             while (reader.Read())
             {
 

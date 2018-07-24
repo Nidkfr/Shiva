@@ -31,10 +31,10 @@ namespace Shiva.Ressources.Xml
         }
 
         [TestMethod]
-        [DeploymentItem("DeployItems/RessourceXml.xml", "Data")]
+        [DeploymentItem("DeployItems/RessourceXml.xml", "GETSET")]
         public void TestIntialize()
         {
-            using (var streamsource = new FileSource("./Data/RessourceXml.xml"))
+            using (var streamsource = new FileSource("./GETSET/RessourceXml.xml"))
             {
                 using (var manager = new RessourceXmlManager(this.LogManager))
                 {
@@ -46,10 +46,10 @@ namespace Shiva.Ressources.Xml
         }
 
         [TestMethod]
-        [DeploymentItem("DeployItems/RessourceXml.xml", "Data")]
+        [DeploymentItem("DeployItems/RessourceXml.xml", "GETSET")]
         public void FailInitialize()
         {
-            using (var streamsource = new FileSource("./Data/RessourceXml.xml"))
+            using (var streamsource = new FileSource("./GETSET/RessourceXml.xml"))
             {
                 using (var manager = new RessourceXmlManager(this.LogManager))
                 {
@@ -60,40 +60,40 @@ namespace Shiva.Ressources.Xml
         }
 
         [TestMethod]
-        [DeploymentItem("DeployItems/RessourceXml.xml", "Data")]
-        public void TestGetRessource()
+        [DeploymentItem("DeployItems/RessourceXml.xml", "GETSET")]
+        public void TestGeSettRessource()
         {
 
-            using (var streamsource = new FileSource("./Data/RessourceXml.xml", FileSourceSaveModeEnum.KEEPALLPREVIOUSVERSION))
+            using (var streamsource = new FileSource("./GETSET/RessourceXml.xml", FileSourceSaveModeEnum.KEEPALLPREVIOUSVERSION))
             {
                 using (var manager = new RessourceXmlManager(this.LogManager))
                 {
                     manager.Initialize(CultureInfo.GetCultureInfo("en"), streamsource);
-                    this._tester.TestGetRessource(manager);
+                    this._tester.TestGetSetRessource(manager);
                 }
             }
 
         }
 
         [TestMethod]
-        [DeploymentItem("DeployItems/RessourceXml.xml", "Data")]
-        public void TestGetRessourceAsync()
+        [DeploymentItem("DeployItems/RessourceXml.xml", "GETSET")]
+        public void TestGetSetRessourceAsync()
         {
-            using (var streamsource = new FileSource("./Data/RessourceXml.xml"))
+            using (var streamsource = new FileSource("./GETSET/RessourceXml.xml"))
             {
                 using (var manager = new RessourceXmlManager(this.LogManager))
                 {
                     manager.Initialize(CultureInfo.GetCultureInfo("en"), streamsource);
-                    this._tester.TestGetRessourceAsync(manager);
+                    this._tester.TestGetSetRessourceAsync(manager);
                 }
             }
         }
 
         [TestMethod]
-        [DeploymentItem("DeployItems/RessourceXml.xml", "DataPerformance")]
+        [DeploymentItem("DeployItems/RessourceXml.xml", "Performance")]
         public void TestPerformanceGetRessource()
         {
-            using (var streamsource = new FileSource("./DataPerformance/RessourceXml.xml"))
+            using (var streamsource = new FileSource("./Performance/RessourceXml.xml"))
             {
                 using (var managerEn = new RessourceXmlManager(this.LogManager))
                 {
@@ -103,6 +103,105 @@ namespace Shiva.Ressources.Xml
                         managerFr.Initialize(CultureInfo.GetCultureInfo("fr"), streamsource);
                         this._tester.TestPerformanceGetRessource(managerEn, managerFr);
                     }
+                }
+            }
+        }
+
+
+        [TestMethod]
+        [DeploymentItem("DeployItems/RessourceXml.xml", "GETSET")]
+        public void FailGetSetRessource()
+        {
+            using (var streamsource = new FileSource("./GETSET/RessourceXml.xml"))
+            {
+                using (var manager = new RessourceXmlManager(this.LogManager))
+                {
+                    manager.Initialize(CultureInfo.GetCultureInfo("en"), streamsource);
+                    this._tester.FailGetSetRessource(manager);
+                }
+            }
+        }
+
+        [TestMethod]
+        [DeploymentItem("DeployItems/RessourceXml.xml", "Contains")]
+        public void TestContainsRessource()
+        {
+            using (var streamsource = new FileSource("./Contains/RessourceXml.xml"))
+            {
+                using (var manager = new RessourceXmlManager(this.LogManager))
+                {
+                    manager.Initialize(CultureInfo.GetCultureInfo("en"), streamsource);
+                    this._tester.TestContainsRessource(manager);
+                }
+            }
+        }
+
+        [TestMethod]
+        [DeploymentItem("DeployItems/RessourceXml.xml", "Contains")]
+        public void TesContainsRessourceAsync()
+        {
+            using (var streamsource = new FileSource("./Contains/RessourceXml.xml"))
+            {
+                using (var manager = new RessourceXmlManager(this.LogManager))
+                {
+                    manager.Initialize(CultureInfo.GetCultureInfo("en"), streamsource);
+                    this._tester.TestContainsRessourceAsync(manager);
+                }
+            }
+        }
+
+        [TestMethod]
+        [DeploymentItem("DeployItems/RessourceXml.xml", "Contains")]
+        public void FailContainsRessource()
+        {
+            using (var streamsource = new FileSource("./Contains/RessourceXml.xml"))
+            {
+                using (var manager = new RessourceXmlManager(this.LogManager))
+                {
+                    manager.Initialize(CultureInfo.GetCultureInfo("en"), streamsource);
+                    this._tester.FailContainsRessource(manager);
+                }
+            }
+        }
+
+        [TestMethod]
+        [DeploymentItem("DeployItems/RessourceXml.xml", "Remove")]
+        public void TestRemoveRessource()
+        {
+            using (var streamsource = new FileSource("./Remove/RessourceXml.xml"))
+            {
+                using (var manager = new RessourceXmlManager(this.LogManager))
+                {
+                    manager.Initialize(CultureInfo.GetCultureInfo("en"), streamsource);
+                    this._tester.TestRemoveRessource(manager);
+                }
+            }
+        }
+
+        [TestMethod]
+        [DeploymentItem("DeployItems/RessourceXml.xml", "Remove")]
+        public void TestRemoveRessourceAsync()
+        {
+            using (var streamsource = new FileSource("./Remove/RessourceXml.xml"))
+            {
+                using (var manager = new RessourceXmlManager(this.LogManager))
+                {
+                    manager.Initialize(CultureInfo.GetCultureInfo("en"), streamsource);
+                    this._tester.TestRemoveRessourceAsync(manager);
+                }
+            }
+        }
+
+        [TestMethod]
+        [DeploymentItem("DeployItems/RessourceXml.xml", "Remove")]
+        public void FailRemoveRessourceAsync()
+        {
+            using (var streamsource = new FileSource("./Remove/RessourceXml.xml"))
+            {
+                using (var manager = new RessourceXmlManager(this.LogManager))
+                {
+                    manager.Initialize(CultureInfo.GetCultureInfo("en"), streamsource);
+                    this._tester.FailRemoveRessourceAsync(manager);
                 }
             }
         }

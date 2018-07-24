@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTest.cs" />
+    <Compile Include="Core\Identities\UTIdentifiableList.cs" />
     <Compile Include="Core\Identities\UTIdentity.cs" />
     <Compile Include="Core\Identities\UTNamespace.cs" />
     <Compile Include="Core\Ioc\TesterIServiceContainer.cs" />
