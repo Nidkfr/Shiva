@@ -53,55 +53,73 @@ namespace Shiva.Ressources
         /// <returns></returns>
         Task SetRessourceAsync<TRessource>(TRessource ressource,CancellationToken? cancelToken= null) where TRessource : IRessource;
 
-        ///// <summary>
-        ///// Gets the group ressource.
-        ///// </summary>
-        ///// <typeparam name="TRessource">The type of the ressource.</typeparam>
-        ///// <param name="groupRessourceId">The group ressource identifier.</param>
-        ///// <returns></returns>
-        //IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Identity groupRessourceId) where TRessource : IRessource;
+        /// <summary>
+        /// Gets the group ressource.
+        /// </summary>
+        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        /// <param name="groupRessourceId">The group ressource identifier.</param>
+        /// <returns></returns>
+        IRessourceGroup<TRessource> GetGroupRessources<TRessource>(Identity groupRessourceId) where TRessource :class,IRessource,new();
 
-        ///// <summary>
-        ///// Gets the group ressource.
-        ///// </summary>
-        ///// <typeparam name="TRessource">The type of the ressource.</typeparam>
-        ///// <param name="groupNamespaceRessource">The group namespace ressource.</param>
-        ///// <returns></returns>
-        //IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Namespace groupNamespaceRessource) where TRessource : IRessource;
+        /// <summary>
+        /// Gets the group ressource.
+        /// </summary>
+        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        /// <param name="groupNamespaceRessource">The group namespace ressource.</param>
+        /// <returns></returns>
+        IRessourceGroup<TRessource> GetGroupRessources<TRessource>(Namespace groupNamespaceRessource) where TRessource :class, IRessource,new();
 
-        ///// <summary>
-        ///// Gets the group ressource asynchronous.
-        ///// </summary>
-        ///// <typeparam name="TRessource">The type of the ressource.</typeparam>
-        ///// <param name="groupRessourceId">The group ressource identifier.</param>
-        ///// <param name="cancelToken">cancel token</param>
-        ///// <returns></returns>
-        //Task<IRessourcesGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Identity groupRessourceId, CancellationToken? cancelToken = null) where TRessource : IRessource;
+        /// <summary>
+        /// Gets the group ressource asynchronous.
+        /// </summary>
+        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        /// <param name="groupRessourceId">The group ressource identifier.</param>
+        /// <param name="cancelToken">cancel token</param>
+        /// <returns></returns>
+        Task<IRessourceGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Identity groupRessourceId, CancellationToken? cancelToken = null) where TRessource :class, IRessource,new();
 
-        ///// <summary>
-        ///// Gets the group ressource asynchronous.
-        ///// </summary>
-        ///// <typeparam name="TRessource">The type of the ressource.</typeparam>
-        ///// <param name="groupNamespaceRessource">The group namespace ressource.</param>
-        ///// <param name="cancelToken">cancel token</param>
-        ///// <returns></returns>
-        //Task<IRessourcesGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Namespace groupNamespaceRessource, CancellationToken? cancelToken = null) where TRessource : IRessource;
+        /// <summary>
+        /// Gets the group ressource asynchronous.
+        /// </summary>
+        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        /// <param name="groupNamespaceRessource">The group namespace ressource.</param>
+        /// <param name="cancelToken">cancel token</param>
+        /// <returns></returns>
+        Task<IRessourceGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Namespace groupNamespaceRessource, CancellationToken? cancelToken = null) where TRessource :class, IRessource,new();
 
         /// <summary>
         /// Attaches the ressource to group.
         /// </summary>
-        /// <param name="ressourceId">The ressource identifier.</param>
+        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        /// <param name="ressource">The ressource.</param>
         /// <param name="groupRessourceId">The group ressource identifier.</param>
-        void AttachRessourceToGroup(Identity ressourceId, Identity groupRessourceId);
+        void AttachRessourceToGroup<TRessource>(TRessource ressource, Identity groupRessourceId) where TRessource:class,IRessource;
+
 
         /// <summary>
         /// Attaches the ressource to group asynchronous.
         /// </summary>
+        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        /// <param name="ressource">The ressource.</param>
+        /// <param name="groupRessourceId">The group ressource identifier.</param>
+        /// <param name="cancelToken">The cancel token.</param>
+        /// <returns></returns>
+        Task AttachRessourceToGroupAsync<TRessource>(TRessource ressource, Identity groupRessourceId, CancellationToken? cancelToken = null) where TRessource : class, IRessource;
+
+        /// <summary>
+        /// Detaches the ressource to group.
+        /// </summary>
         /// <param name="ressourceId">The ressource identifier.</param>
         /// <param name="groupRessourceId">The group ressource identifier.</param>
-        /// <param name="cancelToken">cancel token</param>
-        /// <returns></returns>
-        Task AttachRessourceToGroupAsync(Identity ressourceId, Identity groupRessourceId, CancellationToken? cancelToken = null);
+        void DetachRessourceToGroup(Identity ressourceId, Identity groupRessourceId);
+
+        /// <summary>
+        /// Detaches the ressource to group asynchronous.
+        /// </summary>
+        /// <param name="ressourceId">The ressource identifier.</param>
+        /// <param name="groupRessourceId">The group ressource identifier.</param>
+        /// <param name="cancelToken">Cancel token</param>
+        Task DetachRessourceToGroupAsync(Identity ressourceId, Identity groupRessourceId, CancellationToken? cancelToken = null);
 
         /// <summary>
         /// Removes the group.
@@ -121,13 +139,13 @@ namespace Shiva.Ressources
         /// Gets the group list.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<Identity> GetAllGroups();
+       IEnumerable<IGroupInformation> GetAllGroups();
 
         /// <summary>
         /// Gets the group list asynchronous.
         /// </summary>
         /// <returns></returns>
-        Task<IEnumerable<Identity>> GetAllGroupsAsync(CancellationToken? cancelToken = null);
+        Task<IEnumerable<IGroupInformation>> GetAllGroupsAsync(CancellationToken? cancelToken = null);
 
         /// <summary>
         /// Determines whether the specified identifier ressource contains ressource.

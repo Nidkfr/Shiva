@@ -73,10 +73,10 @@ namespace Shiva.Core.Identities
                 throw new ArgumentNullException(nameof(id));
 
             if (!this._removedElement.Contains(id))
-            {
-                this._removedElement.Add(id);
+            {                
                 this._addedElement.Remove(id);
             }
+            this._removedElement.Add(id);
         }
 
         /// <summary>
