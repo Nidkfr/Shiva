@@ -176,11 +176,7 @@ namespace Shiva.Ressources.Xml
                                     return default(TRessource);
 
                                 }
-                                else continue;
-
-                            }
-                            else
-                                continue;
+                            }                            
                         }
                     }
 
@@ -188,7 +184,7 @@ namespace Shiva.Ressources.Xml
                         break;
                 }
             }
-            return default(TRessource);
+            return default;
         }
 
         /// <summary>
@@ -277,7 +273,76 @@ namespace Shiva.Ressources.Xml
         protected override IEnumerable<TRessource> GetRessourceFromGroupInternal<TRessource>(Identity groupRessourceId)
         {
             this._CheckInit();
-            throw new NotImplementedException();
+            var ressourceIds= new List<Identity>();
+            //check ressource id
+            using (var reader = XmlReader.Create(this._streamSource.GetStream(), this._getReadingPermformenceSettings()))
+            {
+                while (reader.Read())
+                {
+                    if (reader.IsStartElement())
+                    {
+                        if (reader.LocalName == XD.ELEMENT_GROUP)
+                        {
+                            var idattr = reader.GetAttribute(XD.ATTRIBUTE_ID);
+                            if (idattr == groupRessourceId)
+                            {
+                                var typeattr = reader.GetAttribute(XD.ATTRIBUTE_TYPE);
+                                if (typeattr == typeof(TRessource).FullName)
+                                {
+                                    while (reader.ReadToFollowing(XD.ELEMENT_RESSOURCE, XD.NAMESPACE))
+                                    {
+                                        ressourceIds.Add(reader.GetAttribute(XD.ATTRIBUTE_ID));
+                                    }
+                                    break;
+                                }                                
+                            }                            
+                        }
+                    }
+
+                    if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == XD.ELEMENT_GROUPS)
+                        break;
+                }
+            }
+            //check ressource
+            var ressources = new IdentifiableList<TRessource>();
+            using (var reader = XmlReader.Create(this._streamSource.GetStream(), this._getReadingPermformenceSettings()))
+            {
+                while (reader.Read())
+                {
+                    if (reader.IsStartElement())
+                    {
+                        if (reader.LocalName == XD.ELEMENT_RESSOURCE)
+                        {
+                            var idattr = reader.GetAttribute(XD.ATTRIBUTE_ID);
+                            if (ressourceIds.Contains(idattr))
+                            {
+                                var typeattr = reader.GetAttribute(XD.ATTRIBUTE_TYPE);
+                                if (typeattr == typeof(TRessource).FullName)
+                                {
+                                    while (reader.ReadToFollowing(XD.ELEMENT_VALUE, XD.NAMESPACE))
+                                    {
+                                        var lang = reader.GetAttribute(XD.ATTRIBUTE_LANG);
+                                        if (lang == this.Culture.TwoLetterISOLanguageName)
+                                        {
+                                            var ressource = new TRessource();
+                                            ressource.UnSerialize(reader, idattr, this.Culture);
+                                            ressources.Add(ressource);
+                                            ressourceIds.Remove(idattr);
+                                        }
+                                    }
+
+                                    if (ressourceIds.Count == 0)
+                                        break;
+                                }
+                            }                            
+                        }
+                    }
+
+                    if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == XD.ELEMENT_RESSOURCES)
+                        break;
+                }
+            }
+            return ressources;
         }
 
         /// <summary>
@@ -289,7 +354,45 @@ namespace Shiva.Ressources.Xml
         public override IRessourceGroup<TRessource> GetGroupRessources<TRessource>(Namespace groupNamespaceRessource)
         {
             this._CheckInit();
-            throw new NotImplementedException();
+            var ressources = new IdentifiableList<TRessource>();
+            using (var reader = XmlReader.Create(this._streamSource.GetStream(), this._getReadingPermformenceSettings()))
+            {
+                while (reader.Read())
+                {
+                    if (reader.IsStartElement())
+                    {
+                        if (reader.LocalName == XD.ELEMENT_RESSOURCE)
+                        {
+                            var idattr = new Identity(reader.GetAttribute(XD.ATTRIBUTE_ID));
+                            if (idattr.Namespace == groupNamespaceRessource)
+                            {
+                                var typeattr = reader.GetAttribute(XD.ATTRIBUTE_TYPE);
+                                if (typeattr == typeof(TRessource).FullName)
+                                {
+                                    while (reader.ReadToFollowing(XD.ELEMENT_VALUE, XD.NAMESPACE))
+                                    {
+                                        var lang = reader.GetAttribute(XD.ATTRIBUTE_LANG);
+                                        if (lang == this.Culture.TwoLetterISOLanguageName)
+                                        {
+                                            var ressource = new TRessource();
+                                            ressource.UnSerialize(reader, idattr, this.Culture);
+                                            ressources.Add(ressource);
+                                        }
+                                    }
+                                }
+                            }                            
+                        }
+                    }
+
+                    if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == XD.ELEMENT_RESSOURCES)
+                        break;
+                }
+            }
+            if (ressources.Count > 0)
+                return new RessourceGroup<TRessource>(groupNamespaceRessource.ToString(), this.Culture, ressources);
+            else
+                return default;
+
         }
 
         /// <summary>
@@ -299,7 +402,31 @@ namespace Shiva.Ressources.Xml
         protected override IEnumerable<IGroupInformation> GetAllGroupsInternal()
         {
             this._CheckInit();
-            throw new NotImplementedException();
+            var result = new List<IGroupInformation>();
+            using (var reader = XmlReader.Create(this._streamSource.GetStream(), this._getReadingPermformenceSettings()))
+            {
+                while (reader.Read())
+                {
+                    if (reader.IsStartElement())
+                    {
+                        if (reader.LocalName == XD.ELEMENT_GROUP)
+                        {
+                            var idAttr = reader.GetAttribute(XD.ATTRIBUTE_ID);
+                            var typeAttr = reader.GetAttribute(XD.ATTRIBUTE_TYPE);
+                            var type = Type.GetType(typeAttr);
+                            if(type!=null)
+                            {
+                                result.Add(new RessourceGroupInformation(idAttr, type));
+                            }
+                        }
+                    }
+
+                    if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == XD.ELEMENT_GROUPS)
+                        break;
+                }
+            }
+            return result;
+
         }
     }
 }
