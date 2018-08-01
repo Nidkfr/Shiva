@@ -10,11 +10,11 @@ namespace Shiva.Ressources.Xml
     /// <summary>
     /// XmlParser
     /// </summary>
-    /// <seealso cref="Shiva.Xml.XmlParser" />
-    internal class RessourceXmlParser : XmlParser
+    /// <seealso cref="Shiva.Xml.XmlBuilder" />
+    internal class RessourceXmlBuilder : XmlBuilder
     {
         public readonly RessourcesEditInfo _editInfo;
-        public RessourceXmlParser(RessourcesEditInfo info)
+        public RessourceXmlBuilder(RessourcesEditInfo info)
         {
             this._editInfo = info ?? throw new ArgumentNullException(nameof(info));
         }
@@ -28,7 +28,13 @@ namespace Shiva.Ressources.Xml
         {            
             if(reader.LocalName == XD.ELEMENT_RESSOURCES)
             {
-                var node = new RessourcesNodeXmlParser(this._editInfo);
+                var node = new RessourcesNodeXmlBuilder(this._editInfo);
+                node.Update(reader, writer);
+            }
+
+            if(reader.LocalName == XD.ELEMENT_GROUPS)
+            {
+                var node = new GroupsNodeXmlBuilder(this._editInfo);
                 node.Update(reader, writer);
             }
         }
@@ -39,7 +45,10 @@ namespace Shiva.Ressources.Xml
         /// <param name="writer">The writer.</param>
         protected override void WriteChildren(XmlWriter writer)
         {
-            var node = new RessourcesNodeXmlParser(this._editInfo);
+            var node = new RessourcesNodeXmlBuilder(this._editInfo);
+            node.Write(writer);
+
+            var gnode = new GroupsNodeXmlBuilder(this._editInfo);
             node.Write(writer);
         }
 

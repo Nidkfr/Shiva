@@ -52,22 +52,60 @@
                 </xs:complexType>                
               </xs:element>
             </xs:sequence>
-          </xs:complexType>
-          <xs:key name="RessourceID">
-            <xs:selector xpath="xr:Ressource"></xs:selector>
-            <xs:field xpath="@id"/>
-            <xs:field xpath="@type"/>
-          </xs:key>
+          </xs:complexType>          
         </xs:element>
         <xs:element name="Groups" minOccurs="0" maxOccurs="1">
           <xs:annotation>
             <xs:documentation xml:lang="en">Groups definitions</xs:documentation>
           </xs:annotation>
+          <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+              <xs:element name="Group">
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">Group definition</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="Ressource">
+                      <xs:complexType>
+                        <xs:attribute name="id" type="xr:IdElement">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">Id of ressource attached at group</xs:documentation>
+                          </xs:annotation>                          
+                        </xs:attribute>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="id" type="xr:IdElement">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Id of group</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="type" type="xr:Csharp_Type">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Type ressource of group</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>                 
+                </xs:complexType>                
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>          
         </xs:element>
       </xs:all>
+      
     </xs:complexType>
+    <xs:key name="RessourceID">
+      <xs:selector xpath="xr:Ressources/xr:Ressource"></xs:selector>
+      <xs:field xpath="@id"/>
+      <xs:field xpath="@type"/>
+    </xs:key>
+    <xs:keyref name="RessourceRef" refer="xr:RessourceID">
+      <xs:selector xpath="xr:Groups/xr:Group"></xs:selector>
+      <xs:field xpath="xr:Ressource/@id"></xs:field>
+      <xs:field xpath="@type"></xs:field>
+    </xs:keyref>
   </xs:element>
-  <!--************************ Type de finition  **********************************************-->
+  <!--************************ Type definition  **********************************************-->
   <xs:simpleType name="IdElement">
     <xs:annotation>
       <xs:documentation>Id of element</xs:documentation>
@@ -84,5 +122,5 @@
       <xs:pattern value="[A-Z_][A-Za-z0-9_.]*[a-z0-9]"/>
     </xs:restriction>
   </xs:simpleType>
-  <!--************************ Type de finition  **********************************************-->
+  <!--************************ Type definition  **********************************************-->
 </xs:schema>

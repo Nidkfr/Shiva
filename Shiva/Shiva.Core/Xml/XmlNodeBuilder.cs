@@ -10,7 +10,7 @@ namespace Shiva.Xml
     /// <summary>
     /// Xml Node parser
     /// </summary>
-    public abstract class XmlNodeParser
+    public abstract class XmlNodeBuilder
     {
         /// <summary>
         /// Writes the specified writer.
@@ -40,7 +40,7 @@ namespace Shiva.Xml
                 throw new ArgumentNullException(nameof(writer));
 
             this.WriteStartElement(writer);
-            XmlParserTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
+            XmlBuilderTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
             if (reader.EOF || reader.NodeType == XmlNodeType.EndElement)
                 this.WriteChildren(writer);
             else

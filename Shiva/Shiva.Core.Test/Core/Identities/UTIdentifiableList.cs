@@ -2,6 +2,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using FluentAssertions;
+using Shiva.Ressources;
+using System.Collections.Generic;
 
 namespace Shiva.Core.Identities
 {
@@ -30,8 +32,7 @@ namespace Shiva.Core.Identities
             lst.Add(new Ressources.RessourceString("test", "value"));
             Assert.IsTrue(lst.Count == 1);
             Assert.IsTrue(lst.Ids.Count() == 1);
-            Assert.IsTrue(lst.RemovedElement.Count() == 0);
-            Assert.IsTrue(lst.Count() == 1);
+            Assert.IsTrue(lst.RemovedElement.Count() == 0);            
 
             Assert.IsTrue(lst["test"].Value == "value");
             
@@ -42,6 +43,20 @@ namespace Shiva.Core.Identities
         {
             var lst = new IdentifiableList<Ressources.RessourceString>();
             lst.Invoking(x => x.Add(null)).Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void TestAddRange()
+        {
+            var lst = new IdentifiableList<RessourceString>();
+            lst.AddRange(new List<RessourceString> { new RessourceString("test","value"), new RessourceString("test2","value2") });
+
+            Assert.IsTrue(lst.Count == 2);
+            Assert.IsTrue(lst.Ids.Count() == 2);
+            Assert.IsTrue(lst.RemovedElement.Count() == 0);            
+
+            Assert.IsTrue(lst["test"].Value == "value");
+            Assert.IsTrue(lst["test2"].Value == "value2");
         }
 
         [TestMethod]

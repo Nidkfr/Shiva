@@ -20,7 +20,7 @@ namespace Shiva.Xml
         [TestMethod]
         public void TestWrite()
         {
-            var mock = new Mock<XmlNodeParser>();
+            var mock = new Mock<XmlNodeBuilder>();
             mock.Protected().Setup("WriteStartElement", ItExpr.IsAny<XmlWriter>())
                 .Callback<XmlWriter>(x =>
                 {
@@ -39,7 +39,7 @@ namespace Shiva.Xml
         [TestMethod]
         public void FailWrite()
         {
-            var mock = new Mock<XmlNodeParser>();
+            var mock = new Mock<XmlNodeBuilder>();
             var parser = mock.Object;
 
             parser.Invoking(x => x.Write(null)).Should().Throw<ArgumentNullException>();
@@ -48,7 +48,7 @@ namespace Shiva.Xml
         [TestMethod]
         public void TestUpdate()
         {
-            var mock = new Mock<XmlNodeParser>();
+            var mock = new Mock<XmlNodeBuilder>();
             mock.Protected().Setup("WriteStartElement", ItExpr.IsAny<XmlWriter>())
                 .Callback<XmlWriter>(x =>
                 {
@@ -70,7 +70,7 @@ namespace Shiva.Xml
         [TestMethod]
         public void FailUpdate()
         {
-            var mock = new Mock<XmlNodeParser>();
+            var mock = new Mock<XmlNodeBuilder>();
             var parser = mock.Object;
 
             parser.Invoking(x => x.Update(null, XmlWriter.Create(new MemoryStream()))).Should().Throw<ArgumentNullException>();

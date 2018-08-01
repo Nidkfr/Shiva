@@ -12,6 +12,8 @@ namespace Shiva.Ressources.Xml
         public const string ELEMENT_RESSOURCE = "Ressource";
         public const string ELEMENT_RESSOURCES = "Ressources";
         public const string ELEMENT_VALUE = "Value";
+        public const string ELEMENT_GROUPS = "Groups";
+        public const string ELEMENT_GROUP = "Group";
         public const string ATTRIBUTE_ID = "id";
         public const string ATTRIBUTE_TYPE = "type";
         public const string ATTRIBUTE_LANG = "lang";

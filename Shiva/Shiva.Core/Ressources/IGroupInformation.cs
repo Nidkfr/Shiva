@@ -8,16 +8,8 @@ namespace Shiva.Ressources
     /// <summary>
     /// Group Information
     /// </summary>
-    public interface IGroupInformation
-    {
-        /// <summary>
-        /// Gets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        Identity Id { get; }
-
+    public interface IGroupInformation : IIdentifiable
+    {       
         /// <summary>
         /// Gets the type of the ressource target.
         /// </summary>

@@ -85,31 +85,7 @@ namespace Shiva.Ressources.Xml
             if (this.Logger.DebugIsEnabled)
                 this.Logger.Debug("Ressource Manager is disposed");
             this._streamSource?.Dispose();
-        }
-
-        ///// <summary>
-        ///// Gets the group ressources.
-        ///// </summary>
-        ///// <typeparam name="TRessource">The type of the ressource.</typeparam>
-        ///// <param name="groupRessourceId">The group ressource identifier.</param>
-        ///// <returns></returns>
-        //public override IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Identity groupRessourceId)
-        //{
-        //    this._CheckInit();
-        //    throw new NotImplementedException();
-        //}
-
-        ///// <summary>
-        ///// Gets the group ressources.
-        ///// </summary>
-        ///// <typeparam name="TRessource">The type of the ressource.</typeparam>
-        ///// <param name="groupNamespaceRessource">The group namespace ressource.</param>
-        ///// <returns></returns>
-        //public override IRessourcesGroup<TRessource> GetGroupRessources<TRessource>(Namespace groupNamespaceRessource)
-        //{
-        //    this._CheckInit();
-        //    throw new NotImplementedException();
-        //}
+        }        
 
         /// <summary>
         /// Determines whether [contains ressource internal] [the specified ressource identifier].
@@ -161,16 +137,6 @@ namespace Shiva.Ressources.Xml
                 }
                 return false;
             }
-        }
-
-        /// <summary>
-        /// Gets all groups internal.
-        /// </summary>
-        /// <returns></returns>
-        protected override IEnumerable<Identity> GetAllGroupsInternal()
-        {
-            this._CheckInit();
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -280,7 +246,7 @@ namespace Shiva.Ressources.Xml
         protected override void FlushInternal(RessourcesEditInfo editInformation)
         {
 
-            var parser = new RessourceXmlParser(editInformation);
+            var parser = new RessourceXmlBuilder(editInformation);
             parser.Update(this._streamSource.GetStream(), this._streamSource.GetSaveStream());
 
             this._streamSource.Flush();
@@ -300,6 +266,40 @@ namespace Shiva.Ressources.Xml
                 ValidationFlags = XmlSchemaValidationFlags.None,
                 ValidationType = ValidationType.None,
             };
+        }
+
+        /// <summary>
+        /// Gets the ressource from group internal.
+        /// </summary>
+        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        /// <param name="groupRessourceId">The group ressource identifier.</param>
+        /// <returns></returns>
+        protected override IEnumerable<TRessource> GetRessourceFromGroupInternal<TRessource>(Identity groupRessourceId)
+        {
+            this._CheckInit();
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets the group ressources.
+        /// </summary>
+        /// <typeparam name="TRessource">The type of the ressource.</typeparam>
+        /// <param name="groupNamespaceRessource">The group namespace ressource.</param>
+        /// <returns></returns>
+        public override IRessourceGroup<TRessource> GetGroupRessources<TRessource>(Namespace groupNamespaceRessource)
+        {
+            this._CheckInit();
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets all groups internal.
+        /// </summary>
+        /// <returns></returns>
+        protected override IEnumerable<IGroupInformation> GetAllGroupsInternal()
+        {
+            this._CheckInit();
+            throw new NotImplementedException();
         }
     }
 }

@@ -10,10 +10,10 @@ using System.Linq;
 namespace Shiva.Ressources.Xml
 {
     /// <summary>
-    /// Ressources Node Parser
+    /// Ressources Node Builder
     /// </summary>
-    /// <seealso cref="Shiva.Xml.XmlNodeParser" />
-    public class RessourcesNodeXmlParser : XmlNodeParser
+    /// <seealso cref="Shiva.Xml.XmlNodeBuilder" />
+    public class RessourcesNodeXmlBuilder : XmlNodeBuilder
     {
         private readonly RessourcesEditInfo _editInfo;
 
@@ -21,7 +21,7 @@ namespace Shiva.Ressources.Xml
         /// 
         /// </summary>
         /// <param name="editInfo"></param>
-        public RessourcesNodeXmlParser(RessourcesEditInfo editInfo)
+        public RessourcesNodeXmlBuilder(RessourcesEditInfo editInfo)
         {
             this._editInfo = editInfo ?? throw new ArgumentNullException(nameof(editInfo));
         }
@@ -45,13 +45,13 @@ namespace Shiva.Ressources.Xml
                     var type = Type.GetType(typeattr, false, true);
                     if (type != null)
                         if (this._editInfo.RemovedRessources[type].ToList().Contains(idattr))
-                            XmlParserTool.ReadToEndOfElement(reader, XD.ELEMENT_RESSOURCE);
+                            XmlBuilderTool.ReadToEndOfElement(reader, XD.ELEMENT_RESSOURCE);
                         else
                         {
                             var ressource = this._editInfo.AddedRessources.FirstOrDefault(x => x.Id == idattr && type == x.GetType());
                             if (ressource != null)
                             {
-                                var ressourceParser = new RessourceNodeXmlParser(ressource);
+                                var ressourceParser = new RessourceNodeXmlBuilder(ressource);
                                 ressourceParser.Update(reader, writer);
                                 this._editInfo.AddedRessources.Remove(ressource);                                
                             }
@@ -60,16 +60,16 @@ namespace Shiva.Ressources.Xml
                                 writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_RESSOURCE, XD.NAMESPACE);
                                 reader.MoveToElement();
                                 writer.WriteAttributes(reader, true);
-                                XmlParserTool.WriteToEndElement(reader, writer, XD.ELEMENT_RESSOURCE);
+                                XmlBuilderTool.WriteToEndElement(reader, writer, XD.ELEMENT_RESSOURCE);
                                 writer.WriteEndElement();
                             }
                                 
                         }
                     else
-                        XmlParserTool.ReadToEndOfElement(reader, XD.ELEMENT_RESSOURCE);
+                        XmlBuilderTool.ReadToEndOfElement(reader, XD.ELEMENT_RESSOURCE);
                 }
                 else
-                    XmlParserTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
+                    XmlBuilderTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
             }
 
             this.WriteChildren(writer);
@@ -83,7 +83,7 @@ namespace Shiva.Ressources.Xml
         {
             foreach (var ressource in this._editInfo.AddedRessources)
             {
-                var parser = new RessourceNodeXmlParser(ressource);
+                var parser = new RessourceNodeXmlBuilder(ressource);
                 parser.Write(writer);
             }
         }

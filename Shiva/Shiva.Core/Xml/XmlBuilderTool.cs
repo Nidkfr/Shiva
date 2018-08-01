@@ -11,7 +11,7 @@ namespace Shiva.Xml
     /// <summary>
     /// Xml Parser Tool
     /// </summary>
-    public static class XmlParserTool
+    public static class XmlBuilderTool
     {
         /// <summary>
         /// Reads and write to next start or end element.

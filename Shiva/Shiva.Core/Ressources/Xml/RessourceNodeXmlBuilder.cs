@@ -10,16 +10,16 @@ namespace Shiva.Ressources.Xml
     /// <summary>
     /// Ressource node parser
     /// </summary>
-    /// <seealso cref="Shiva.Xml.XmlNodeParser" />
-    public sealed class RessourceNodeXmlParser : XmlNodeParser
+    /// <seealso cref="Shiva.Xml.XmlNodeBuilder" />
+    public sealed class RessourceNodeXmlBuilder : XmlNodeBuilder
     {
         private readonly IRessource _ressource;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RessourceNodeXmlParser"/> class.
+        /// Initializes a new instance of the <see cref="RessourceNodeXmlBuilder"/> class.
         /// </summary>
         /// <param name="ressource">The ressource.</param>
-        public RessourceNodeXmlParser(IRessource ressource)
+        public RessourceNodeXmlBuilder(IRessource ressource)
         {
             this._ressource = ressource;
         }
@@ -41,19 +41,19 @@ namespace Shiva.Ressources.Xml
                     var langattr = reader.GetAttribute(XD.ATTRIBUTE_LANG);
                     if (langattr == this._ressource.Culture.TwoLetterISOLanguageName)
                     {
-                        XmlParserTool.ReadToEndOfElement(reader, XD.ELEMENT_VALUE);
+                        XmlBuilderTool.ReadToEndOfElement(reader, XD.ELEMENT_VALUE);
                     }
                     else
                     {
                         writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_VALUE, XD.NAMESPACE);
                         writer.WriteAttributes(reader, true);                        
-                        XmlParserTool.WriteToEndElement(reader, writer, XD.ELEMENT_VALUE);
+                        XmlBuilderTool.WriteToEndElement(reader, writer, XD.ELEMENT_VALUE);
                         writer.WriteEndElement();
                     }
 
                 }
                 else
-                    XmlParserTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
+                    XmlBuilderTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
             }
 
             this.WriteChildren(writer);

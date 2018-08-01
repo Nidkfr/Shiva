@@ -55,6 +55,20 @@ namespace Shiva.Core.Identities
         }
 
         /// <summary>
+        /// Adds the range.
+        /// </summary>
+        /// <param name="elements">The elements.</param>
+        public void AddRange(IEnumerable<T> elements)
+        {
+            if (elements == null)
+                throw new ArgumentNullException(nameof(elements));
+
+            foreach (var element in elements)
+            {
+                this.Add(element);
+            }
+        }
+        /// <summary>
         /// Removes the specified element.
         /// </summary>
         /// <param name="element">The element.</param>

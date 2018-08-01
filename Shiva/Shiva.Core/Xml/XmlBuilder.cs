@@ -11,7 +11,7 @@ namespace Shiva.Xml
     /// <summary>
     /// Xml Parser base
     /// </summary>
-    public abstract class XmlParser
+    public abstract class XmlBuilder
     {
         /// <summary>
         /// Writes Xml on the specified stream destination.
@@ -51,9 +51,9 @@ namespace Shiva.Xml
                 using (var writer = XmlWriter.Create(streamDestination, new XmlWriterSettings { Indent = true, }))
                 {
                     writer.WriteStartDocument();
-                    XmlParserTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
+                    XmlBuilderTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
                     this.WriteStartRoot(writer);
-                    XmlParserTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
+                    XmlBuilderTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
                     if (reader.EOF || reader.NodeType == XmlNodeType.EndElement)
                         this.WriteChildren(writer);
                     else

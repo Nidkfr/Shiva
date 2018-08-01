@@ -34,5 +34,40 @@ namespace Shiva.Ressources
             set;
         }
 
+        /// <summary>
+        /// Gets or sets the added groups.
+        /// </summary>
+        /// <value>
+        /// The added groups.
+        /// </value>
+        public IDictionary<IGroupInformation,IEnumerable<Identity>> AddedGroups
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the removed groups.
+        /// </summary>
+        /// <value>
+        /// The removed groups.
+        /// </value>
+        public IEnumerable<IGroupInformation> RemovedGroups
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the detached ressource groups.
+        /// </summary>
+        /// <value>
+        /// The detached ressource groups.
+        /// </value>
+        public IDictionary<IGroupInformation,IEnumerable<Identity>> DetachedRessourceGroups
+        {
+            get;
+            set;
+        }
     }
 }
