@@ -34,7 +34,7 @@ namespace Shiva.Core.Identities
         {
             if (string.IsNullOrWhiteSpace(ns))
                 throw new ArgumentNullException(nameof(ns));
-            this._ns = ns.TrimEnd(NamespaceSeparator[0]);
+            this._ns = ns.TrimEnd(NAMESPACESEPARATOR[0]);
             this._decodeString(this._ns);
         }
 
@@ -146,11 +146,11 @@ namespace Shiva.Core.Identities
 
         private void _decodeString(string ns)
         {
-            foreach (var node in ns.Split(NamespaceSeparator[0]))
+            foreach (var node in ns.Split(NAMESPACESEPARATOR[0]))
             {
                 this._nodes.AddLast(new NamespaceNode(this,node.Trim()));
             }
-            this._ns = string.Join(Namespace.NamespaceSeparator, this._nodes);
+            this._ns = string.Join(Namespace.NAMESPACESEPARATOR, this._nodes);
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace Shiva.Core.Identities
         /// <summary>
         /// The namespace separator
         /// </summary>
-        public const string NamespaceSeparator = ".";
+        public const string NAMESPACESEPARATOR = ".";
 
         /// <summary>
         /// Gets the root node.
@@ -195,6 +195,29 @@ namespace Shiva.Core.Identities
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
             return this._nodes.Find(node)?.Next?.Value;
+        }
+
+        /// <summary>
+        /// Ins the namespace.
+        /// </summary>
+        /// <param name="ns">The ns.</param>
+        /// <returns></returns>
+        public bool InNamespace(Namespace ns)
+        {
+            var currentnode = this.RootNode;
+            var ext_currentnode = ns.RootNode;
+
+            while(currentnode == ext_currentnode)
+            {
+                if (currentnode.NextNode == null)
+                    break;
+                currentnode = currentnode.NextNode;
+
+                if (ext_currentnode.NextNode == null)
+                    return false;
+                ext_currentnode = ext_currentnode.NextNode;
+            }
+            return currentnode == ext_currentnode;
         }
     }
 }

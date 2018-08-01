@@ -350,8 +350,9 @@ namespace Shiva.Ressources.Xml
         /// </summary>
         /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <param name="groupNamespaceRessource">The group namespace ressource.</param>
+        /// <param name="getChildNamespace">get child namespace</param>
         /// <returns></returns>
-        public override IRessourceGroup<TRessource> GetGroupRessources<TRessource>(Namespace groupNamespaceRessource)
+        public override IRessourceGroup<TRessource> GetGroupRessources<TRessource>(Namespace groupNamespaceRessource, bool getChildNamespace)
         {
             this._CheckInit();
             var ressources = new IdentifiableList<TRessource>();
@@ -364,7 +365,9 @@ namespace Shiva.Ressources.Xml
                         if (reader.LocalName == XD.ELEMENT_RESSOURCE)
                         {
                             var idattr = new Identity(reader.GetAttribute(XD.ATTRIBUTE_ID));
-                            if (idattr.Namespace == groupNamespaceRessource)
+                            var test = getChildNamespace ?
+                                groupNamespaceRessource.InNamespace(idattr.Namespace) : idattr.Namespace == groupNamespaceRessource;
+                            if (test)
                             {
                                 var typeattr = reader.GetAttribute(XD.ATTRIBUTE_TYPE);
                                 if (typeattr == typeof(TRessource).FullName)

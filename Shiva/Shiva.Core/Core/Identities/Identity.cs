@@ -26,7 +26,7 @@ namespace Shiva.Core.Identities
             if (string.IsNullOrWhiteSpace(fullid))
                 throw new ArgumentNullException(nameof(fullid));
 
-            var nodes = fullid.Split(Namespace.NamespaceSeparator[0]);
+            var nodes = fullid.Split(Namespace.NAMESPACESEPARATOR[0]);
 
             if(nodes.Length == 1)
             {

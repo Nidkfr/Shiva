@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FluentAssertions;
+using Shiva.Core.Identities;
 
 namespace Shiva.Ressources
 {
@@ -30,6 +31,8 @@ namespace Shiva.Ressources
         void TestRemoveRessourceAsync();
 
         void FailRemoveRessourceAsync();
+
+        void TestGroup();
     }
 
     public class RessourceManagerTester
@@ -270,6 +273,82 @@ namespace Shiva.Ressources
             manager.Invoking(x => x.RemoveRessource<RessourceString>(null)).Should().Throw<ArgumentNullException>();
             Func<Task> call = () => manager.RemoveRessourceAsync<RessourceString>(null);
             call.Should().Throw<ArgumentNullException>();
+        }
+
+        public void TestGroup(IRessourceManager manager)
+        {
+            var r1 = new RessourceString("Test.test1", "value1");
+            var r2 = new RessourceString("Test2.test2", "value2");
+            var r3 = new RessourceString("Test.child.test3", "value3");
+
+            manager.SetRessource<RessourceString>(r1);
+            manager.SetRessource<RessourceString>(r2);
+            manager.SetRessource<RessourceString>(r3);
+
+            manager.AttachRessourceToGroup<RessourceString>(r1, "grp1");
+            manager.AttachRessourceToGroup<RessourceString>(r2, "grp2");
+            manager.AttachRessourceToGroup<RessourceString>(r3, "grp2");
+
+            Assert.IsTrue(manager.GetAllGroups().Count() == 2);
+
+            var grp1 = manager.GetGroupRessources<RessourceString>((Identity)"grp1");
+            Assert.IsTrue(grp1.Culture == manager.Culture);
+            Assert.IsTrue(grp1.Id == "grp1");
+            Assert.IsTrue(grp1.Ressources.Count == 1);
+            Assert.IsTrue(grp1.Ressources.First().Id == "Test.test1");
+            Assert.IsTrue(grp1.Ressources.First().Value == "value1");
+
+            var grp2 = manager.GetGroupRessources<RessourceString>((Identity)"grp2");
+            Assert.IsTrue(grp2.Culture == manager.Culture);
+            Assert.IsTrue(grp2.Id == "grp2");
+            Assert.IsTrue(grp2.Ressources.Count == 2);
+            Assert.IsTrue(grp2.Ressources.First().Id == "Test2.test2");
+            Assert.IsTrue(grp2.Ressources.First().Value == "value2");
+            Assert.IsTrue(grp2.Ressources.Last().Id == "Test.child.test3");
+            Assert.IsTrue(grp2.Ressources.Last().Value == "value3");
+
+            manager.Flush();
+
+            Assert.IsTrue(manager.GetAllGroups().Count() == 2);
+
+            var r4 = new RessourceString("test.test2", "value2");
+            manager.SetRessource<RessourceString>(r4);
+            manager.AttachRessourceToGroup<RessourceString>(r1, "grp4");
+
+            Assert.IsTrue(manager.GetAllGroups().Count() == 3);
+
+            manager.DetachRessourceToGroup<RessourceString>(r3, "grp2");
+
+            grp2 = manager.GetGroupRessources<RessourceString>((Identity)"grp2");
+            Assert.IsTrue(grp2.Culture == manager.Culture);
+            Assert.IsTrue(grp2.Id == "grp2");
+            Assert.IsTrue(grp2.Ressources.Count == 1);
+            Assert.IsTrue(grp2.Ressources.First().Id == "Test2.test2");
+            Assert.IsTrue(grp2.Ressources.First().Value == "value1");
+
+            manager.Flush();
+
+            grp2 = manager.GetGroupRessources<RessourceString>((Identity)"grp2");
+            Assert.IsTrue(grp2.Culture == manager.Culture);
+            Assert.IsTrue(grp2.Id == "grp2");
+            Assert.IsTrue(grp2.Ressources.Count == 1);
+            Assert.IsTrue(grp2.Ressources.First().Id == "Test2.test2");
+            Assert.IsTrue(grp2.Ressources.First().Value == "value1");
+
+            var grpnamespace = manager.GetGroupRessources<RessourceString>((Namespace)"test",false);
+            Assert.IsTrue(grpnamespace.Culture == manager.Culture);
+            Assert.IsTrue(grpnamespace.Id == "test");
+            Assert.IsTrue(grpnamespace.Ressources.Count == 2);
+            Assert.IsTrue(grpnamespace.Ressources.First().Id == "Test.test1");
+            Assert.IsTrue(grpnamespace.Ressources.First().Value == "value1");
+
+            grpnamespace = manager.GetGroupRessources<RessourceString>((Namespace)"test", true);
+            Assert.IsTrue(grpnamespace.Culture == manager.Culture);
+            Assert.IsTrue(grpnamespace.Id == "test");
+            Assert.IsTrue(grpnamespace.Ressources.Count == 3);
+            Assert.IsTrue(grpnamespace.Ressources.First().Id == "Test.test1");
+            Assert.IsTrue(grpnamespace.Ressources.First().Value == "value1");
+
         }
     }
 }

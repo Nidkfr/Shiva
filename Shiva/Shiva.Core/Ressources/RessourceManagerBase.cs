@@ -68,12 +68,16 @@ namespace Shiva.Ressources
             if (this.Logger.InfoIsEnabled)
                 this.Logger.Info($"Attach Ressource {ressource.Id} to group {groupRessourceId} in culture {this.Culture}");
 
-            var grpInfo = new RessourceGroupInformation(groupRessourceId, typeof(TRessource));            
+            var grpInfo = new RessourceGroupInformation(groupRessourceId, typeof(TRessource));
+            if (this.ContainsRessource<TRessource>(ressource.Id))
+            {
+                if (!this._groupesRessources.ContainsKey(grpInfo))
+                    this._groupesRessources.Add(grpInfo, new IdentifiableList<IdentityContainer>());
 
-            if (!this._groupesRessources.ContainsKey(grpInfo))
-                this._groupesRessources.Add(grpInfo, new IdentifiableList<IdentityContainer>());
-
-            this._groupesRessources[grpInfo].Add(new IdentityContainer(ressource.Id));
+                this._groupesRessources[grpInfo].Add(new IdentityContainer(ressource.Id));
+            }
+            else
+                throw new InvalidOperationException("Attached ressource is not valid");
 
         }
 
@@ -222,8 +226,9 @@ namespace Shiva.Ressources
         /// </summary>
         /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <param name="groupNamespaceRessource">The group namespace ressource.</param>
+        /// <param name="getChildNamespace">check child namespace</param>
         /// <returns></returns>
-        public abstract IRessourceGroup<TRessource> GetGroupRessources<TRessource>(Namespace groupNamespaceRessource) where TRessource :class, IRessource,new();
+        public abstract IRessourceGroup<TRessource> GetGroupRessources<TRessource>(Namespace groupNamespaceRessource, bool getChildNamespace) where TRessource :class, IRessource,new();
 
         /// <summary>
         /// Gets the group ressource asynchronous.
@@ -243,10 +248,11 @@ namespace Shiva.Ressources
         /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <param name="groupNamespaceRessource">The group namespace ressource.</param>
         /// <param name="cancelToken">cancel token</param>
+        /// <param name="getChildNamespace">get child namespace</param>
         /// <returns></returns>
-        public async Task<IRessourceGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Namespace groupNamespaceRessource, CancellationToken? cancelToken = null) where TRessource :class, IRessource,new()
+        public async Task<IRessourceGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Namespace groupNamespaceRessource, bool getChildNamespace, CancellationToken? cancelToken = null) where TRessource :class, IRessource,new()
         {
-            return await Task.Run(() => this.GetGroupRessources<TRessource>(groupNamespaceRessource), cancelToken ?? CancellationToken.None);
+            return await Task.Run(() => this.GetGroupRessources<TRessource>(groupNamespaceRessource, getChildNamespace), cancelToken ?? CancellationToken.None);
         }
 
         /// <summary>

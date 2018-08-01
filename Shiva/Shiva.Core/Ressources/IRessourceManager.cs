@@ -66,8 +66,9 @@ namespace Shiva.Ressources
         /// </summary>
         /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <param name="groupNamespaceRessource">The group namespace ressource.</param>
+        /// <param name="getChildNamespace">Get child namespace</param>
         /// <returns></returns>
-        IRessourceGroup<TRessource> GetGroupRessources<TRessource>(Namespace groupNamespaceRessource) where TRessource :class, IRessource,new();
+        IRessourceGroup<TRessource> GetGroupRessources<TRessource>(Namespace groupNamespaceRessource,bool getChildNamespace) where TRessource :class, IRessource,new();
 
         /// <summary>
         /// Gets the group ressource asynchronous.
@@ -84,8 +85,9 @@ namespace Shiva.Ressources
         /// <typeparam name="TRessource">The type of the ressource.</typeparam>
         /// <param name="groupNamespaceRessource">The group namespace ressource.</param>
         /// <param name="cancelToken">cancel token</param>
+        /// <param name="getChildNamespace">get child namespace</param>
         /// <returns></returns>
-        Task<IRessourceGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Namespace groupNamespaceRessource, CancellationToken? cancelToken = null) where TRessource :class, IRessource,new();
+        Task<IRessourceGroup<TRessource>> GetGroupRessourcesAsync<TRessource>(Namespace groupNamespaceRessource, bool getChildNamespace, CancellationToken? cancelToken = null) where TRessource :class, IRessource,new();
 
         /// <summary>
         /// Attaches the ressource to group.

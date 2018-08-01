@@ -87,6 +87,8 @@
     <Compile Include="Mocks\VoidClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ressources\RessourceManagerTester.cs" />
+    <Compile Include="Ressources\UTGroupeRessource.cs" />
+    <Compile Include="Ressources\UTGroupRessourceInformation.cs" />
     <Compile Include="Ressources\UTRessourceBinary.cs" />
     <Compile Include="Ressources\UTRessourceString.cs" />
     <Compile Include="Ressources\UTRessourceBase.cs" />
