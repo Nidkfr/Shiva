@@ -32,8 +32,10 @@ namespace Shiva.Ressources
 
         void FailRemoveRessourceAsync();
 
-        void TestGroup();
+        void TestGroup();       
 
+        void FailGroup();        
+        
         void TestPerformanceGroup();
     }
 
@@ -354,7 +356,19 @@ namespace Shiva.Ressources
 
         }
 
-        
+        public void FailGroup(IRessourceManager manager)
+        {
+            var r1 = new RessourceString("test.fail", "value1");
+            manager.Invoking(x => x.AttachRessourceToGroup<RessourceString>(null, "test")).Should().Throw<ArgumentNullException>();
+            manager.Invoking(x => x.AttachRessourceToGroup<RessourceString>(r1, null)).Should().Throw<ArgumentNullException>();
+            manager.Invoking(x => x.DetachRessourceToGroup<RessourceString>(null, "test")).Should().Throw<ArgumentNullException>();
+            manager.Invoking(x => x.DetachRessourceToGroup<RessourceString>(r1, null)).Should().Throw<ArgumentNullException>();
+            manager.Invoking(x => x.GetGroupRessources<RessourceString>((Identity)null)).Should().Throw<ArgumentNullException>();
+            manager.Invoking(x => x.GetGroupRessources<RessourceString>((Namespace)null,true)).Should().Throw<ArgumentNullException>();
+            manager.Invoking(x => x.RemoveGroup((Identity)null)).Should().Throw<ArgumentNullException>();
+            manager.Invoking(x => x.AttachRessourceToGroup(r1, "test")).Should().Throw<InvalidOperationException>();
+        }
+
         public void TestPerformanceGroup(IRessourceManager manager)
         {
             //i will create 100000 ressource string

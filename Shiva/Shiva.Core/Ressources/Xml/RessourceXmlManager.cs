@@ -356,6 +356,9 @@ namespace Shiva.Ressources.Xml
         /// <returns></returns>
         public override IRessourceGroup<TRessource> GetGroupRessources<TRessource>(Namespace groupNamespaceRessource, bool getChildNamespace)
         {
+            if (groupNamespaceRessource == null)
+                throw new ArgumentNullException(nameof(groupNamespaceRessource));
+
             this._CheckInit();
             var ressources = new IdentifiableList<TRessource>();
             using (var reader = XmlReader.Create(this._streamSource.GetStream(), this._getReadingPermformenceSettings()))

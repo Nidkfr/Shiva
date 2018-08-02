@@ -233,5 +233,19 @@ namespace Shiva.Ressources.Xml
                 }
             }
         }
+
+        [TestMethod]
+        [DeploymentItem("DeployItems/RessourceXml.xml", "Group")]
+        public void FailGroup()
+        {
+            using (var streamsource = new FileSource("./Group/RessourceXml.xml"))
+            {
+                using (var manager = new RessourceXmlManager(this.LogManager))
+                {
+                    manager.Initialize(CultureInfo.GetCultureInfo("en"), streamsource);
+                    this._tester.FailGroup(manager);
+                }
+            }
+        }
     }
 }

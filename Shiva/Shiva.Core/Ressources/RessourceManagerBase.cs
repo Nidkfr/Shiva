@@ -321,6 +321,9 @@ namespace Shiva.Ressources
         /// <param name="groupRessourceId">The group ressource identifier.</param>
         public void RemoveGroup(Identity groupRessourceId)
         {
+            if (groupRessourceId == null)
+                throw new ArgumentNullException(nameof(groupRessourceId));
+
             if (this.Logger.InfoIsEnabled)
                 this.Logger.Info($"Remove group {groupRessourceId} in culture {this.Culture}");
             
@@ -453,6 +456,9 @@ namespace Shiva.Ressources
         /// <param name="groupRessourceId">The group ressource identifier.</param>
         public void DetachRessourceToGroup<TRessource>(TRessource ressource, Identity groupRessourceId) where TRessource:class,IRessource
         {
+            if (ressource == null)
+                throw new ArgumentNullException(nameof(ressource));
+
             var grp = new RessourceGroupInformation(groupRessourceId, typeof(TRessource));
             if (!this._groupesRessources.ContainsKey(grp))
                 this._groupesRessources.Add(grp, new IdentifiableList<IdentityContainer>());
