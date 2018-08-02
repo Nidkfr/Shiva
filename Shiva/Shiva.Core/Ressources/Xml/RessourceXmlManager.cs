@@ -85,7 +85,7 @@ namespace Shiva.Ressources.Xml
             if (this.Logger.DebugIsEnabled)
                 this.Logger.Debug("Ressource Manager is disposed");
             this._streamSource?.Dispose();
-        }        
+        }
 
         /// <summary>
         /// Determines whether [contains ressource internal] [the specified ressource identifier].
@@ -113,9 +113,10 @@ namespace Shiva.Ressources.Xml
                                 var typeattr = reader.GetAttribute(XD.ATTRIBUTE_TYPE);
                                 if (typeattr == typeof(TRessource).FullName)
                                 {
-                                    while (reader.ReadToFollowing(XD.ELEMENT_VALUE, XD.NAMESPACE))
+                                    var subreader = reader.ReadSubtree();
+                                    while (subreader.ReadToFollowing(XD.ELEMENT_VALUE, XD.NAMESPACE))
                                     {
-                                        var lang = reader.GetAttribute(XD.ATTRIBUTE_LANG);
+                                        var lang = subreader.GetAttribute(XD.ATTRIBUTE_LANG);
                                         if (lang == this.Culture.TwoLetterISOLanguageName)
                                         {
                                             return true;
@@ -148,7 +149,7 @@ namespace Shiva.Ressources.Xml
         protected override TRessource GetRessourceInternal<TRessource>(Identity ressourceID)
         {
             this._CheckInit();
-            
+
             using (var reader = XmlReader.Create(this._streamSource.GetStream(), this._getReadingPermformenceSettings()))
             {
                 while (reader.Read())
@@ -163,20 +164,21 @@ namespace Shiva.Ressources.Xml
                                 var typeattr = reader.GetAttribute(XD.ATTRIBUTE_TYPE);
                                 if (typeattr == typeof(TRessource).FullName)
                                 {
-                                    while (reader.ReadToFollowing(XD.ELEMENT_VALUE, XD.NAMESPACE))
+                                    var subreader = reader.ReadSubtree();
+                                    while (subreader.ReadToFollowing(XD.ELEMENT_VALUE, XD.NAMESPACE))
                                     {
-                                        var lang = reader.GetAttribute(XD.ATTRIBUTE_LANG);
+                                        var lang = subreader.GetAttribute(XD.ATTRIBUTE_LANG);
                                         if (lang == this.Culture.TwoLetterISOLanguageName)
                                         {
                                             var ressource = new TRessource();
-                                            ressource.UnSerialize(reader, ressourceID, this.Culture);
+                                            ressource.UnSerialize(subreader, ressourceID, this.Culture);
                                             return ressource;
                                         }
                                     }
-                                    return default(TRessource);
+                                    return default;
 
                                 }
-                            }                            
+                            }
                         }
                     }
 
@@ -206,12 +208,12 @@ namespace Shiva.Ressources.Xml
                 {
                     ValidationType = ValidationType.Schema,
                     IgnoreComments = true,
-                    IgnoreProcessingInstructions=true,
-                    IgnoreWhitespace=true,
+                    IgnoreProcessingInstructions = true,
+                    IgnoreWhitespace = true,
                 };
                 settings.Schemas.Add(xsdSet);
                 settings.ValidationEventHandler += new ValidationEventHandler(this._Xml_ValidationEventHandler);
-                var stream = this._streamSource.GetStream();                
+                var stream = this._streamSource.GetStream();
                 using (var reader = XmlReader.Create(stream, settings))
                     while (reader.Read())
                     {
@@ -273,7 +275,7 @@ namespace Shiva.Ressources.Xml
         protected override IEnumerable<TRessource> GetRessourceFromGroupInternal<TRessource>(Identity groupRessourceId)
         {
             this._CheckInit();
-            var ressourceIds= new List<Identity>();
+            var ressourceIds = new List<Identity>();
             //check ressource id
             using (var reader = XmlReader.Create(this._streamSource.GetStream(), this._getReadingPermformenceSettings()))
             {
@@ -286,16 +288,15 @@ namespace Shiva.Ressources.Xml
                             var idattr = reader.GetAttribute(XD.ATTRIBUTE_ID);
                             if (idattr == groupRessourceId)
                             {
-                                var typeattr = reader.GetAttribute(XD.ATTRIBUTE_TYPE);
-                                if (typeattr == typeof(TRessource).FullName)
+                                var subreader = reader.ReadSubtree();
+                                while (subreader.ReadToFollowing(XD.ELEMENT_RESSOURCE, XD.NAMESPACE))
                                 {
-                                    while (reader.ReadToFollowing(XD.ELEMENT_RESSOURCE, XD.NAMESPACE))
-                                    {
-                                        ressourceIds.Add(reader.GetAttribute(XD.ATTRIBUTE_ID));
-                                    }
-                                    break;
-                                }                                
-                            }                            
+                                    var typeAttr = subreader.GetAttribute(XD.ATTRIBUTE_TYPE);
+                                    if(typeAttr == typeof(TRessource).FullName)
+                                       ressourceIds.Add(subreader.GetAttribute(XD.ATTRIBUTE_ID));
+                                }
+                                break;
+                            }
                         }
                     }
 
@@ -319,13 +320,14 @@ namespace Shiva.Ressources.Xml
                                 var typeattr = reader.GetAttribute(XD.ATTRIBUTE_TYPE);
                                 if (typeattr == typeof(TRessource).FullName)
                                 {
-                                    while (reader.ReadToFollowing(XD.ELEMENT_VALUE, XD.NAMESPACE))
+                                    var subreader = reader.ReadSubtree();
+                                    while (subreader.ReadToFollowing(XD.ELEMENT_VALUE, XD.NAMESPACE))
                                     {
-                                        var lang = reader.GetAttribute(XD.ATTRIBUTE_LANG);
+                                        var lang = subreader.GetAttribute(XD.ATTRIBUTE_LANG);
                                         if (lang == this.Culture.TwoLetterISOLanguageName)
                                         {
                                             var ressource = new TRessource();
-                                            ressource.UnSerialize(reader, idattr, this.Culture);
+                                            ressource.UnSerialize(subreader, idattr, this.Culture);
                                             ressources.Add(ressource);
                                             ressourceIds.Remove(idattr);
                                         }
@@ -334,7 +336,7 @@ namespace Shiva.Ressources.Xml
                                     if (ressourceIds.Count == 0)
                                         break;
                                 }
-                            }                            
+                            }
                         }
                     }
 
@@ -372,18 +374,19 @@ namespace Shiva.Ressources.Xml
                                 var typeattr = reader.GetAttribute(XD.ATTRIBUTE_TYPE);
                                 if (typeattr == typeof(TRessource).FullName)
                                 {
-                                    while (reader.ReadToFollowing(XD.ELEMENT_VALUE, XD.NAMESPACE))
+                                    var subreader = reader.ReadSubtree();
+                                    while (subreader.ReadToFollowing(XD.ELEMENT_VALUE, XD.NAMESPACE))
                                     {
-                                        var lang = reader.GetAttribute(XD.ATTRIBUTE_LANG);
+                                        var lang = subreader.GetAttribute(XD.ATTRIBUTE_LANG);
                                         if (lang == this.Culture.TwoLetterISOLanguageName)
                                         {
                                             var ressource = new TRessource();
-                                            ressource.UnSerialize(reader, idattr, this.Culture);
+                                            ressource.UnSerialize(subreader, idattr, this.Culture);
                                             ressources.Add(ressource);
                                         }
                                     }
                                 }
-                            }                            
+                            }
                         }
                     }
 
@@ -415,11 +418,17 @@ namespace Shiva.Ressources.Xml
                         if (reader.LocalName == XD.ELEMENT_GROUP)
                         {
                             var idAttr = reader.GetAttribute(XD.ATTRIBUTE_ID);
-                            var typeAttr = reader.GetAttribute(XD.ATTRIBUTE_TYPE);
-                            var type = Type.GetType(typeAttr);
-                            if(type!=null)
+                            var types = new List<Type>();
+                            var subreader = reader.ReadSubtree();
+                            while (subreader.ReadToFollowing(XD.ELEMENT_RESSOURCE, XD.NAMESPACE))
                             {
-                                result.Add(new RessourceGroupInformation(idAttr, type));
+                                var typeAttr = subreader.GetAttribute(XD.ATTRIBUTE_TYPE);
+                                var type = Type.GetType(typeAttr);
+                                types.Add(type);
+                            }
+                            foreach (var ty in types.Distinct())
+                            {
+                                result.Add(new RessourceGroupInformation(idAttr, ty));
                             }
                         }
                     }

@@ -91,6 +91,8 @@ namespace Shiva.Xml
                     case XmlNodeType.Element:
                         writer.WriteStartElement(reader.Prefix,reader.LocalName,reader.NamespaceURI);
                         writer.WriteAttributes(reader, true);
+                        if (reader.IsEmptyElement)
+                            writer.WriteEndElement();
                         break;
                     case XmlNodeType.EndElement:writer.WriteEndElement(); break;
                     case XmlNodeType.Text:writer.WriteString(reader.Value); break;

@@ -127,7 +127,7 @@ namespace Shiva.Ressources
         /// Removes the group.
         /// </summary>
         /// <param name="groupRessourceId">The group ressource identifier.</param>
-        void RemoveGroup<TRessource>(Identity groupRessourceId) where TRessource:class,IRessource;
+        void RemoveGroup(Identity groupRessourceId);
 
         /// <summary>
         /// Removes the group asynchronous.
@@ -135,7 +135,7 @@ namespace Shiva.Ressources
         /// <param name="groupRessourceId">The group ressource identifier.</param>
         /// <param name="cancelToken">cancel token</param>
         /// <returns></returns>
-        Task RemoveGroupAsync<TRessource>(Identity groupRessourceId, CancellationToken? cancelToken = null) where TRessource:class,IRessource;
+        Task RemoveGroupAsync(Identity groupRessourceId, CancellationToken? cancelToken = null);
 
         /// <summary>
         /// Gets the group list.

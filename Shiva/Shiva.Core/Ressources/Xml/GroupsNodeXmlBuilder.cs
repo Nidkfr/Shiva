@@ -41,34 +41,59 @@ namespace Shiva.Ressources.Xml
                 if (reader.NodeType == XmlNodeType.Element && reader.LocalName == XD.ELEMENT_GROUP)
                 {
                     var idattr = reader.GetAttribute(XD.ATTRIBUTE_ID);
-                    var typeattr = reader.GetAttribute(XD.ATTRIBUTE_TYPE);
-                    var type = Type.GetType(typeattr, false, true);
-                    var grpInfo = new RessourceGroupInformation(idattr, type);
-                    if (type != null)
-                        if (this._ressourceInfo.RemovedGroups.Contains(grpInfo))
-                            XmlBuilderTool.ReadToEndOfElement(reader, XD.ELEMENT_GROUP);
+                    if (this._ressourceInfo.RemovedGroups.Contains((Identity)idattr))
+                        XmlBuilderTool.ReadToEndOfElement(reader, XD.ELEMENT_GROUP);
+                    else
+                    {
+                        if (this._ressourceInfo.AddedGroups.Any(x => x.Key.Id == idattr))
+                        {
+                            var grps = this._ressourceInfo.AddedGroups.Where(x => x.Key.Id == idattr).ToList();
+
+                            writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_GROUP, XD.NAMESPACE);
+                            writer.WriteStartAttribute(XD.ATTRIBUTE_ID);
+                            writer.WriteValue(idattr);
+                            writer.WriteEndAttribute();
+
+                            foreach (var grp in grps)
+                            {
+                                var subtreeReader = reader.ReadSubtree();
+                                var detachedRessources = this._ressourceInfo.DetachedRessourceGroups.ContainsKey(grp.Key) ? this._ressourceInfo.DetachedRessourceGroups[grp.Key] : new List<Identity>();
+                                var attachedRessource = grp.Value.ToList();
+                                while (subtreeReader.ReadToFollowing(XD.ELEMENT_RESSOURCE, XD.NAMESPACE))
+                                {
+                                    var resIdAttr = subtreeReader.GetAttribute(XD.ATTRIBUTE_ID);
+                                    if (detachedRessources.Contains((Identity)resIdAttr))
+                                        continue;
+
+
+                                    writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_RESSOURCE, XD.NAMESPACE);
+                                    writer.WriteAttributes(subtreeReader, true);
+                                    writer.WriteEndElement();
+                                    attachedRessource.Remove(resIdAttr);
+                                }
+                                foreach (var ressourceId in attachedRessource)
+                                {
+                                    writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_RESSOURCE, XD.NAMESPACE);
+                                    writer.WriteStartAttribute(XD.ATTRIBUTE_ID);
+                                    writer.WriteValue(ressourceId);
+                                    writer.WriteEndAttribute();
+                                    writer.WriteStartAttribute(XD.ATTRIBUTE_TYPE);
+                                    writer.WriteValue(grp.Key.RessourceTargetType.FullName);
+                                    writer.WriteEndAttribute();
+                                    writer.WriteEndElement();
+                                }
+                                this._ressourceInfo.AddedGroups.Remove(grp);
+                            }
+                            writer.WriteEndElement();                            
+                        }
                         else
                         {
-                            var group = this._ressourceInfo.AddedGroups.FirstOrDefault(x => x.Key == grpInfo);
-                            if (group.Key != null)
-                            {
-                                var detachedRessource = this._ressourceInfo.DetachedRessourceGroups.ContainsKey(grpInfo) ? this._ressourceInfo.DetachedRessourceGroups[grpInfo] : new List<Identity>();
-                                var node = new GroupNodeXmlBuilder(group.Key, group.Value, detachedRessource);
-                                node.Update(reader, writer);
-                                this._ressourceInfo.AddedGroups.Remove(grpInfo);
-                            }
-                            else
-                            {
-                                writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_GROUP, XD.NAMESPACE);
-                                reader.MoveToElement();
-                                writer.WriteAttributes(reader, true);
-                                XmlBuilderTool.WriteToEndElement(reader, writer, XD.ELEMENT_GROUP);
-                                writer.WriteEndElement();
-                            }
-
+                            writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_GROUP, XD.NAMESPACE);
+                            writer.WriteAttributes(reader, true);                            
+                            XmlBuilderTool.WriteToEndElement(reader, writer, XD.ELEMENT_GROUP);                            
+                            writer.WriteEndElement();
                         }
-                    else
-                        XmlBuilderTool.ReadToEndOfElement(reader, XD.ELEMENT_GROUP);
+                    }
                 }
                 else
                     XmlBuilderTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
@@ -85,7 +110,7 @@ namespace Shiva.Ressources.Xml
         {
             foreach (var grp in this._ressourceInfo.AddedGroups)
             {
-                var node = new GroupNodeXmlBuilder(grp.Key, grp.Value,new List<Identity>());
+                var node = new GroupNodeXmlBuilder(grp.Key, grp.Value, new List<Identity>());
                 node.Write(writer);
             }
         }

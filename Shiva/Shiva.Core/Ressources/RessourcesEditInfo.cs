@@ -52,7 +52,7 @@ namespace Shiva.Ressources
         /// <value>
         /// The removed groups.
         /// </value>
-        public IEnumerable<IGroupInformation> RemovedGroups
+        public IEnumerable<Identity> RemovedGroups
         {
             get;
             set;

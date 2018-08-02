@@ -14,6 +14,11 @@ namespace Shiva.Ressources.Xml
     internal class RessourceXmlBuilder : XmlBuilder
     {
         public readonly RessourcesEditInfo _editInfo;
+
+        private bool RessourceCheck { get; set; }
+
+        private bool GroupsCheck { get; set; }
+
         public RessourceXmlBuilder(RessourcesEditInfo info)
         {
             this._editInfo = info ?? throw new ArgumentNullException(nameof(info));
@@ -26,17 +31,26 @@ namespace Shiva.Ressources.Xml
         /// <param name="writer">The writer.</param>
         protected override void UpdateChildren(XmlReader reader, XmlWriter writer)
         {            
-            if(reader.LocalName == XD.ELEMENT_RESSOURCES)
+            do
             {
-                var node = new RessourcesNodeXmlBuilder(this._editInfo);
-                node.Update(reader, writer);
-            }
+                if (reader.LocalName == XD.ELEMENT_RESSOURCES)
+                {
+                    var node = new RessourcesNodeXmlBuilder(this._editInfo);
+                    node.Update(reader, writer);
+                    this.RessourceCheck = true;
+                }
 
-            if(reader.LocalName == XD.ELEMENT_GROUPS)
-            {
-                var node = new GroupsNodeXmlBuilder(this._editInfo);
-                node.Update(reader, writer);
+                if (reader.LocalName == XD.ELEMENT_GROUPS)
+                {
+                    var node = new GroupsNodeXmlBuilder(this._editInfo);
+                    node.Update(reader, writer);
+                    this.GroupsCheck = true;
+                }
+                XmlBuilderTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
             }
+            while (!reader.EOF);
+            
+            this.WriteChildren(writer);
         }
 
         /// <summary>
@@ -45,11 +59,17 @@ namespace Shiva.Ressources.Xml
         /// <param name="writer">The writer.</param>
         protected override void WriteChildren(XmlWriter writer)
         {
-            var node = new RessourcesNodeXmlBuilder(this._editInfo);
-            node.Write(writer);
+            if (!this.RessourceCheck)
+            {
+                var node = new RessourcesNodeXmlBuilder(this._editInfo);
+                node.Write(writer);
+            }
 
-            var gnode = new GroupsNodeXmlBuilder(this._editInfo);
-            node.Write(writer);
+            if (!this.GroupsCheck)
+            {
+                var gnode = new GroupsNodeXmlBuilder(this._editInfo);
+                gnode.Write(writer);
+            }
         }
 
         /// <summary>
@@ -58,6 +78,8 @@ namespace Shiva.Ressources.Xml
         /// <param name="writer">The writer.</param>
         protected override void WriteStartRoot(XmlWriter writer)
         {
+            this.RessourceCheck = false;
+            this.GroupsCheck = false;
             writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_ROOT, XD.NAMESPACE);
             writer.WriteAttributeString("xmlns", XD.PREFIX, null, XD.NAMESPACE);
         }

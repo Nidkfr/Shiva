@@ -37,36 +37,7 @@ namespace Shiva.Ressources.Xml
         /// <param name="writer">The writer.</param>
         protected override void UpdateChildren(XmlReader reader, XmlWriter writer)
         {
-            while (!reader.EOF)
-            {
-
-                if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == XD.ELEMENT_GROUP)
-                    break;
-
-                if (reader.NodeType == XmlNodeType.Element && reader.LocalName == XD.ELEMENT_RESSOURCE)
-                {
-                    var ressourceId = reader.GetAttribute(XD.ATTRIBUTE_ID);
-                    if (this._detachedRessource.Contains((Identity)ressourceId))
-                    {
-                        XmlBuilderTool.ReadToEndOfElement(reader, XD.ELEMENT_RESSOURCE);
-                    }
-                    else
-                    {
-                        writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_RESSOURCE, XD.NAMESPACE);
-                        writer.WriteAttributes(reader, true);
-                        XmlBuilderTool.WriteToEndElement(reader, writer, XD.ELEMENT_RESSOURCE);
-                        writer.WriteEndElement();
-                        if (this._attachedRessource.Contains((Identity)ressourceId))
-                            this._attachedRessource.Remove(ressourceId);
-
-                    }
-
-                }
-                else
-                    XmlBuilderTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
-            }
-
-            this.WriteChildren(writer);
+          //code is manage in GroupsNodeXmlBuilder
         }
 
         /// <summary>
@@ -78,10 +49,13 @@ namespace Shiva.Ressources.Xml
             foreach (var ressourceId in this._attachedRessource)
             {
                 writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_RESSOURCE, XD.NAMESPACE);
-                writer.WriteStartAttribute(XD.PREFIX, XD.ATTRIBUTE_ID, XD.NAMESPACE);
+                writer.WriteStartAttribute(XD.ATTRIBUTE_ID);
                 writer.WriteValue(ressourceId);
                 writer.WriteEndAttribute();
-                writer.WriteEndElement();
+                writer.WriteStartAttribute(XD.ATTRIBUTE_TYPE);
+                writer.WriteValue(this._group.RessourceTargetType.FullName);
+                writer.WriteEndAttribute();
+                writer.WriteEndElement();                
             }
         }
 
@@ -92,13 +66,9 @@ namespace Shiva.Ressources.Xml
         protected override void WriteStartElement(XmlWriter writer)
         {
             writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_GROUP, XD.NAMESPACE);
-            writer.WriteStartAttribute(XD.PREFIX, XD.ATTRIBUTE_ID, XD.NAMESPACE);
+            writer.WriteStartAttribute(XD.ATTRIBUTE_ID);
             writer.WriteValue(this._group.Id);
             writer.WriteEndAttribute();
-            writer.WriteStartAttribute(XD.PREFIX, XD.ATTRIBUTE_TYPE, XD.NAMESPACE);
-            writer.WriteValue(this._group.RessourceTargetType.FullName);
-            writer.WriteEndAttribute();
-
         }
     }
 }

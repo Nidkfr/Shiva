@@ -73,6 +73,11 @@
                             <xs:documentation xml:lang="en">Id of ressource attached at group</xs:documentation>
                           </xs:annotation>                          
                         </xs:attribute>
+                        <xs:attribute name="type" type="xr:Csharp_Type">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">Type ressource of group</xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
                       </xs:complexType>
                     </xs:element>
                   </xs:sequence>
@@ -80,12 +85,7 @@
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Id of group</xs:documentation>
                     </xs:annotation>
-                  </xs:attribute>
-                  <xs:attribute name="type" type="xr:Csharp_Type">
-                    <xs:annotation>
-                      <xs:documentation xml:lang="en">Type ressource of group</xs:documentation>
-                    </xs:annotation>
-                  </xs:attribute>                 
+                  </xs:attribute>                                 
                 </xs:complexType>                
               </xs:element>
             </xs:sequence>
@@ -99,9 +99,9 @@
       <xs:field xpath="@id"/>
       <xs:field xpath="@type"/>
     </xs:key>
-    <xs:keyref name="RessourceRef" refer="xr:RessourceID">
-      <xs:selector xpath="xr:Groups/xr:Group"></xs:selector>
-      <xs:field xpath="xr:Ressource/@id"></xs:field>
+   <xs:keyref name="RessourceRef" refer="xr:RessourceID">
+      <xs:selector xpath="xr:Groups/xr:Group/xr:Ressource"></xs:selector>
+      <xs:field xpath="@id"></xs:field>
       <xs:field xpath="@type"></xs:field>
     </xs:keyref>
   </xs:element>

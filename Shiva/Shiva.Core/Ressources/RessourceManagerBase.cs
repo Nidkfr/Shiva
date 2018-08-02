@@ -19,7 +19,7 @@ namespace Shiva.Ressources
     {
         private readonly IDictionary<Type, IdentifiableList<IRessource>> _ressources = new Dictionary<Type, IdentifiableList<IRessource>>();        
         private readonly IDictionary<IGroupInformation, IdentifiableList<IdentityContainer>> _groupesRessources = new Dictionary<IGroupInformation, IdentifiableList<IdentityContainer>>();
-        private readonly IList<IGroupInformation> _removedgroupes = new List<IGroupInformation>();
+        private readonly IList<Identity> _removedgroupes = new List<Identity>();
 
         /// <summary>
         /// Gets or sets the logger.
@@ -207,7 +207,12 @@ namespace Shiva.Ressources
                             lst.Add((TRessource)this._ressources[typeof(TRessource)][item.Id]);
                     }
                 }
+                foreach (var id in this._groupesRessources[grpInfo].RemovedElement)
+                {
+                    lst.Remove(id);
+                }
             }
+            
             if (lst.Count > 0)
                 return new RessourceGroup<TRessource>(groupRessourceId, this.Culture, lst);
             return null;
@@ -314,13 +319,16 @@ namespace Shiva.Ressources
         /// Removes the group. if new attached a make, its removed
         /// </summary>
         /// <param name="groupRessourceId">The group ressource identifier.</param>
-        public void RemoveGroup<TRessource>(Identity groupRessourceId) where TRessource:class,IRessource
+        public void RemoveGroup(Identity groupRessourceId)
         {
             if (this.Logger.InfoIsEnabled)
                 this.Logger.Info($"Remove group {groupRessourceId} in culture {this.Culture}");
-            var grpInfo = new RessourceGroupInformation(groupRessourceId, typeof(TRessource));
-            this._removedgroupes.Remove(grpInfo);
-            this._groupesRessources.Remove(grpInfo);
+            
+            this._removedgroupes.Remove(groupRessourceId);
+            foreach (var grp in this._groupesRessources.Keys.Where(x=>x.Id == groupRessourceId))
+            {
+                this._groupesRessources.Remove(grp);
+            }
         }
          
         /// <summary>
@@ -329,9 +337,9 @@ namespace Shiva.Ressources
         /// <param name="groupRessourceId">The group ressource identifier.</param>
         /// <param name="cancelToken">cancel token</param>
         /// <returns></returns>
-        public async Task RemoveGroupAsync<TRessource>(Identity groupRessourceId, CancellationToken? cancelToken = null) where TRessource : class, IRessource
+        public async Task RemoveGroupAsync(Identity groupRessourceId, CancellationToken? cancelToken = null)
         {
-            await Task.Run(() => this.RemoveGroup<TRessource>(groupRessourceId), cancelToken ?? CancellationToken.None);
+            await Task.Run(() => this.RemoveGroup(groupRessourceId), cancelToken ?? CancellationToken.None);
         }
 
         /// <summary>
@@ -372,7 +380,8 @@ namespace Shiva.Ressources
                 RemovedRessources = this._ressources.ToDictionary(x => x.Key, x => x.Value.RemovedElement),
                 AddedRessources = this._ressources.SelectMany(x => x.Value).ToList(),
                 AddedGroups = this._groupesRessources.ToDictionary(x => x.Key, x => x.Value.Select(y => y.Id)),
-                RemovedGroups = this._removedgroupes
+                RemovedGroups = this._removedgroupes,
+                DetachedRessourceGroups = this._groupesRessources.ToDictionary(x=>x.Key,x=>x.Value.RemovedElement)
             };
 
 
