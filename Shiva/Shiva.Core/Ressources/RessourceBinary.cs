@@ -1,40 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using Shiva.Core.Identities;
+﻿using Shiva.Core.Identities;
+using System;
 using System.Globalization;
-using System.Xml.Linq;
 using System.Xml;
-using Shiva.Xml;
 
 namespace Shiva.Ressources
 {
     /// <summary>
     /// Ressource Stream
-    /// </summary>    
-    public class RessourceBinary : RessourceBase, IRessource<byte[]>
-    {       
+    /// </summary>
+    public sealed class RessourceBinary : RessourceBase, IRessource<byte[]>
+    {
+        #region Private Fields
+
         private byte[] _data;
 
+        #endregion Private Fields
+
+        #region Public Constructors
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="RessourceBinary"/> class.
+        /// Initializes a new instance of the <see cref="RessourceBinary" /> class.
         /// </summary>
         public RessourceBinary()
         {
-
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RessourceBinary"/> class.
+        /// Initializes a new instance of the <see cref="RessourceBinary" /> class.
         /// </summary>
-        /// <param name="idRessource">The identifier ressource.</param>
-        /// <param name="data">The stream.</param>
-        /// <param name="culture">The culture.</param>
-        public RessourceBinary(Identity idRessource, byte[] data, CultureInfo culture=null):base(idRessource,culture)
-        {            
-            this._data = data ?? throw new ArgumentNullException(nameof(data));            
-        }        
+        /// <param name="idRessource">
+        /// The identifier ressource.
+        /// </param>
+        /// <param name="data">
+        /// The stream.
+        /// </param>
+        /// <param name="culture">
+        /// The culture.
+        /// </param>
+        public RessourceBinary(Identity idRessource, byte[] data, CultureInfo culture = null) : base(idRessource, culture)
+        {
+            this._data = data ?? throw new ArgumentNullException(nameof(data));
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is empty ressource.
+        /// </summary>
+        /// <value>
+        /// <c> true </c> if this instance is empty ressource; otherwise, <c> false </c>.
+        /// </value>
+        public override bool HasValue => this._data?.Length > 0;
 
         /// <summary>
         /// Gets the value.
@@ -44,33 +62,33 @@ namespace Shiva.Ressources
         /// </value>
         public byte[] Value => this._data;
 
+        #endregion Public Properties
 
-        /// <summary>
-        /// Gets a value indicating whether this instance is empty ressource.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is empty ressource; otherwise, <c>false</c>.
-        /// </value>
-        public override bool HasValue => this._data?.Length > 0;
-
-
+        #region Public Methods
 
         /// <summary>
         /// Clones this instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// </returns>
         public override IRessource Clone()
         {
             return ((IRessource<byte[]>)this).Clone();
         }
 
         /// <summary>
-        /// Clones this instance.
+        /// Serializes the specified writer.
         /// </summary>
-        /// <returns></returns>
-        IRessource<byte[]> IRessource<byte[]>.Clone()
+        /// <param name="writer">
+        /// The writer.
+        /// </param>
+        public override void Serialize(XmlWriter writer)
         {
-            return new RessourceBinary(this.Id, this.Value, this.Culture);
+            if (writer == null)
+                throw new ArgumentNullException(nameof(writer));
+            writer.WriteStartElement("Data");
+            writer.WriteValue(Convert.ToBase64String(this.Value));
+            writer.WriteEndElement();
         }
 
         /// <summary>
@@ -83,27 +101,19 @@ namespace Shiva.Ressources
         {
             return $"{{{this.GetType().FullName}::{this.Value.Length} byte}}";
         }
-       
-
-        /// <summary>
-        /// Serializes the specified writer.
-        /// </summary>
-        /// <param name="writer">The writer.</param>
-        public override void Serialize(XmlWriter writer)
-        {
-            if (writer == null)
-                throw new ArgumentNullException(nameof(writer));
-            writer.WriteStartElement("Data");
-            writer.WriteValue(Convert.ToBase64String(this.Value));
-            writer.WriteEndElement();
-        }
 
         /// <summary>
         /// Uns the serialize.
         /// </summary>
-        /// <param name="reader">The reader.</param>
-        /// <param name="id">The identifier.</param>
-        /// <param name="culture">The culture.</param>
+        /// <param name="reader">
+        /// The reader.
+        /// </param>
+        /// <param name="id">
+        /// The identifier.
+        /// </param>
+        /// <param name="culture">
+        /// The culture.
+        /// </param>
         public override void UnSerialize(XmlReader reader, Identity id, CultureInfo culture)
         {
             if (reader == null)
@@ -119,5 +129,17 @@ namespace Shiva.Ressources
 
             base.UnSerialize(reader, id, culture);
         }
+
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        IRessource<byte[]> IRessource<byte[]>.Clone()
+        {
+            return new RessourceBinary(this.Id, this.Value, this.Culture);
+        }
+
+        #endregion Public Methods
     }
 }

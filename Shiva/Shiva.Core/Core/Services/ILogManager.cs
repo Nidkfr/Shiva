@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Shiva.Core.Services
 {
@@ -9,25 +7,40 @@ namespace Shiva.Core.Services
     /// </summary>
     public interface ILogManager
     {
+        #region Public Methods
+
         /// <summary>
         /// Creates the logger.
         /// </summary>
-        /// <param name="name">The name of logger.</param>
-        /// <returns>a logger</returns>
+        /// <param name="name">
+        /// The name of logger.
+        /// </param>
+        /// <returns>
+        /// a logger
+        /// </returns>
         ILogger CreateLogger(string name);
 
         /// <summary>
         /// Creates the logger.
         /// </summary>
-        /// <typeparam name="Type">The type name for logger.</typeparam>
-        /// <returns>a logger</returns>
+        /// <typeparam name="Type">
+        /// The type name for logger.
+        /// </typeparam>
+        /// <returns>
+        /// a logger
+        /// </returns>
         ILogger CreateLogger<Type>();
 
         /// <summary>
         /// Creates the logger.
         /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns></returns>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        /// <returns>
+        /// </returns>
         ILogger CreateLogger(Type type);
+
+        #endregion Public Methods
     }
 }

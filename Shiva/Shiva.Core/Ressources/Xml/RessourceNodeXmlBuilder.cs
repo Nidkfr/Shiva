@@ -1,7 +1,5 @@
 ﻿using Shiva.Xml;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml;
 using XD = Shiva.Ressources.Xml.RessourceXmlDefinitions;
 
@@ -11,28 +9,45 @@ namespace Shiva.Ressources.Xml
     /// Ressource node parser
     /// </summary>
     /// <seealso cref="Shiva.Xml.XmlNodeBuilder" />
-    public sealed class RessourceNodeXmlBuilder : XmlNodeBuilder
+    ///
+     sealed class RessourceNodeXmlBuilder : XmlNodeBuilder
     {
+        #region Private Fields
+
         private readonly IRessource _ressource;
 
+        #endregion Private Fields
+
+        #region Public Constructors
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="RessourceNodeXmlBuilder"/> class.
+        /// Initializes a new instance of the <see cref="RessourceNodeXmlBuilder" /> class.
         /// </summary>
-        /// <param name="ressource">The ressource.</param>
+        /// <param name="ressource">
+        /// The ressource.
+        /// </param>
         public RessourceNodeXmlBuilder(IRessource ressource)
         {
             this._ressource = ressource;
         }
+
+        #endregion Public Constructors
+
+        #region Protected Methods
+
         /// <summary>
         /// Updates the children.
         /// </summary>
-        /// <param name="reader">The reader.</param>
-        /// <param name="writer">The writer.</param>
+        /// <param name="reader">
+        /// The reader.
+        /// </param>
+        /// <param name="writer">
+        /// The writer.
+        /// </param>
         protected override void UpdateChildren(XmlReader reader, XmlWriter writer)
         {
             while (!reader.EOF)
             {
-
                 if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == XD.ELEMENT_RESSOURCE)
                     break;
 
@@ -46,11 +61,10 @@ namespace Shiva.Ressources.Xml
                     else
                     {
                         writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_VALUE, XD.NAMESPACE);
-                        writer.WriteAttributes(reader, true);                        
+                        writer.WriteAttributes(reader, true);
                         XmlBuilderTool.WriteToEndElement(reader, writer, XD.ELEMENT_VALUE);
                         writer.WriteEndElement();
                     }
-
                 }
                 else
                     XmlBuilderTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
@@ -62,7 +76,9 @@ namespace Shiva.Ressources.Xml
         /// <summary>
         /// Writes the children.
         /// </summary>
-        /// <param name="writer">The writer.</param>
+        /// <param name="writer">
+        /// The writer.
+        /// </param>
         protected override void WriteChildren(XmlWriter writer)
         {
             writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_VALUE, XD.NAMESPACE);
@@ -76,8 +92,11 @@ namespace Shiva.Ressources.Xml
         /// <summary>
         /// Writes the start element.
         /// </summary>
-        /// <param name="writer">The writer.</param>
-        /// <exception cref="NotImplementedException"></exception>
+        /// <param name="writer">
+        /// The writer.
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
         protected override void WriteStartElement(XmlWriter writer)
         {
             writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_RESSOURCE, XD.NAMESPACE);
@@ -88,5 +107,7 @@ namespace Shiva.Ressources.Xml
             writer.WriteValue(this._ressource.GetType().FullName);
             writer.WriteEndAttribute();
         }
+
+        #endregion Protected Methods
     }
 }

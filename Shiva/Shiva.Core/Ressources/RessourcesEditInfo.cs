@@ -1,22 +1,23 @@
 ﻿using Shiva.Core.Identities;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Shiva.Ressources
 {
     /// <summary>
     /// Ressource Edition information
     /// </summary>
-    public class RessourcesEditInfo
+    public sealed class RessourcesEditInfo
     {
+        #region Public Properties
+
         /// <summary>
-        /// Gets or sets the removed ressources.
+        /// Gets or sets the added groups.
         /// </summary>
         /// <value>
-        /// The removed ressources.
+        /// The added groups.
         /// </value>
-        public Dictionary<Type,IEnumerable<Identity>> RemovedRessources
+        public IDictionary<IGroupInformation, IEnumerable<Identity>> AddedGroups
         {
             get;
             set;
@@ -35,12 +36,12 @@ namespace Shiva.Ressources
         }
 
         /// <summary>
-        /// Gets or sets the added groups.
+        /// Gets or sets the detached ressource groups.
         /// </summary>
         /// <value>
-        /// The added groups.
+        /// The detached ressource groups.
         /// </value>
-        public IDictionary<IGroupInformation,IEnumerable<Identity>> AddedGroups
+        public IDictionary<IGroupInformation, IEnumerable<Identity>> DetachedRessourceGroups
         {
             get;
             set;
@@ -59,15 +60,17 @@ namespace Shiva.Ressources
         }
 
         /// <summary>
-        /// Gets or sets the detached ressource groups.
+        /// Gets or sets the removed ressources.
         /// </summary>
         /// <value>
-        /// The detached ressource groups.
+        /// The removed ressources.
         /// </value>
-        public IDictionary<IGroupInformation,IEnumerable<Identity>> DetachedRessourceGroups
+        public Dictionary<Type, IEnumerable<Identity>> RemovedRessources
         {
             get;
             set;
         }
+
+        #endregion Public Properties
     }
 }

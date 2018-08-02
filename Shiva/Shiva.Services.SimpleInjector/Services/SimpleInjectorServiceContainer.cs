@@ -35,10 +35,10 @@ namespace Shiva.Services
         {
             switch (scope)
             {
-                case ScopeServiceEnum.Transient:
+                case ScopeServiceEnum.TRANSIENT:
                     this._container.Register<TService>(serviceFactory, Lifestyle.Transient);
                     break;
-                case ScopeServiceEnum.Singleton:
+                case ScopeServiceEnum.SINGLETON:
                     this._container.Register<TService>(serviceFactory, Lifestyle.Singleton);
                     break;
                 default:
@@ -62,17 +62,17 @@ namespace Shiva.Services
         /// <typeparam name="TService">The type of the service.</typeparam>
         /// <typeparam name="TImplementation">The type of the implementation.</typeparam>
         /// <param name="scope">The scope.</param>
-        public override void Register<TService, TImplementation>(ScopeServiceEnum scope = ScopeServiceEnum.Transient)
+        public override void Register<TService, TImplementation>(ScopeServiceEnum scope = ScopeServiceEnum.TRANSIENT)
         {
             if (this.Logger.InfoIsEnabled)
                 this.Logger.Info("Register Type {0} with instance {1}  in {2} scope mode",typeof(TService),typeof(TImplementation),scope);
 
             switch (scope)
             {
-                case ScopeServiceEnum.Transient:
+                case ScopeServiceEnum.TRANSIENT:
                     this._container.Register<TService, TImplementation>(Lifestyle.Transient);
                     break;
-                case ScopeServiceEnum.Singleton:
+                case ScopeServiceEnum.SINGLETON:
                     this._container.Register<TService, TImplementation>(Lifestyle.Singleton);
                     break;
                 default:

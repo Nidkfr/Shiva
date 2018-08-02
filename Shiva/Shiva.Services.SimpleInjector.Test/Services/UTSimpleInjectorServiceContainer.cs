@@ -37,7 +37,7 @@ namespace Shiva.Services
         {
             var instance = new SimpleInjectorServiceContainer(new Container(), this.LogManager);
 
-            instance.Register<IServiceContainer>(() => instance, ScopeServiceEnum.Singleton);
+            instance.Register<IServiceContainer>(() => instance, ScopeServiceEnum.SINGLETON);
             instance.Register<ILogManager, Log4NetLogManager>();
             instance.RegisterSingleton<IEnumerable>(new List<string>());
         }
@@ -47,7 +47,7 @@ namespace Shiva.Services
         {
             var instance = new SimpleInjectorServiceContainer(new Container(), this.LogManager);
 
-            instance.Register<IServiceContainer>(() => instance, ScopeServiceEnum.Singleton);
+            instance.Register<IServiceContainer>(() => instance, ScopeServiceEnum.SINGLETON);
             instance.Register<ILogManager, Log4NetLogManager>();
             instance.RegisterSingleton<IEnumerable>(new List<string>());
 

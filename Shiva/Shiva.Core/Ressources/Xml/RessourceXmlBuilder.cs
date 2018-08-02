@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Shiva.Xml;
+using System;
 using System.Xml;
-using Shiva.Xml;
 using XD = Shiva.Ressources.Xml.RessourceXmlDefinitions;
 
 namespace Shiva.Ressources.Xml
@@ -11,7 +9,8 @@ namespace Shiva.Ressources.Xml
     /// XmlParser
     /// </summary>
     /// <seealso cref="Shiva.Xml.XmlBuilder" />
-    internal class RessourceXmlBuilder : XmlBuilder
+    ///
+    sealed class RessourceXmlBuilder : XmlBuilder
     {
         public readonly RessourcesEditInfo _editInfo;
 
@@ -27,10 +26,14 @@ namespace Shiva.Ressources.Xml
         /// <summary>
         /// Updates the children.
         /// </summary>
-        /// <param name="reader">The reader.</param>
-        /// <param name="writer">The writer.</param>
+        /// <param name="reader">
+        /// The reader.
+        /// </param>
+        /// <param name="writer">
+        /// The writer.
+        /// </param>
         protected override void UpdateChildren(XmlReader reader, XmlWriter writer)
-        {            
+        {
             do
             {
                 if (reader.LocalName == XD.ELEMENT_RESSOURCES)
@@ -49,14 +52,16 @@ namespace Shiva.Ressources.Xml
                 XmlBuilderTool.ReadAndWriteToNextStartOrEndElement(reader, writer);
             }
             while (!reader.EOF);
-            
+
             this.WriteChildren(writer);
         }
 
         /// <summary>
         /// Writes the children.
         /// </summary>
-        /// <param name="writer">The writer.</param>
+        /// <param name="writer">
+        /// The writer.
+        /// </param>
         protected override void WriteChildren(XmlWriter writer)
         {
             if (!this.RessourceCheck)
@@ -75,7 +80,9 @@ namespace Shiva.Ressources.Xml
         /// <summary>
         /// Writes the start root.
         /// </summary>
-        /// <param name="writer">The writer.</param>
+        /// <param name="writer">
+        /// The writer.
+        /// </param>
         protected override void WriteStartRoot(XmlWriter writer)
         {
             this.RessourceCheck = false;

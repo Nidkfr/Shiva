@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Shiva.Exceptions
 {
@@ -8,16 +6,26 @@ namespace Shiva.Exceptions
     /// Exception : Type constructor is invalid for service container
     /// </summary>
     /// <seealso cref="System.Exception" />
+    ///
     public sealed class InvalidTypeConstructorForServiceContainerException : Exception
     {
+        #region Public Constructors
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="InvalidTypeConstructorForServiceContainerException"/> class.
+        /// Initializes a new instance of the
+        /// <see cref="InvalidTypeConstructorForServiceContainerException" /> class.
         /// </summary>
-        /// <param name="invalidType">Type of the invalid.</param>
+        /// <param name="invalidType">
+        /// Type of the invalid.
+        /// </param>
         public InvalidTypeConstructorForServiceContainerException(Type invalidType)
         {
             this.InvalidType = invalidType ?? throw new ArgumentNullException(nameof(invalidType));
         }
+
+        #endregion Public Constructors
+
+        #region Public Properties
 
         /// <summary>
         /// Gets the type of the invalid.
@@ -35,5 +43,7 @@ namespace Shiva.Exceptions
         /// Gets a message that describes the current exception.
         /// </summary>
         public override string Message => $"{this.InvalidType} is not valide for service container. Constructor need have not parameter.";
+
+        #endregion Public Properties
     }
 }

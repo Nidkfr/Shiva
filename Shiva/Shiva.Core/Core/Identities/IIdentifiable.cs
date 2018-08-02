@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Shiva.Core.Identities
+﻿namespace Shiva.Core.Identities
 {
     /// <summary>
-    /// Object is identidiable
+    /// Object is identifiable
     /// </summary>
     public interface IIdentifiable
     {
+        #region Public Properties
+
         /// <summary>
         /// Gets the identifier.
         /// </summary>
@@ -16,5 +14,7 @@ namespace Shiva.Core.Identities
         /// The identifier.
         /// </value>
         Identity Id { get; }
+
+        #endregion Public Properties
     }
 }

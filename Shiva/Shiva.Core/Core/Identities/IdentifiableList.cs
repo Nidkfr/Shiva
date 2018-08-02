@@ -6,13 +6,14 @@ using System.Linq;
 namespace Shiva.Core.Identities
 {
     /// <summary>
-    /// Cached list Identifiable
+    /// Identifiable List
     /// </summary>
     /// <typeparam name="T">
+    /// Identifiable Type
     /// </typeparam>
     /// <seealso cref="System.Collections.Generic.IEnumerable{T}" />
     ///
-    public class IdentifiableList<T> : IEnumerable<T> where T:IIdentifiable
+    public sealed class IdentifiableList<T> : IEnumerable<T> where T : IIdentifiable
     {
         #region Private Fields
 
@@ -24,14 +25,53 @@ namespace Shiva.Core.Identities
         #region Public Properties
 
         /// <summary>
+        /// Gets the ids.
+        /// </summary>
+        /// <value>
+        /// The ids.
+        /// </value>
+        public IEnumerable<Identity> Ids => this._addedElement.Keys;
+
+        /// <summary>
+        /// Gets the removed element.
+        /// </summary>
+        /// <value>
+        /// The removed element.
+        /// </value>
+        public IEnumerable<Identity> RemovedElement => this._removedElement.ToList();
+
+        /// <summary>
         /// Gets count Elements.
         /// </summary>
         /// <value>
-        /// The count Element.
+        /// The count Elements.
         /// </value>
         public int Count => this._addedElement.Count;
 
         #endregion Public Properties
+
+        #region Public Indexers
+
+        /// <summary>
+        /// Gets the T with the specified identifier.
+        /// </summary>
+        /// <value>
+        /// The T element.
+        /// </value>
+        /// <param name="id">
+        /// The identifier.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public T this[Identity id]
+        {
+            get
+            {
+                return this._addedElement[id];
+            }
+        }
+
+        #endregion Public Indexers
 
         #region Public Methods
 
@@ -51,13 +91,14 @@ namespace Shiva.Core.Identities
                 this._addedElement[element.Id] = element;
 
             this._removedElement.Remove(element.Id);
-
         }
 
         /// <summary>
         /// Adds the range.
         /// </summary>
-        /// <param name="elements">The elements.</param>
+        /// <param name="elements">
+        /// The elements.
+        /// </param>
         public void AddRange(IEnumerable<T> elements)
         {
             if (elements == null)
@@ -68,38 +109,6 @@ namespace Shiva.Core.Identities
                 this.Add(element);
             }
         }
-        /// <summary>
-        /// Removes the specified element.
-        /// </summary>
-        /// <param name="element">The element.</param>
-        public void Remove(T element)
-        {
-            this.Remove(element?.Id);
-        }
-
-        /// <summary>
-        /// Removes the specified identifier.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        public void Remove(Identity id)
-        {
-            if (id == null)
-                throw new ArgumentNullException(nameof(id));
-
-            if (!this._removedElement.Contains(id))
-            {                
-                this._addedElement.Remove(id);
-            }
-            this._removedElement.Add(id);
-        }
-
-        /// <summary>
-        /// Gets the removed element.
-        /// </summary>
-        /// <value>
-        /// The removed element.
-        /// </value>
-        public IEnumerable<Identity> RemovedElement => this._removedElement.ToList();
 
         /// <summary>
         /// Clears this instance.
@@ -111,27 +120,13 @@ namespace Shiva.Core.Identities
         }
 
         /// <summary>
-        /// Gets the T with the specified identifier.
-        /// </summary>
-        /// <value>
-        /// The T element.
-        /// </value>
-        /// <param name="id">The identifier.</param>
-        /// <returns></returns>
-        public T this[Identity id]
-        {
-            get
-            {
-                return this._addedElement[id];
-            }
-        }
-
-        /// <summary>
         /// Determines whether [contains] [the specified identifier].
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="id">
+        /// The identifier.
+        /// </param>
         /// <returns>
-        ///   <c>true</c> if [contains] [the specified identifier]; otherwise, <c>false</c>.
+        /// <c> true </c> if [contains] [the specified identifier]; otherwise, <c> false </c>.
         /// </returns>
         public bool Contains(Identity id)
         {
@@ -150,6 +145,35 @@ namespace Shiva.Core.Identities
         }
 
         /// <summary>
+        /// Removes the specified element.
+        /// </summary>
+        /// <param name="element">
+        /// The element.
+        /// </param>
+        public void Remove(T element)
+        {
+            this.Remove(element?.Id);
+        }
+
+        /// <summary>
+        /// Removes the specified identifier.
+        /// </summary>
+        /// <param name="id">
+        /// The identifier.
+        /// </param>
+        public void Remove(Identity id)
+        {
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
+
+            if (!this._removedElement.Contains(id))
+            {
+                this._addedElement.Remove(id);
+            }
+            this._removedElement.Add(id);
+        }
+
+        /// <summary>
         /// Returns an enumerator that iterates through a collection.
         /// </summary>
         /// <returns>
@@ -162,14 +186,5 @@ namespace Shiva.Core.Identities
         }
 
         #endregion Public Methods
-
-        /// <summary>
-        /// Gets the ids.
-        /// </summary>
-        /// <value>
-        /// The ids.
-        /// </value>
-        public IEnumerable<Identity> Ids => this._addedElement.Keys;
-
     }
 }

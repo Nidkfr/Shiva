@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Shiva.Core.Ioc
+﻿namespace Shiva.Core.Ioc
 {
     /// <summary>
     /// Scope mode for service container
@@ -12,11 +8,11 @@ namespace Shiva.Core.Ioc
         /// <summary>
         /// Return a new Instance of object at each Resolve
         /// </summary>
-        Transient = 0,
+        TRANSIENT = 0,
 
         /// <summary>
         /// Return the same instance of object at each Resolve
         /// </summary>
-        Singleton = 1,
+        SINGLETON = 1,
     }
 }

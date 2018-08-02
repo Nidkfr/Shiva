@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Shiva.Core.Identities;
+﻿using Shiva.Core.Identities;
+using System;
 
 namespace Shiva.Ressources
 {
@@ -9,7 +7,9 @@ namespace Shiva.Ressources
     /// Group Information
     /// </summary>
     public interface IGroupInformation : IIdentifiable
-    {       
+    {
+        #region Public Properties
+
         /// <summary>
         /// Gets the type of the ressource target.
         /// </summary>
@@ -17,5 +17,7 @@ namespace Shiva.Ressources
         /// The type of the ressource target.
         /// </value>
         Type RessourceTargetType { get; }
+
+        #endregion Public Properties
     }
 }

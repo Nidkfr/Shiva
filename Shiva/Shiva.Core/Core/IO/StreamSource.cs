@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
 
 namespace Shiva.Core.IO
@@ -8,29 +6,35 @@ namespace Shiva.Core.IO
     /// <summary>
     /// Stream source base
     /// </summary>
-    public abstract class StreamSource:IDisposable
+    public abstract class StreamSource : IDisposable
     {
-        /// <summary>
-        /// Opens the current stream.
-        /// </summary>
-        /// <returns></returns>
-        public abstract Stream GetStream();
+        #region Public Methods
 
         /// <summary>
-        /// Gets the save stream.
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting
+        /// unmanaged resources.
         /// </summary>
-        /// <returns></returns>
-        public abstract Stream GetSaveStream();
+        public abstract void Dispose();
 
         /// <summary>
-        /// The save stream became the current stream 
+        /// The save stream became the current stream
         /// </summary>
         public abstract void Flush();
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// Gets the save stream.
         /// </summary>
-        public abstract void Dispose();
-        
+        /// <returns>
+        /// </returns>
+        public abstract Stream GetSaveStream();
+
+        /// <summary>
+        /// Opens the current stream.
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public abstract Stream GetStream();
+
+        #endregion Public Methods
     }
 }

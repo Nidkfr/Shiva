@@ -14,10 +14,10 @@ namespace Shiva.Core.Ioc
     {
         public void TestRegister(IServiceContainer container)
         {
-            container.Register<IEnumerable<string>>(() => new List<string>(), ScopeServiceEnum.Transient);
-            container.Register<IEnumerable<int>>(() => new List<int>(), ScopeServiceEnum.Singleton);
-            container.Register<AbstractVoidClass<string>, VoidClass1<string>>(ScopeServiceEnum.Transient);
-            container.Register<AbstractVoidClass<bool>, VoidClass1<bool>>(ScopeServiceEnum.Singleton);
+            container.Register<IEnumerable<string>>(() => new List<string>(), ScopeServiceEnum.TRANSIENT);
+            container.Register<IEnumerable<int>>(() => new List<int>(), ScopeServiceEnum.SINGLETON);
+            container.Register<AbstractVoidClass<string>, VoidClass1<string>>(ScopeServiceEnum.TRANSIENT);
+            container.Register<AbstractVoidClass<bool>, VoidClass1<bool>>(ScopeServiceEnum.SINGLETON);
         }
 
         public void FailRegister(IServiceContainer container)
@@ -37,7 +37,7 @@ namespace Shiva.Core.Ioc
 
         public void TestResolveType(IServiceContainer container)
         {
-            container.Register<ILogger, NoLogger>(ScopeServiceEnum.Singleton);
+            container.Register<ILogger, NoLogger>(ScopeServiceEnum.SINGLETON);
             this.TestRegister(container);
             Assert.IsNotNull(container.ResolveType<IEnumerable<string>>());
             Assert.IsTrue(container.ResolveType<IEnumerable<string>>() is IEnumerable<string>);

@@ -11,7 +11,8 @@ namespace Shiva.Tools
     /// </summary>
     public static class StringTools
     {
-        private static readonly Regex _formatRegex = new Regex(@"(?<start>\{)+(?<property>[\w\.\[\]]+)(?<format>:[^}]+)?(?<end>\})+", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        #region Private Fields
+
         /// <summary>
         /// The end format identifier
         /// </summary>
@@ -31,13 +32,28 @@ namespace Shiva.Tools
         /// The start format identifier
         /// </summary>
         private const string STARTFORMATID = "start";
+
+        private static readonly Regex _formatRegex = new Regex(@"(?<start>\{)+(?<property>[\w\.\[\]]+)(?<format>:[^}]+)?(?<end>\})+", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        #endregion Private Fields
+
+        #region Public Methods
+
         /// <summary>
         /// Formats string of the by name value.
         /// </summary>
-        /// <param name="stringValue">The string value.</param>
-        /// <param name="values">The values.</param>
-        /// <param name="formatProvider">format provider</param>
-        /// <returns>formated string</returns>
+        /// <param name="stringValue">
+        /// The string value.
+        /// </param>
+        /// <param name="values">
+        /// The values.
+        /// </param>
+        /// <param name="formatProvider">
+        /// format provider
+        /// </param>
+        /// <returns>
+        /// formated string
+        /// </returns>
         public static string FormatByName(this string stringValue, IDictionary<string, object> values, IFormatProvider formatProvider = null)
         {
             if (string.IsNullOrWhiteSpace(stringValue))
@@ -67,8 +83,11 @@ namespace Shiva.Tools
         /// <summary>
         /// Removes the byte order mark UTF8.
         /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// </returns>
         public static string RemoveByteOrderMarkUtf8(this string value)
         {
             var _byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
@@ -78,5 +97,7 @@ namespace Shiva.Tools
             }
             return value;
         }
+
+        #endregion Public Methods
     }
 }
