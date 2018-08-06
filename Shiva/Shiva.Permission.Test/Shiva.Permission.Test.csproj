@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{55D0BA0B-DFB0-425E-83A6-921A6294A6D8}</ProjectGuid>
+    <ProjectGuid>{C2F3403D-0E9F-4A6A-86E7-149895350547}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Shiva</RootNamespace>
-    <AssemblyName>Shiva.Core.Test</AssemblyName>
+    <AssemblyName>Shiva.Permission.Test</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -44,9 +44,6 @@
     <Reference Include="FluentAssertions, Version=5.4.1.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.5.4.1\lib\net47\FluentAssertions.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.1.3.2\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
     </Reference>
@@ -55,9 +52,6 @@
     </Reference>
     <Reference Include="Moq, Version=4.9.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.9.0\lib\net45\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="SimpleInjector, Version=4.3.0.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
-      <HintPath>..\packages\SimpleInjector.4.3.0\lib\net45\SimpleInjector.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -75,58 +69,32 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseTest.cs" />
-    <Compile Include="Core\Identities\UTIdentifiableList.cs" />
-    <Compile Include="Core\Identities\UTIdentity.cs" />
-    <Compile Include="Core\Identities\UTNamespace.cs" />
-    <Compile Include="Core\Ioc\TesterIServiceContainer.cs" />
-    <Compile Include="Core\Ioc\UTServiceContainerBase.cs" />
-    <Compile Include="Core\IO\UTFileSource.cs" />
-    <Compile Include="Exceptions\UTInvalidServiceContainerTypeException.cs" />
-    <Compile Include="Exceptions\UTInvalidEnumOptionException.cs" />
-    <Compile Include="Mocks\VoidClass.cs" />
+    <Compile Include="Permission\PermissionManagerTester.cs" />
+    <Compile Include="Permission\UTRole.cs" />
+    <Compile Include="Permission\UTPermissionAccess.cs" />
+    <Compile Include="Permission\Xml\UTPermissionXmlBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Ressources\RessourceManagerTester.cs" />
-    <Compile Include="Ressources\UTGroupeRessource.cs" />
-    <Compile Include="Ressources\UTRessourceBinary.cs" />
-    <Compile Include="Ressources\UTRessourceString.cs" />
-    <Compile Include="Ressources\UTRessourceBase.cs" />
-    <Compile Include="Ressources\Xml\UTXmlRessourceManager.cs" />
-    <Compile Include="Tools\UTStringTools.cs" />
-    <Compile Include="Xml\UTXmlNodeParser.cs" />
-    <Compile Include="Xml\UTXmlParser.cs" />
-    <Compile Include="Xml\UTXmlParserTool.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Shiva.Core.Test\Shiva.Core.Test.csproj">
+      <Project>{55d0ba0b-dfb0-425e-83a6-921a6294a6d8}</Project>
+      <Name>Shiva.Core.Test</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Shiva.Core\Shiva.Core.csproj">
-      <Project>{2ac0dbc3-c995-401c-a536-ea6e78eb0799}</Project>
+      <Project>{2AC0DBC3-C995-401C-A536-EA6E78EB0799}</Project>
       <Name>Shiva.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Shiva.Services.Log4Net\Shiva.Services.Log4Net.csproj">
-      <Project>{45b6406f-841d-4c44-8b8c-7fcf0f232a43}</Project>
-      <Name>Shiva.Services.Log4Net</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Shiva.Services.SimpleInjector\Shiva.Services.SimpleInjector.csproj">
-      <Project>{5ff49945-707e-47cc-96d7-f0303cb55a16}</Project>
-      <Name>Shiva.Services.SimpleInjector</Name>
+    <ProjectReference Include="..\Shiva.Permission\Shiva.Permission.csproj">
+      <Project>{b761304b-8823-4839-929c-9f9c58c4fea0}</Project>
+      <Name>Shiva.Permission</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Log.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="DeployItems\XmlSample.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="DeployItems\RessourceXml.xml">
+    <None Include="DeployItems\Permission.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

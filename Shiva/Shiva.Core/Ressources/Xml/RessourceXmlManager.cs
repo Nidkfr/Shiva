@@ -170,7 +170,7 @@ namespace Shiva.Ressources.Xml
             this._culture = culture ?? throw new ArgumentNullException(nameof(culture));
             this._streamSource = source ?? throw new ArgumentNullException(nameof(source));
 
-            this.ValidateXml();
+            this._validateXml();
 
             this.IsInitialized = true;
         }
@@ -178,7 +178,7 @@ namespace Shiva.Ressources.Xml
         /// <summary>
         /// Validates the XML.
         /// </summary>
-        public void ValidateXml()
+        private void _validateXml()
         {
             this._validationXml.Clear();
             var ressource = this.GetType().Assembly.GetManifestResourceNames();
@@ -279,11 +279,11 @@ namespace Shiva.Ressources.Xml
         /// </param>
         protected override void FlushInternal(RessourcesEditInfo editInformation)
         {
-            var parser = new RessourceXmlBuilder(editInformation);
-            parser.Update(this._streamSource.GetStream(), this._streamSource.GetSaveStream());
+            var builder = new RessourceXmlBuilder(editInformation);
+            builder.Update(this._streamSource.GetStream(), this._streamSource.GetSaveStream());
 
             this._streamSource.Flush();
-            this.ValidateXml();
+            this._validateXml();
         }
 
         /// <summary>
@@ -492,6 +492,8 @@ namespace Shiva.Ressources.Xml
         private void _Xml_ValidationEventHandler(object sender, ValidationEventArgs e)
         {
             this._validationXml.Add(e.Message);
+            if (this.Logger.ErrorIsEnabled)
+                this.Logger.Error($"Xml Validation Fail : {e.Message}");
         }
 
         #endregion Private Methods

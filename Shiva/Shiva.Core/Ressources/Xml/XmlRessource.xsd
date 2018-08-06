@@ -68,12 +68,12 @@
                   <xs:sequence minOccurs="0" maxOccurs="unbounded">
                     <xs:element name="Ressource">
                       <xs:complexType>
-                        <xs:attribute name="id" type="xr:IdElement">
+                        <xs:attribute name="id" type="xr:IdElement" use="required">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">Id of ressource attached at group</xs:documentation>
                           </xs:annotation>
                         </xs:attribute>
-                        <xs:attribute name="type" type="xr:Csharp_Type">
+                        <xs:attribute name="type" type="xr:Csharp_Type" use="required">
                           <xs:annotation>
                             <xs:documentation xml:lang="en">Type ressource of group</xs:documentation>
                           </xs:annotation>
@@ -81,7 +81,7 @@
                       </xs:complexType>
                     </xs:element>
                   </xs:sequence>
-                  <xs:attribute name="id" type="xr:IdElement">
+                  <xs:attribute name="id" type="xr:IdElement" use="required">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Id of group</xs:documentation>
                     </xs:annotation>

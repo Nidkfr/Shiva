@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Shiva</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\Shiva.Permission.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Permission\Xml\XmlPermission.xsd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Permission\Xml\XmlPermission.xsd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shiva.Core\Shiva.Core.csproj" />
+  </ItemGroup>
+
+</Project>

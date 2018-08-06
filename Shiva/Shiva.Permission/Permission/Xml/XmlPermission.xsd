@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="Permission"
+    targetNamespace="http://shiva.org/Permission"
+    elementFormDefault="qualified"
+    xmlns:xp="http://shiva.org/Permission"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+
+  <xs:element name="Permissions">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">Permissions definitions</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:all maxOccurs="1" minOccurs="0">
+        <xs:element name="Roles" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Roles definition</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence maxOccurs="unbounded" minOccurs="0">
+              <xs:element name="Role">
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">Role definition</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name ="Permission">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Permission Value</xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType mixed="true">
+                        <xs:sequence minOccurs="0" maxOccurs="1">
+                          <xs:any processContents="skip" />
+                        </xs:sequence>
+                        <xs:attribute name="id" use ="required" type="xp:IdElement">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">Id of permission</xs:documentation>
+                          </xs:annotation>                          
+                        </xs:attribute>
+                        <xs:attribute name="type" use="required" type="xp:Csharp_Type">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">Type c# of definition</xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="id" use="required" type="xp:IdElement">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Id of Role</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <!--************************ Type definition  **********************************************-->
+  <xs:simpleType name="IdElement">
+    <xs:annotation>
+      <xs:documentation>Id of element</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Za-z_][A-Za-z0-9_.]*[a-z0-9]" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Csharp_Type">
+    <xs:annotation>
+      <xs:documentation>Id of element</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z_][A-Za-z0-9_.]*[a-z0-9]" />
+    </xs:restriction>
+  </xs:simpleType>
+  <!--************************ Type definition  **********************************************-->
+</xs:schema>
