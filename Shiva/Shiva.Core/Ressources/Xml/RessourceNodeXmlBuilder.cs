@@ -80,13 +80,8 @@ namespace Shiva.Ressources.Xml
         /// The writer.
         /// </param>
         protected override void WriteChildren(XmlWriter writer)
-        {
-            writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_VALUE, XD.NAMESPACE);
-            writer.WriteStartAttribute(XD.ATTRIBUTE_LANG);
-            writer.WriteValue(this._ressource.Culture.TwoLetterISOLanguageName);
-            writer.WriteEndAttribute();
-            this._ressource.Serialize(writer);
-            writer.WriteEndElement();
+        {            
+            this._ressource.Serialize(writer,new XmlContext (XD.NAMESPACE,XD.PREFIX));            
         }
 
         /// <summary>

@@ -221,10 +221,10 @@ namespace Shiva.Ressources.Xml
         }
 
         [TestMethod]
-        [DeploymentItem("DeployItems/RessourceXml.xml", "Group")]
+        [DeploymentItem("DeployItems/RessourceXml.xml", "GroupPerformance")]
         public void TestPerformanceGroup()
         {
-            using (var streamsource = new FileSource("./Group/RessourceXml.xml"))
+            using (var streamsource = new FileSource("./GroupPerformance/RessourceXml.xml"))
             {
                 using (var manager = new RessourceXmlManager(this.LogManager))
                 {

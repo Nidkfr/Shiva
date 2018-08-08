@@ -59,12 +59,12 @@ namespace Shiva.Ressources
                 };
                 using (var writer = XmlWriter.Create(stream, settings))
                 {
-                    ressource.Serialize(writer);
+                    ressource.Serialize(writer,new Shiva.Xml.XmlContext("",""));
                 }
                 var settingsString = Encoding.UTF8.GetString(stream.ToArray()).Trim();
                 settingsString = settingsString.RemoveByteOrderMarkUtf8();
                 var xdoc = XDocument.Parse(settingsString);
-                Assert.IsTrue(xdoc.Root.Name == "Data");
+                Assert.IsTrue(xdoc.Root.Name == "Value");
                 Assert.IsTrue(xdoc.Root.Value == "dmFsdWU=", xdoc.Root.Value);
             }
         }
@@ -73,7 +73,7 @@ namespace Shiva.Ressources
         public void FailSerialize()
         {
             var ressource = new RessourceBinary("test", Encoding.ASCII.GetBytes("value"), CultureInfo.GetCultureInfo(1));
-            ressource.Invoking(x => x.Serialize(null)).Should().Throw<ArgumentNullException>();
+            ressource.Invoking(x => x.Serialize(null,new Shiva.Xml.XmlContext("",""))).Should().Throw<ArgumentNullException>();
         }
 
         [TestMethod]
@@ -90,7 +90,7 @@ namespace Shiva.Ressources
                 };
                 using (var writer = XmlWriter.Create(stream, settings))
                 {
-                    ressource.Serialize(writer);
+                    ressource.Serialize(writer,null);
                 }
                 var settingsString = Encoding.UTF8.GetString(stream.ToArray()).Trim();
                 settingsString = settingsString.RemoveByteOrderMarkUtf8();
@@ -98,7 +98,7 @@ namespace Shiva.Ressources
                 var newressource = new RessourceBinary();
                 using (var reader = xdoc.Root.CreateReader())
                 {
-                    newressource.UnSerialize(reader, "test", CultureInfo.GetCultureInfo(1));
+                    newressource.UnSerialize(reader,null);
                 }
                 Assert.IsTrue(System.Text.Encoding.ASCII.GetString(newressource.Value) == "value", Convert.ToBase64String(newressource.Value));
             }
@@ -108,12 +108,12 @@ namespace Shiva.Ressources
         public void FailUnserialize()
         {
             var ressource = new RessourceBinary("test", Encoding.ASCII.GetBytes("value"), CultureInfo.GetCultureInfo(1));
-            ressource.Invoking(x => x.UnSerialize(null, "", CultureInfo.GetCultureInfo(1))).Should().Throw<ArgumentNullException>();
+            ressource.Invoking(x => x.UnSerialize(null, null)).Should().Throw<ArgumentNullException>();
 
             var xdoc = XDocument.Parse(@"<test/>");
             using (var reader = xdoc.CreateReader())
             {
-                ressource.Invoking(x => x.UnSerialize(reader, "test", CultureInfo.GetCultureInfo(1)))
+                ressource.Invoking(x => x.UnSerialize(reader,null))
                      .Should()
                      .Throw<InvalidOperationException>();
             }

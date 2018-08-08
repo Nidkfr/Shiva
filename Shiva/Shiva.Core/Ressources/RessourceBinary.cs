@@ -1,4 +1,5 @@
 ﻿using Shiva.Core.Identities;
+using Shiva.Xml;
 using System;
 using System.Globalization;
 using System.Xml;
@@ -74,22 +75,7 @@ namespace Shiva.Ressources
         public override IRessource Clone()
         {
             return ((IRessource<byte[]>)this).Clone();
-        }
-
-        /// <summary>
-        /// Serializes the specified writer.
-        /// </summary>
-        /// <param name="writer">
-        /// The writer.
-        /// </param>
-        public override void Serialize(XmlWriter writer)
-        {
-            if (writer == null)
-                throw new ArgumentNullException(nameof(writer));
-            writer.WriteStartElement("Data");
-            writer.WriteValue(Convert.ToBase64String(this.Value));
-            writer.WriteEndElement();
-        }
+        }       
 
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
@@ -103,32 +89,27 @@ namespace Shiva.Ressources
         }
 
         /// <summary>
-        /// Uns the serialize.
+        /// Internals the serialize.
         /// </summary>
-        /// <param name="reader">
-        /// The reader.
-        /// </param>
-        /// <param name="id">
-        /// The identifier.
-        /// </param>
-        /// <param name="culture">
-        /// The culture.
-        /// </param>
-        public override void UnSerialize(XmlReader reader, Identity id, CultureInfo culture)
+        /// <param name="writer">The writer.</param>
+        /// <param name="ctx">xmlcontext</param>
+        protected override void InternalSerialize(XmlWriter writer, XmlContext ctx)
         {
-            if (reader == null)
-                throw new ArgumentNullException(nameof(reader));
-
-            if (reader.ReadToDescendant("Data"))
-            {
-                var val = reader.ReadElementContentAsString();
-                this._data = Convert.FromBase64String(val);
-            }
-            else
-                throw new InvalidOperationException("Invalid Xml Ressource File");
-
-            base.UnSerialize(reader, id, culture);
+            writer.WriteValue(Convert.ToBase64String(this.Value));
         }
+
+        /// <summary>
+        /// Internals the serialize.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="ctx">xml context</param>
+        protected override void InternalUnSerialize(XmlReader reader,XmlContext ctx)
+        {
+            var val = reader.ReadElementContentAsString();
+            this._data = Convert.FromBase64String(val);
+        }
+
+
 
         /// <summary>
         /// Clones this instance.

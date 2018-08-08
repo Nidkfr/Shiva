@@ -109,7 +109,7 @@ namespace Shiva.Permission.Xml
         /// <exception cref="NotImplementedException"></exception>
         protected override void SetRoleInternal(RoleBase role)
         {
-            var builder = new PermissionXmlBuilder();
+            var builder = new PermissionXmlBuilder(role);
             builder.Update(this._source.GetStream(), this._source.GetSaveStream());
 
             this._source.Flush();

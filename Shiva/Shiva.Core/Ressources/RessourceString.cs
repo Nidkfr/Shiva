@@ -1,4 +1,5 @@
 ﻿using Shiva.Core.Identities;
+using Shiva.Xml;
 using System;
 using System.Globalization;
 using System.Xml;
@@ -75,22 +76,7 @@ namespace Shiva.Ressources
         {
             return ((IRessource<string>)this).Clone();
         }
-
-        /// <summary>
-        /// Serializes the specified writer.
-        /// </summary>
-        /// <param name="writer">
-        /// The writer.
-        /// </param>
-        public override void Serialize(XmlWriter writer)
-        {
-            if (writer == null)
-                throw new ArgumentNullException(nameof(writer));
-            writer.WriteStartElement("String");
-            writer.WriteValue(this.Value);
-            writer.WriteEndElement();
-        }
-
+        
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
@@ -103,30 +89,24 @@ namespace Shiva.Ressources
         }
 
         /// <summary>
-        /// Uns the serialize.
+        /// Internals the serialize.
         /// </summary>
-        /// <param name="reader">
-        /// The reader.
-        /// </param>
-        /// <param name="id">
-        /// </param>
-        /// <param name="culture">
-        /// </param>
-        /// <exception cref="System.InvalidOperationException">
-        /// Invalid Xml Ressource File
-        /// </exception>
-        public override void UnSerialize(XmlReader reader, Identity id, CultureInfo culture)
+        /// <param name="writer">The writer.</param>
+        /// <param name="ctx">xml context</param>
+        protected override void InternalSerialize(XmlWriter writer,XmlContext ctx)
         {
-            if (reader == null)
-                throw new ArgumentNullException(nameof(reader));
-            base.UnSerialize(reader, id, culture);
-            if (reader.ReadToDescendant("String"))
-            {
-                this._value = reader.ReadElementContentAsString();
-            }
-            else
-                throw new InvalidOperationException("Invalid Xml Ressource File");
+            writer.WriteValue(this.Value);
         }
+
+        /// <summary>
+        /// Internals the serialize.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="ctx">xml context</param>
+        protected override void InternalUnSerialize(XmlReader reader,XmlContext ctx)
+        {
+            this._value = reader.ReadElementContentAsString();
+        }       
 
         /// <summary>
         /// Clones this instance.

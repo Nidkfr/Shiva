@@ -293,7 +293,7 @@ namespace Shiva.Ressources
             manager.AttachRessourceToGroup<RessourceString>(r2, "grp2");
             manager.AttachRessourceToGroup<RessourceString>(r3, "grp2");
 
-            Assert.IsTrue(manager.GetAllGroups().Count() == 2);
+            Assert.IsTrue(manager.GetAllGroups().Count() == 2, manager.GetAllGroups().Count().ToString());
 
             var grp1 = manager.GetGroupRessources<RessourceString>((Identity)"grp1");
             Assert.IsTrue(grp1.Culture == manager.Culture);

@@ -1,6 +1,7 @@
 ﻿using Shiva.Core.Identities;
 using Shiva.Core.IO;
 using Shiva.Core.Services;
+using Shiva.Xml;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -133,8 +134,10 @@ namespace Shiva.Ressources.Xml
                                         if (lang == this.Culture.TwoLetterISOLanguageName)
                                         {
                                             var ressource = new TRessource();
-                                            ressource.UnSerialize(subreader, idattr, this.Culture);
+                                            ressource.SetId(idattr);
+                                            ressource.UnSerialize(subreader, new XmlContext(XD.NAMESPACE, XD.PREFIX));
                                             ressources.Add(ressource);
+
                                         }
                                     }
                                 }
@@ -392,9 +395,11 @@ namespace Shiva.Ressources.Xml
                                         if (lang == this.Culture.TwoLetterISOLanguageName)
                                         {
                                             var ressource = new TRessource();
-                                            ressource.UnSerialize(subreader, idattr, this.Culture);
+                                            ressource.SetId(idattr);
+                                            ressource.UnSerialize(subreader, new XmlContext(XD.NAMESPACE, XD.PREFIX));
                                             ressources.Add(ressource);
                                             ressourceIds.Remove(idattr);
+
                                         }
                                     }
 
@@ -448,8 +453,11 @@ namespace Shiva.Ressources.Xml
                                         if (lang == this.Culture.TwoLetterISOLanguageName)
                                         {
                                             var ressource = new TRessource();
-                                            ressource.UnSerialize(subreader, ressourceID, this.Culture);
+                                            ressource.SetId(idattr);
+                                            subreader.MoveToContent();
+                                            ressource.UnSerialize(subreader, new XmlContext(XD.NAMESPACE, XD.PREFIX));
                                             return ressource;
+
                                         }
                                     }
                                     return default;

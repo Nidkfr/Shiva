@@ -1,4 +1,5 @@
 ﻿using Shiva.Core.Identities;
+using Shiva.Xml;
 using System;
 using System.Globalization;
 using System.Xml;
@@ -91,10 +92,28 @@ namespace Shiva.Ressources
         /// <summary>
         /// Serializes the specified writer.
         /// </summary>
-        /// <param name="writer">
-        /// The writer.
-        /// </param>
-        public abstract void Serialize(XmlWriter writer);
+        /// <param name="writer">The writer.</param>
+        /// <param name="ctx">The CTX.</param>
+        public void Serialize(XmlWriter writer, XmlContext ctx)
+        {
+            if (writer == null)
+                throw new ArgumentNullException(nameof(writer));
+
+            if (ctx != null)
+                writer.WriteStartElement(ctx.Prefix, "Value", ctx.Namespace);
+            else
+                writer.WriteStartElement("Value");
+            writer.WriteAttributeString("lang", this.Culture.TwoLetterISOLanguageName);
+            this.InternalSerialize(writer, ctx);
+            writer.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Internals the serialize.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="ctx">xml context</param>
+        protected abstract void InternalSerialize(XmlWriter writer, XmlContext ctx);
 
         /// <summary>
         /// Sets the culture.
@@ -108,22 +127,39 @@ namespace Shiva.Ressources
         }
 
         /// <summary>
+        /// Sets the identifier of ressource.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        public void SetId(Identity id)
+        {
+            this._id = id ?? throw new ArgumentNullException(nameof(id));
+        }
+        /// <summary>
         /// Uns the serialize.
         /// </summary>
-        /// <param name="reader">
-        /// The reader.
-        /// </param>
-        /// <param name="id">
-        /// The identifier.
-        /// </param>
-        /// <param name="culture">
-        /// The culture.
-        /// </param>
-        public virtual void UnSerialize(XmlReader reader, Identity id, CultureInfo culture)
+        /// <param name="reader">The reader.</param>
+        /// <param name="ctx">xml context</param>
+        public void UnSerialize(XmlReader reader, XmlContext ctx)
         {
-            this._id = id;
-            this._culture = culture;
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
+
+            if (reader.LocalName=="Value" || reader.ReadToFollowing("Value"))
+            {
+                this._culture = CultureInfo.GetCultureInfo(reader.GetAttribute("lang"));
+                this.InternalUnSerialize(reader, ctx);
+            }
+            else
+                throw new InvalidOperationException("Invalid Reader, it's not found Value element in reader.");
         }
+
+        /// <summary>
+        /// Internals the serialize.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="ctx">The CTX.</param>
+        protected abstract void InternalUnSerialize(XmlReader reader, XmlContext ctx);
+
 
         #endregion Public Methods
 

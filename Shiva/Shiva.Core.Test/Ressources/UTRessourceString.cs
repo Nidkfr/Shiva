@@ -64,12 +64,12 @@ namespace Shiva.Ressources
                 };
                 using (var writer = XmlWriter.Create(stream, settings))
                 {
-                    ressource.Serialize(writer);
+                    ressource.Serialize(writer,null);
                 }
                 var settingsString = Encoding.UTF8.GetString(stream.ToArray()).Trim();
                 settingsString = settingsString.RemoveByteOrderMarkUtf8();
                 var xdoc = XDocument.Parse(settingsString);
-                Assert.IsTrue(xdoc.Root.Name == "String");
+                Assert.IsTrue(xdoc.Root.Name == "Value");
                 Assert.IsTrue(xdoc.Root.Value == "value");
             }
         }
@@ -78,7 +78,7 @@ namespace Shiva.Ressources
         public void FailSerialize()
         {
             var ressource = new RessourceString("test", "value", CultureInfo.GetCultureInfo(1));
-            ressource.Invoking(x => x.Serialize(null)).Should().Throw<ArgumentNullException>();
+            ressource.Invoking(x => x.Serialize(null,null)).Should().Throw<ArgumentNullException>();
 
         }
 
@@ -96,7 +96,7 @@ namespace Shiva.Ressources
                 };
                 using (var writer = XmlWriter.Create(stream, settings))
                 {
-                    ressource.Serialize(writer);
+                    ressource.Serialize(writer,null);
                 }
                 var settingsString = Encoding.UTF8.GetString(stream.ToArray()).Trim();
                 settingsString = settingsString.RemoveByteOrderMarkUtf8();
@@ -104,7 +104,7 @@ namespace Shiva.Ressources
                 var newressource = new RessourceString();
                 using (var reader = xdoc.Root.CreateReader())
                 {
-                    newressource.UnSerialize(reader, "test", CultureInfo.GetCultureInfo(1));
+                    newressource.UnSerialize(reader,null);
                 }
                 Assert.IsTrue(newressource.Value == "value");
             }
@@ -114,12 +114,12 @@ namespace Shiva.Ressources
         public void FailUnserialize()
         {
             var ressource = new RessourceString("test", "value", CultureInfo.GetCultureInfo(1));
-            ressource.Invoking(x => x.UnSerialize(null, "", CultureInfo.GetCultureInfo(1))).Should().Throw<ArgumentNullException>();
+            ressource.Invoking(x => x.UnSerialize(null, null)).Should().Throw<ArgumentNullException>();
 
             var xdoc = XDocument.Parse(@"<test></test>");
             using (var reader = xdoc.CreateReader())
             {
-                ressource.Invoking(x => x.UnSerialize(reader, "test", CultureInfo.GetCultureInfo(1)))
+                ressource.Invoking(x => x.UnSerialize(reader,null))
                      .Should()
                      .Throw<InvalidOperationException>();
             }

@@ -6,7 +6,7 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
 >
 
-  <xs:element name="Permissions">
+  <xs:element name="PermissionsDefinitions">
     <xs:annotation>
       <xs:documentation xml:lang="en">Permissions definitions</xs:documentation>
     </xs:annotation>
@@ -23,28 +23,37 @@
                   <xs:documentation xml:lang="en">Role definition</xs:documentation>
                 </xs:annotation>
                 <xs:complexType>
-                  <xs:sequence minOccurs="0" maxOccurs="unbounded">
-                    <xs:element name ="Permission">
+                  <xs:choice>
+                    <xs:element name="Permissions" minOccurs="0" maxOccurs="1">
                       <xs:annotation>
-                        <xs:documentation xml:lang="en">Permission Value</xs:documentation>
+                        <xs:documentation xml:lang="en">Classic Role with directly permission insertions</xs:documentation>
                       </xs:annotation>
-                      <xs:complexType mixed="true">
-                        <xs:sequence minOccurs="0" maxOccurs="1">
-                          <xs:any processContents="skip" />
+                      <xs:complexType>
+                        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                          <xs:element name ="Permission">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">Permission Value</xs:documentation>
+                            </xs:annotation>
+                            <xs:complexType mixed="true">
+                              <xs:sequence minOccurs="0" maxOccurs="1">
+                                <xs:any processContents="skip" />
+                              </xs:sequence>
+                              <xs:attribute name="id" use ="required" type="xp:IdElement">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">Id of permission</xs:documentation>
+                                </xs:annotation>
+                              </xs:attribute>
+                              <xs:attribute name="type" use="required" type="xp:Csharp_Type">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="en">Type c# of definition</xs:documentation>
+                                </xs:annotation>
+                              </xs:attribute>
+                            </xs:complexType>
+                          </xs:element>
                         </xs:sequence>
-                        <xs:attribute name="id" use ="required" type="xp:IdElement">
-                          <xs:annotation>
-                            <xs:documentation xml:lang="en">Id of permission</xs:documentation>
-                          </xs:annotation>                          
-                        </xs:attribute>
-                        <xs:attribute name="type" use="required" type="xp:Csharp_Type">
-                          <xs:annotation>
-                            <xs:documentation xml:lang="en">Type c# of definition</xs:documentation>
-                          </xs:annotation>
-                        </xs:attribute>
                       </xs:complexType>
                     </xs:element>
-                  </xs:sequence>
+                  </xs:choice>
                   <xs:attribute name="id" use="required" type="xp:IdElement">
                     <xs:annotation>
                       <xs:documentation xml:lang="en">Id of Role</xs:documentation>

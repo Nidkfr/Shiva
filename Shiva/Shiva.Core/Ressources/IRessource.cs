@@ -1,4 +1,5 @@
 ﻿using Shiva.Core.Identities;
+using Shiva.Xml;
 using System.Globalization;
 using System.Xml;
 
@@ -7,7 +8,7 @@ namespace Shiva.Ressources
     /// <summary>
     /// Ressource
     /// </summary>
-    public interface IRessource : IIdentifiable
+    public interface IRessource : IIdentifiable, IInclusiveSerializable
     {
         #region Public Properties
 
@@ -39,16 +40,6 @@ namespace Shiva.Ressources
         IRessource Clone();
 
         /// <summary>
-        /// Serializes this instance.
-        /// </summary>
-        /// <param name="writer">
-        /// writer
-        /// </param>
-        /// <returns>
-        /// </returns>
-        void Serialize(XmlWriter writer);
-
-        /// <summary>
         /// Change culture of ressource
         /// </summary>
         /// <param name="culture">
@@ -57,19 +48,10 @@ namespace Shiva.Ressources
         void SetCulture(CultureInfo culture);
 
         /// <summary>
-        /// Uns the serialize.
+        /// Sets the identifier.
         /// </summary>
-        /// <param name="reader">
-        /// The reader.
-        /// </param>
-        /// <param name="id">
-        /// The identifier.
-        /// </param>
-        /// <param name="info">
-        /// The information.
-        /// </param>
-        void UnSerialize(XmlReader reader, Identity id, CultureInfo info);
-
+        /// <param name="id">The identifier.</param>
+        void SetId(Identity id);
         #endregion Public Methods
     }
 
