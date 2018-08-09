@@ -45,17 +45,6 @@ namespace Shiva.Xml
                 Assert.IsTrue(reader.LocalName == "test");
             }
         }
-
-        [TestMethod]
-        public void TestReadToEndOfElement()
-        {
-            var xdoc = XDocument.Parse("<!-- test --><test><child></child></test>");
-                var reader = xdoc.CreateReader();
-                XmlBuilderTool.ReadToEndOfElement(reader,"child");                                
-                Assert.IsTrue(reader.NodeType == XmlNodeType.EndElement);
-                Assert.IsTrue(reader.LocalName == "child");
-            
-        }
         
     }
 }

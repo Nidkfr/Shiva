@@ -57,7 +57,7 @@ namespace Shiva.Ressources.Xml
                     var type = Type.GetType(typeattr, false, true);
                     if (type != null)
                         if (this._editInfo.RemovedRessources[type].ToList().Contains(idattr))
-                            XmlBuilderTool.ReadToEndOfElement(reader, XD.ELEMENT_RESSOURCE);
+                            reader.Skip();
                         else
                         {
                             var ressource = this._editInfo.AddedRessources.FirstOrDefault(x => x.Id == idattr && type == x.GetType());
@@ -77,7 +77,7 @@ namespace Shiva.Ressources.Xml
                             }
                         }
                     else
-                        XmlBuilderTool.ReadToEndOfElement(reader, XD.ELEMENT_RESSOURCE);
+                        reader.Skip();
                 }
                 else
                     XmlBuilderTool.ReadAndWriteToNextStartOrEndElement(reader, writer);

@@ -18,6 +18,8 @@ namespace Shiva.Permission.Xml
 
         public const string ATTRIBUTE_ID = "id";
 
+        public const string ATTRIBUTE_TYPE = "type";
+
         public const string NAMESPACE = "http://shiva.org/Permissions";
 
         public const string PREFIX = "xp";

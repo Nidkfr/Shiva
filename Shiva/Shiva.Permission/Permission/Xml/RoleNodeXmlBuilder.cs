@@ -4,6 +4,7 @@ using System.Text;
 using System.Xml;
 using Shiva.Xml;
 using XD = Shiva.Permission.Xml.PermissionXmlDefinition;
+using System.Linq;
 
 namespace Shiva.Permission.Xml
 {
@@ -43,8 +44,16 @@ namespace Shiva.Permission.Xml
             switch (this._role)
             {
                 case Role role:
-                    writer.WriteStartElement(XD.PREFIX,XD.ELEMENT_PERMISSIONS,XD.NAMESPACE);
-                    writer.WriteEndElement();
+                    foreach (var grp in role.GetPermissions().GroupBy(x=>x.GetType()))
+                    {
+                        writer.WriteStartElement(XD.PREFIX, XD.ELEMENT_PERMISSIONS, XD.NAMESPACE);
+                        writer.WriteAttributeString(XD.ATTRIBUTE_TYPE, grp.Key.FullName);
+                        foreach (var p in grp)
+                        {
+                            p.Serialize(writer, new XmlContext(XD.NAMESPACE, XD.PREFIX));
+                        }
+                        writer.WriteEndElement();
+                    }
                     break;
             }
         }

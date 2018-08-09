@@ -42,7 +42,7 @@ namespace Shiva.Permission.Xml
                         {
                             var attrId = subreader.GetAttribute(XD.ATTRIBUTE_ID);
                             if (attrId == this._role.Id)
-                                XmlBuilderTool.ReadToEndOfElement(subreader, XD.ELEMENT_ROLE);
+                                reader.Skip();
                         }
                     }
                     if(this._role !=null)

@@ -45,28 +45,6 @@ namespace Shiva.Xml
         }
 
         /// <summary>
-        /// Reads to end of element.
-        /// </summary>
-        /// <param name="reader">
-        /// The reader.
-        /// </param>
-        /// <param name="elementName">
-        /// Name of the element.
-        /// </param>
-        public static void ReadToEndOfElement(XmlReader reader, string elementName)
-        {
-            do
-            {
-                if (reader.EOF)
-                    break;
-
-                if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == elementName)
-                    break;
-            }
-            while (reader.Read());
-        }
-
-        /// <summary>
         /// Writes to end element.
         /// </summary>
         /// <param name="reader">

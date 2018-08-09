@@ -56,7 +56,7 @@ namespace Shiva.Ressources.Xml
                     var langattr = reader.GetAttribute(XD.ATTRIBUTE_LANG);
                     if (langattr == this._ressource.Culture.TwoLetterISOLanguageName)
                     {
-                        XmlBuilderTool.ReadToEndOfElement(reader, XD.ELEMENT_VALUE);
+                        reader.Skip();
                     }
                     else
                     {

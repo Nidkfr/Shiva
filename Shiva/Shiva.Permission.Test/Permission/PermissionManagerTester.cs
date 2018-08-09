@@ -27,6 +27,22 @@ namespace Shiva.Permission
             role.SetPermission(new PermissionAccess("test") { Acces = true });
 
             manager.SetRole(role);
+
+            role = manager.GetRole<Role>("test");
+
+            Assert.IsTrue(role.Id == "test");
+            Assert.IsTrue(role.GetPermissions().Count() == 1);
+            Assert.IsTrue(role.GetPermission<PermissionAccess>("test").Acces);
+            Assert.IsNull(role.GetPermission<PermissionAccess>("fail"));
+
+            role.SetPermission(new PermissionData("test2") { Mode = PermissionDataEnum.EDITABLE });
+
+            manager.SetRole(role);
+
+            Assert.IsTrue(role.Id == "test");
+            Assert.IsTrue(role.GetPermissions().Count() == 2);
+            Assert.IsTrue(role.GetPermission<PermissionData>("test2").Mode == PermissionDataEnum.EDITABLE);
+            
         }
 
         public void TestGetSetRoleAsync(IPermissionManager manager)

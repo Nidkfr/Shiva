@@ -27,14 +27,7 @@ namespace Shiva.Permission
         /// The identifier.
         /// </value>
         public Identity Id
-        { get; private set; }
-
-
-        /// <summary>
-        /// Gets the permissions.
-        /// </summary>
-        /// <returns></returns>
-        public abstract IEnumerable<IPermission> GetPermissions();
+        { get; private set; }       
 
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
@@ -47,5 +40,12 @@ namespace Shiva.Permission
             return $"[{this.GetType().Name}]({this.Id})";
         }
 
+        /// <summary>
+        /// Gets the permission.
+        /// </summary>
+        /// <typeparam name="TPermission">The type of the permission.</typeparam>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        public abstract TPermission GetPermission<TPermission>(Identity id);
     }
 }

@@ -58,7 +58,7 @@ namespace Shiva.Ressources.Xml
                 {
                     var idattr = reader.GetAttribute(XD.ATTRIBUTE_ID);
                     if (this._ressourceInfo.RemovedGroups.Contains((Identity)idattr))
-                        XmlBuilderTool.ReadToEndOfElement(reader, XD.ELEMENT_GROUP);
+                        reader.Skip();
                     else
                     {
                         if (this._ressourceInfo.AddedGroups.Any(x => x.Key.Id == idattr))

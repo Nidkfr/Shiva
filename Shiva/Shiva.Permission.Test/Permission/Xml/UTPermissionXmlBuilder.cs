@@ -61,10 +61,10 @@ namespace Shiva.Permission.Xml
         }
 
         [TestMethod]
-        [DeploymentItem("DeployItems/Permission.xml", "GETSET")]
+        [DeploymentItem("DeployItems/Permission.xml", "GETSETAsync")]
         public void TestGetSetRoleAsync()
         {
-            using (var streamsource = new FileSource("./GETSET/Permission.xml"))
+            using (var streamsource = new FileSource("./GETSETAsync/Permission.xml"))
             {
                 using (var manager = new PermissionManagerXml(this.LogManager))
                 {                   

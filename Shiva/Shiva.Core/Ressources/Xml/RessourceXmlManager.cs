@@ -312,7 +312,7 @@ namespace Shiva.Ressources.Xml
                             while (subreader.ReadToFollowing(XD.ELEMENT_RESSOURCE, XD.NAMESPACE))
                             {
                                 var typeAttr = subreader.GetAttribute(XD.ATTRIBUTE_TYPE);
-                                var type = Type.GetType(typeAttr);
+                                var type = Type.GetType(typeAttr,false,true);
                                 types.Add(type);
                             }
                             foreach (var ty in types.Distinct())

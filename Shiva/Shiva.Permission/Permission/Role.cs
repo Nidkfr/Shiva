@@ -26,7 +26,7 @@ namespace Shiva.Permission
         /// Gets the permissions.
         /// </summary>
         /// <returns></returns>
-        public override IEnumerable<IPermission> GetPermissions()
+        public  IEnumerable<IPermission> GetPermissions()
         {
             return this._permissions.ToList();
         }
@@ -66,6 +66,17 @@ namespace Shiva.Permission
                 throw new ArgumentNullException(nameof(idPermission));
 
             this._permissions.Remove(idPermission);
+        }
+
+        /// <summary>
+        /// Gets the permission.
+        /// </summary>
+        /// <typeparam name="TPermission">The type of the permission.</typeparam>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        public override TPermission GetPermission<TPermission>(Identity id)
+        {
+            return (TPermission)this.GetPermissions().FirstOrDefault(x => x.Id == id && x.GetType() == typeof(TPermission));
         }
     }
 }

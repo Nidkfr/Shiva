@@ -6,6 +6,7 @@ using Shiva.Core.IO;
 using System.Xml.Schema;
 using System.Xml;
 using XD = Shiva.Permission.Xml.PermissionXmlDefinition;
+using Shiva.Core.Identities;
 
 namespace Shiva.Permission.Xml
 {
@@ -13,10 +14,10 @@ namespace Shiva.Permission.Xml
     /// Permission Manager Base
     /// </summary>
     /// <seealso cref="Shiva.Permission.PermissionManagerBase" />
-    public sealed class PermissionManagerXml : PermissionManagerBase , IDisposable
+    public sealed class PermissionManagerXml : PermissionManagerBase, IDisposable
     {
         private readonly IList<string> _validationXml = new List<string>();
-        private  StreamSource _source=null;
+        private StreamSource _source = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PermissionManagerXml"/> class.
@@ -37,7 +38,7 @@ namespace Shiva.Permission.Xml
                 this.Logger.Info("Initialization of permission manager xml");
 
             this._source = source;
-            this._validateXml();            
+            this._validateXml();
             this.IsInitialized = true;
         }
 
@@ -86,8 +87,8 @@ namespace Shiva.Permission.Xml
                 settings.ValidationEventHandler += new ValidationEventHandler(this._Xml_ValidationEventHandler);
                 var stream = this._source.GetStream();
                 using (var reader = XmlReader.Create(stream, settings))
-                    while (reader.Read());
-                    
+                    while (reader.Read()) ;
+
                 if (this._validationXml.Count > 0)
                     throw new XmlSchemaValidationException($"Permission Xml stream validation fail :\n\r {string.Join("\n\r", this._validationXml)}");
             }
@@ -122,6 +123,90 @@ namespace Shiva.Permission.Xml
         public void Dispose()
         {
             this._source?.Dispose();
+        }
+
+        /// <summary>
+        /// Gets the role.
+        /// </summary>
+        /// <typeparam name="TRole">The type of the role.</typeparam>
+        /// <param name="roleId">The identifier.</param>
+        /// <returns></returns>        
+        public override TRole GetRole<TRole>(Identity roleId)
+        {
+            this._CheckInit();
+            if (roleId == null)
+                throw new ArgumentNullException(nameof(roleId));
+
+            using (var reader = XmlReader.Create(this._source.GetStream(), this._getReadingPermformenceSettings()))
+            {
+                while (reader.Read())
+                {
+                    if (reader.IsStartElement())
+                    {
+                        if (reader.LocalName == XD.ELEMENT_ROLE)
+                        {
+                            var idattr = reader.GetAttribute(XD.ATTRIBUTE_ID);
+                            if (idattr == roleId)
+                            {
+                                if (typeof(TRole) == typeof(Role))
+                                    return this._getRole(reader, idattr) as TRole;
+                               
+                            }
+                        }
+                    }
+
+                    if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == XD.ELEMENT_ROLES)
+                        break;
+                }
+            }
+            return default;
+
+        }
+
+        private XmlReaderSettings _getReadingPermformenceSettings()
+        {
+            return new XmlReaderSettings
+            {
+                CheckCharacters = false,
+                ConformanceLevel = ConformanceLevel.Document,
+                IgnoreComments = true,
+                IgnoreProcessingInstructions = true,
+                IgnoreWhitespace = true,
+                ValidationFlags = XmlSchemaValidationFlags.None,
+                ValidationType = ValidationType.None,
+            };
+        }
+
+        private Role _getRole(XmlReader reader,Identity roleId)
+        {
+            var role = new Role(roleId);            
+            var permissionsTypeSubReader = reader.ReadSubtree();           
+            while (permissionsTypeSubReader.Read())
+            {
+                if (permissionsTypeSubReader.IsStartElement())
+                {
+                    if (permissionsTypeSubReader.LocalName == XD.ELEMENT_PERMISSIONS)
+                    {
+                        var type = Type.GetType(permissionsTypeSubReader.GetAttribute(XD.ATTRIBUTE_TYPE), false, true);
+                        if (type != null)
+                        {
+                            var ctor = type.GetConstructor(new Type[] { });
+                            var permissionsSubReader = permissionsTypeSubReader.ReadSubtree();
+                            while (permissionsSubReader.Read())
+                            {
+                                if (permissionsSubReader.IsStartElement())
+                                {
+                                    var permission = ctor.Invoke(null) as IPermission;
+                                    permission.UnSerialize(permissionsSubReader, new Shiva.Xml.XmlContext(XD.NAMESPACE, XD.PREFIX));
+                                    role.SetPermission(permission);
+                                }
+                            }
+                        }
+                        permissionsTypeSubReader.Skip();
+                    }
+                }
+            }
+            return role;
         }
     }
 }

@@ -24,7 +24,7 @@
                 </xs:annotation>
                 <xs:complexType>
                   <xs:choice>
-                    <xs:element name="Permissions" minOccurs="0" maxOccurs="1">
+                    <xs:element name="Permissions" minOccurs="0" maxOccurs="unbounded">
                       <xs:annotation>
                         <xs:documentation xml:lang="en">Classic Role with directly permission insertions</xs:documentation>
                       </xs:annotation>
@@ -51,7 +51,16 @@
                             </xs:complexType>
                           </xs:element>
                         </xs:sequence>
+                        <xs:attribute name="type" use="required" type="xp:Csharp_Type">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="en">Type of permission</xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
                       </xs:complexType>
+                      <xs:unique name="PermissionUnique">
+                        <xs:selector xpath="*"></xs:selector>
+                        <xs:field xpath="id"></xs:field>
+                      </xs:unique>
                     </xs:element>
                   </xs:choice>
                   <xs:attribute name="id" use="required" type="xp:IdElement">
@@ -66,6 +75,10 @@
         </xs:element>
       </xs:all>
     </xs:complexType>
+    <xs:key name="RoleKey">
+      <xs:selector xpath="Roles/Role"></xs:selector>
+      <xs:field xpath="id"/>
+    </xs:key>
   </xs:element>
   <!--************************ Type definition  **********************************************-->
   <xs:simpleType name="IdElement">

@@ -46,7 +46,8 @@ namespace Shiva.Permission
         public override void Serialize(XmlWriter writer, XmlContext ctx)
         {
             writer.WriteStartElement("Acces");
-            writer.WriteAttributeString("value",this.Acces.ToString());
+            writer.WriteAttributeString("id", this.Id);
+            writer.WriteAttributeString("value",this.Acces.ToString());            
             writer.WriteEndElement();
         }
 
@@ -62,9 +63,13 @@ namespace Shiva.Permission
             {
                 if (bool.TryParse(reader.GetAttribute("value"), out var val))
                 {
-                    this.Acces = val;                    
+                    this.Acces = val;
                 }
+
+                this.Id = reader.GetAttribute("id");
             }
+            else
+                throw new InvalidOperationException("Invalid Element for unserialize PermissionAccess.");
         }
     }
 }
