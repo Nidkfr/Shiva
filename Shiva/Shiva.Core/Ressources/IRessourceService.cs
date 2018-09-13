@@ -9,7 +9,7 @@ namespace Shiva.Ressources
     /// <summary>
     /// Ressources Management
     /// </summary>
-    public interface IRessourceManager
+    public interface IRessourceService
     {
         #region Public Properties
 

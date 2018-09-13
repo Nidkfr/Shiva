@@ -12,9 +12,9 @@ namespace Shiva.Ressources
     /// <summary>
     /// Implementation of ressource manager base
     /// </summary>
-    /// <seealso cref="Shiva.Ressources.IRessourceManager" />
+    /// <seealso cref="Shiva.Ressources.IRessourceService" />
     ///
-    public abstract class RessourceManagerBase : IRessourceManager
+    public abstract class RessourceServicerBase : IRessourceService
     {
         #region Private Fields
 
@@ -27,12 +27,12 @@ namespace Shiva.Ressources
         #region Protected Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RessourceManagerBase" /> class.
+        /// Initializes a new instance of the <see cref="RessourceServicerBase" /> class.
         /// </summary>
         /// <param name="logmanager">
         /// The logmanager.
         /// </param>
-        protected RessourceManagerBase(ILogManager logmanager = null)
+        protected RessourceServicerBase(ILogManager logmanager = null)
         {
             this.Logger = logmanager?.CreateLogger(this.GetType()) ?? new NoLogger();
         }
@@ -87,6 +87,9 @@ namespace Shiva.Ressources
 
             if (groupRessourceId == null)
                 throw new ArgumentNullException(nameof(groupRessourceId));
+
+            if (ressource.IsEmptyRessource)
+                throw new InvalidOperationException("You not be use a empty Ressource");
 
             if (this.Logger.InfoIsEnabled)
                 this.Logger.Info($"Attach Ressource {ressource.Id} to group {groupRessourceId} in culture {this.Culture}");
@@ -195,6 +198,9 @@ namespace Shiva.Ressources
         {
             if (ressource == null)
                 throw new ArgumentNullException(nameof(ressource));
+
+            if (ressource.IsEmptyRessource)
+                throw new InvalidOperationException("You not be use a empty Ressource");
 
             var grp = new RessourceGroupInformation(groupRessourceId, typeof(TRessource));
             if (!this._groupesRessources.ContainsKey(grp))
@@ -518,6 +524,9 @@ namespace Shiva.Ressources
         {
             if (ressource == null)
                 throw new ArgumentNullException(nameof(ressource));
+
+            if (ressource.IsEmptyRessource)
+                throw new InvalidOperationException("You not be use a empty Ressource");
 
             ressource = (TRessource)ressource.Clone();
             ressource.SetCulture(this.Culture);

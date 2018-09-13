@@ -82,6 +82,14 @@ namespace Shiva.Core.IO
             private set;
         }
 
+        /// <summary>
+        /// Gets the stream identitfication.
+        /// </summary>
+        /// <value>
+        /// The stream identitfication.
+        /// </value>
+        public override string StreamIdentitfication => this._fileinfo.FullName;
+
         #endregion Public Properties
 
         #region Public Methods

@@ -15,27 +15,28 @@ namespace Shiva.Ressources.Xml
     /// <summary>
     /// Xml ressource Manager
     /// </summary>
-    public sealed class RessourceXmlManager : RessourceManagerBase, IDisposable
+    public sealed class RessourceXmlService : RessourceServicerBase, IDisposable
     {
         #region Private Fields
 
         private readonly IList<string> _validationXml = new List<string>();
         private CultureInfo _culture;
         private StreamSource _streamSource;
+        private XmlSchemaSet _xsd;
 
         #endregion Private Fields
 
         #region Public Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RessourceXmlManager" /> class.
+        /// Initializes a new instance of the <see cref="RessourceXmlService" /> class.
         /// </summary>
         /// <param name="logmanager">
         /// The logmanager.
         /// </param>
-        public RessourceXmlManager(ILogManager logmanager = null) : base(logmanager)
+        public RessourceXmlService(ILogManager logmanager = null) : base(logmanager)
         {
-            this.Logger = logmanager?.CreateLogger<RessourceXmlManager>() ?? new NoLogger();
+            this.Logger = logmanager?.CreateLogger<RessourceXmlService>() ?? new NoLogger();
         }
 
         #endregion Public Constructors
@@ -43,9 +44,9 @@ namespace Shiva.Ressources.Xml
         #region Private Destructors
 
         /// <summary>
-        /// Finalizes an instance of the <see cref="RessourceXmlManager" /> class.
+        /// Finalizes an instance of the <see cref="RessourceXmlService" /> class.
         /// </summary>
-        ~RessourceXmlManager()
+        ~RessourceXmlService()
         {
             this.Dispose();
         }
@@ -184,34 +185,40 @@ namespace Shiva.Ressources.Xml
         private void _validateXml()
         {
             this._validationXml.Clear();
-            var ressource = this.GetType().Assembly.GetManifestResourceNames();
-            var schema = XmlSchema.Read(this.GetType().Assembly.GetManifestResourceStream(XD.RESSOURCE_SCHEMA), this._Xml_ValidationEventHandler);
 
-            if (this._validationXml.Count == 0)
+            if (this._xsd == null)
             {
-                var xsdSet = new XmlSchemaSet();
-                xsdSet.ValidationEventHandler += this._Xml_ValidationEventHandler;
-                xsdSet.Add(schema);
 
-                var settings = new XmlReaderSettings
+                var schema = XmlSchema.Read(this.GetType().Assembly.GetManifestResourceStream(XD.RESSOURCE_SCHEMA), this._Xml_ValidationEventHandler);
+
+                if (this._validationXml.Count == 0)
                 {
-                    ValidationType = ValidationType.Schema,
-                    IgnoreComments = true,
-                    IgnoreProcessingInstructions = true,
-                    IgnoreWhitespace = true,
-                };
-                settings.Schemas.Add(xsdSet);
-                settings.ValidationEventHandler += new ValidationEventHandler(this._Xml_ValidationEventHandler);
-                var stream = this._streamSource.GetStream();
-                using (var reader = XmlReader.Create(stream, settings))
-                    while (reader.Read())
-                    {
-                    }
-                if (this._validationXml.Count > 0)
-                    throw new XmlSchemaValidationException($"Ressource Xml stream validation fail :\n\r {string.Join("\n\r", this._validationXml)}");
+                    this._xsd = new XmlSchemaSet();
+                    this._xsd.ValidationEventHandler += this._Xml_ValidationEventHandler;
+                    this._xsd.Add(schema);
+                    this._xsd.Compile();
+                }
+                else
+                    throw new XmlSchemaValidationException($"Permission Xml schema is not valid :\n\r {string.Join("\n\r", this._validationXml)}");
             }
-            else
-                throw new XmlSchemaValidationException($"Ressource Xml schema is not valid :\n\r {string.Join("\n\r", this._validationXml)}");
+
+            var settings = new XmlReaderSettings
+            {
+                ValidationType = ValidationType.Schema,
+                IgnoreComments = true,
+                IgnoreProcessingInstructions = true,
+                IgnoreWhitespace = true,
+            };
+            settings.Schemas.Add(this._xsd);
+            settings.ValidationEventHandler += new ValidationEventHandler(this._Xml_ValidationEventHandler);
+            var stream = this._streamSource.GetStream();
+            using (var reader = XmlReader.Create(stream, settings))
+                while (reader.Read())
+                {
+                }
+            if (this._validationXml.Count > 0)
+                throw new XmlSchemaValidationException($"Ressource Xml stream validation fail :\n\r {string.Join("\n\r", this._validationXml)}");
+
         }
 
         #endregion Public Methods
@@ -312,7 +319,7 @@ namespace Shiva.Ressources.Xml
                             while (subreader.ReadToFollowing(XD.ELEMENT_RESSOURCE, XD.NAMESPACE))
                             {
                                 var typeAttr = subreader.GetAttribute(XD.ATTRIBUTE_TYPE);
-                                var type = Type.GetType(typeAttr,false,true);
+                                var type = Type.GetType(typeAttr, false, true);
                                 types.Add(type);
                             }
                             foreach (var ty in types.Distinct())

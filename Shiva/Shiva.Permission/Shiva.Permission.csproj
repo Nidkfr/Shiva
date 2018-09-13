@@ -15,15 +15,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Permission\Xml\XmlPermission.xsd" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Permission\Xml\XmlPermission.xsd" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Shiva.Core\Shiva.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Permission\Xml\" />
   </ItemGroup>
 
 </Project>

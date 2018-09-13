@@ -71,10 +71,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Permission\PermissionManagerTester.cs" />
-    <Compile Include="Permission\UTRole.cs" />
-    <Compile Include="Permission\UTPermissionAccess.cs" />
-    <Compile Include="Permission\Xml\UTPermissionXmlBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -96,9 +92,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DeployItems\Permission.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <Folder Include="DeployItems\" />
+    <Folder Include="Permission\Xml\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -39,9 +39,9 @@ namespace Shiva.Ressources
         void TestPerformanceGroup();
     }
 
-    public class RessourceManagerTester
+    public class RessourceServiceTester
     {
-        public void TestGetSetRessource(IRessourceManager manager)
+        public void TestGetSetRessource(IRessourceService manager)
         {
             //create 2 resource with different type
             manager.SetRessource(new RessourceString("Test.Ressource1", "test value"));
@@ -84,7 +84,7 @@ namespace Shiva.Ressources
             Assert.IsTrue(System.Text.Encoding.ASCII.GetString(ressourceb.Value) == "test value");
         }
 
-        public void TestGetSetRessourceAsync(IRessourceManager manager)
+        public void TestGetSetRessourceAsync(IRessourceService manager)
         {
             //create 2 resource with different type
             manager.SetRessource(new RessourceString("Test.Ressource1", "test value"));
@@ -137,7 +137,7 @@ namespace Shiva.Ressources
             Assert.IsTrue(System.Text.Encoding.ASCII.GetString(ressourceb.Result.Value) == "test value");
         }
 
-        public void FailGetSetRessource(IRessourceManager manager)
+        public void FailGetSetRessource(IRessourceService manager)
         {
             manager.Invoking(x => x.GetRessource<RessourceString>(null)).Should().Throw<ArgumentNullException>();
             Func<Task> call = () => manager.GetRessourceAsync<RessourceString>(null);
@@ -145,11 +145,11 @@ namespace Shiva.Ressources
 
             manager.Invoking(x => x.SetRessource<RessourceString>(null)).Should().Throw<ArgumentNullException>();
             Func<Task> call2 = () => manager.SetRessourceAsync<RessourceString>(null);
-            call.Should().Throw<ArgumentNullException>();
+            call2.Should().Throw<ArgumentNullException>();
             
         }
 
-        public void TestContainsRessource(IRessourceManager manager)
+        public void TestContainsRessource(IRessourceService manager)
         {
             manager.SetRessource(new RessourceString("test", "value", CultureInfo.GetCultureInfo(1)));
             Assert.IsTrue(manager.ContainsRessource<RessourceString>("test"));
@@ -159,7 +159,7 @@ namespace Shiva.Ressources
             Assert.IsFalse(manager.ContainsRessource<RessourceBinary>("test"));
         }
 
-        public void TestContainsRessourceAsync(IRessourceManager manager)
+        public void TestContainsRessourceAsync(IRessourceService manager)
         {
             manager.SetRessource(new RessourceString("test", "value", CultureInfo.GetCultureInfo(1)));
             var waitingresult = manager.ContainsRessourceAsync<RessourceString>("test");
@@ -177,15 +177,15 @@ namespace Shiva.Ressources
             Assert.IsFalse(waitingresult.Result);
         }
 
-        public void FailContainsRessource(IRessourceManager manager)
+        public void FailContainsRessource(IRessourceService manager)
         {
             manager.Invoking(x => x.ContainsRessource<RessourceString>(null)).Should().Throw<ArgumentNullException>();
             var response = manager.ContainsRessourceAsync<RessourceString>(null);
             Func<Task> call = () => manager.ContainsRessourceAsync<RessourceString>(null);
-            call.Should().Throw<ArgumentNullException>();
+            call.Should().Throw<ArgumentNullException>();            
         }
 
-        public void TestPerformanceGetRessource(IRessourceManager managerEn, IRessourceManager managerFr)
+        public void TestPerformanceGetRessource(IRessourceService managerEn, IRessourceService managerFr)
         {
             //i will create 100000 ressource string
             var tot = 10000;
@@ -217,10 +217,15 @@ namespace Shiva.Ressources
             Assert.IsTrue(ressource.Culture == CultureInfo.GetCultureInfo("en"));
             Assert.IsTrue(ressource.Value == "Test value ok", ressource.Value);
 
+            ressource = managerEn.GetRessource<RessourceString>($"Test.Ressource1");
+            Assert.IsTrue(ressource.Id == $"Test.Ressource1");
+            Assert.IsTrue(ressource.Culture == CultureInfo.GetCultureInfo("en"));
+            Assert.IsTrue(ressource.Value == "Test value 1", ressource.Value);
+
 
         }
 
-        public void TestRemoveRessource(IRessourceManager manager)
+        public void TestRemoveRessource(IRessourceService manager)
         {
             manager.SetRessource<RessourceString>(new RessourceString("test", "value", CultureInfo.GetCultureInfo(1)));
             manager.RemoveRessource<RessourceString>("test");
@@ -244,7 +249,7 @@ namespace Shiva.Ressources
             Assert.IsFalse(manager.ContainsRessource<RessourceString>("test"));
         }
 
-        public void TestRemoveRessourceAsync(IRessourceManager manager)
+        public void TestRemoveRessourceAsync(IRessourceService manager)
         {
             manager.SetRessource<RessourceString>(new RessourceString("test", "value", CultureInfo.GetCultureInfo(1)));
             var awaitingResult = manager.RemoveRessourceAsync<RessourceString>("test");
@@ -272,14 +277,14 @@ namespace Shiva.Ressources
             Assert.IsFalse(manager.ContainsRessource<RessourceString>("test"));
         }
 
-        public void FailRemoveRessourceAsync(IRessourceManager manager)
+        public void FailRemoveRessourceAsync(IRessourceService manager)
         {
             manager.Invoking(x => x.RemoveRessource<RessourceString>(null)).Should().Throw<ArgumentNullException>();
             Func<Task> call = () => manager.RemoveRessourceAsync<RessourceString>(null);
             call.Should().Throw<ArgumentNullException>();
         }
 
-        public void TestGroup(IRessourceManager manager)
+        public void TestGroup(IRessourceService manager)
         {
             var r1 = new RessourceString("Test.test1", "value1");
             var r2 = new RessourceString("Test2.test2", "value2");
@@ -356,12 +361,14 @@ namespace Shiva.Ressources
 
         }
 
-        public void FailGroup(IRessourceManager manager)
+        public void FailGroup(IRessourceService manager)
         {
             var r1 = new RessourceString("test.fail", "value1");
             manager.Invoking(x => x.AttachRessourceToGroup<RessourceString>(null, "test")).Should().Throw<ArgumentNullException>();
+            manager.Invoking(x => x.AttachRessourceToGroup<RessourceString>(new RessourceString(), "test")).Should().Throw<InvalidOperationException>();
             manager.Invoking(x => x.AttachRessourceToGroup<RessourceString>(r1, null)).Should().Throw<ArgumentNullException>();
             manager.Invoking(x => x.DetachRessourceToGroup<RessourceString>(null, "test")).Should().Throw<ArgumentNullException>();
+            manager.Invoking(x => x.DetachRessourceToGroup<RessourceString>(new RessourceString(), "test")).Should().Throw<InvalidOperationException>();
             manager.Invoking(x => x.DetachRessourceToGroup<RessourceString>(r1, null)).Should().Throw<ArgumentNullException>();
             manager.Invoking(x => x.GetGroupRessources<RessourceString>((Identity)null)).Should().Throw<ArgumentNullException>();
             manager.Invoking(x => x.GetGroupRessources<RessourceString>((Namespace)null,true)).Should().Throw<ArgumentNullException>();
@@ -369,7 +376,7 @@ namespace Shiva.Ressources
             manager.Invoking(x => x.AttachRessourceToGroup(r1, "test")).Should().Throw<InvalidOperationException>();
         }
 
-        public void TestPerformanceGroup(IRessourceManager manager)
+        public void TestPerformanceGroup(IRessourceService manager)
         {
             //i will create 100000 ressource string
             var tot = 10000;

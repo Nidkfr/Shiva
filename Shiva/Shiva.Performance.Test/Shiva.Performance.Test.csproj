@@ -55,9 +55,18 @@
       <Project>{2ac0dbc3-c995-401c-a536-ea6e78eb0799}</Project>
       <Name>Shiva.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Shiva.Permission\Shiva.Permission.csproj">
+      <Project>{b761304b-8823-4839-929c-9f9c58c4fea0}</Project>
+      <Name>Shiva.Permission</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="RessourceXml.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Permission.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

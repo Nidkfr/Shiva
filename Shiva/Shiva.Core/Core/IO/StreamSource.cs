@@ -36,5 +36,13 @@ namespace Shiva.Core.IO
         public abstract Stream GetStream();
 
         #endregion Public Methods
+
+        /// <summary>
+        /// Gets the stream identitfication.
+        /// </summary>
+        /// <value>
+        /// The stream identitfication.
+        /// </value>
+        public abstract string StreamIdentitfication { get; }
     }
 }

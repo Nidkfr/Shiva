@@ -1,4 +1,5 @@
 ﻿using Shiva.Core.IO;
+using Shiva.Permission;
 using Shiva.Ressources;
 using Shiva.Ressources.Xml;
 using System;
@@ -16,9 +17,9 @@ namespace Shiva.Performance.Test
         {
             using (var streamsource = new FileSource("./RessourceXml.xml"))
             {
-                using (var managerEn = new RessourceXmlManager(null))
+                using (var managerEn = new RessourceXmlService(null))
                 {
-                    var total = 10000;
+                    var total = 100;
 
                     managerEn.Initialize(CultureInfo.GetCultureInfo("en"), streamsource);
                     var currrentdate = DateTime.Now;
@@ -51,12 +52,47 @@ namespace Shiva.Performance.Test
 
                     currrentdate = DateTime.Now;
                     var grp = managerEn.GetGroupRessources<RessourceString>("group");
-                    Console.WriteLine($"{DateTime.Now} get group with {grp.Ressources.Count} elements {(DateTime.Now - currrentdate).TotalSeconds}");
+                    Console.WriteLine($"{DateTime.Now} get group with {grp.Ressources.Count} elements {(DateTime.Now - currrentdate).TotalSeconds}");                   
+
+                    Console.Read();                   
+                }
+            }
+
+            using (var streamsource = new FileSource("./Permission.xml"))
+            {
+                using (var managerPermission = new Shiva.Permission.Xml.PermissionManagerXml(null))
+                {
+                    var total = 100;
+                    managerPermission.Initialize(streamsource);
+
+                    Console.WriteLine("test Permission");
+                    var currrentdate = DateTime.Now;
+
+                    for (var i = 0; i < total; i++)
+                    {
+                        var role = new Role($"test{i}");
+                        for (var j = 0; j < total; j++)
+                        {
+                            role.SetPermission(new PermissionAccess($"A{j}") { Acces = true });
+                        }
+                        for (var j = 0; j < total; j++)
+                        {
+                            role.SetPermission(new PermissionData($"D{j}") { Mode = PermissionDataEnum.EDITABLE });
+                        }
+                        managerPermission.SetRole(role);
+                    }
+                    Console.WriteLine($"Write {total} role with {total} permission Acces and {total} permission mode duration {(DateTime.Now - currrentdate).TotalSeconds}");
+                    currrentdate = DateTime.Now;
+                    var r = managerPermission.GetRole<Role>($"test{total - 1}");
+                    if (r != null)
+                        Console.WriteLine($"get Role with {r.GetPermissions().Count()} permission duration {(DateTime.Now - currrentdate).TotalSeconds}");
+                    else
+                        Console.WriteLine("Fail");
 
                     Console.Read();
                 }
-            }            
-            
+            }
+            Console.Read();
         }
     }
 }
